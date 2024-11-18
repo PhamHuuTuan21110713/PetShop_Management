@@ -1,0 +1,32 @@
+.sidebarContainer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+  
+    z-index: 1000;
+    padding: 10px;
+}
+
+.menuContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.menuItem {
+    padding: 10px;
+   cursor: pointer;
+    border-radius: 4px;
+    text-decoration: none;
+}
+
+
+
+.menuItem:hover {
+    background-color: #c2c2c2;
+}
+
+.menuItem:hover p {
+    color: #000;
+}
