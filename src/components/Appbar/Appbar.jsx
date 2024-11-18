@@ -9,10 +9,12 @@ import MenuList from '@mui/material/MenuList';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 import { Avatar, Typography } from "@mui/material";
 import Box from "@mui/material/Box"
-import Button from '@mui/material/Button';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import ChatIcon from '@mui/icons-material/Chat';
 import { NavLink } from "react-router-dom/dist";
+const classNameNav = ({ isActive }) => {
+    return (isActive ? "active-link" : "inactive-link")
+}
 const Appbar = () => {
     const [open, setOpen] = useState(false);
     const anchorRef = useRef(null);
@@ -39,7 +41,7 @@ const Appbar = () => {
         <Box sx={{ height: (theme) => theme.customSize.headerHeight }} className={myStyle.appbarContainer}>
             {/* left part */}
             <Box>
-
+                <Typography variant="h6" sx={{fontWeight:"bold"}}>Trang chủ</Typography>
             </Box>
             {/* right part */}
             <Box sx={{display:"flex", alignItems:"center", gap: 3}}>

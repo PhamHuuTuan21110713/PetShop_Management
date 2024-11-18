@@ -14,7 +14,9 @@ import RoomServiceIcon from '@mui/icons-material/RoomService';
 import MovingIcon from '@mui/icons-material/Moving';
 import LoyaltyIcon from '@mui/icons-material/Loyalty';
 import CategoryIcon from '@mui/icons-material/Category';
-
+const classNameNav = ({ isActive }) => {
+    return (isActive ? `${myStyle.activeLink}` : `${myStyle.menuItem}`)
+}
 const Sidebar = () => {
     return (
         <Box sx={{width: (theme) => theme.customSize.sidebarWidth}} className={myStyle.sidebarContainer}>
@@ -37,17 +39,17 @@ const Sidebar = () => {
                                 Tổng quan
                             </Typography>
                             <Box className={myStyle.menuContainer}>
-                                <NavLink className={myStyle.menuItem}>
-                                    <Typography sx={{ color: "#6e6d6d", fontWeight: "bold", display: "flex", alignItems: "center", gap: 1 }}>
+                                <NavLink className={classNameNav}>
+                                    <Typography  sx={{ color: "#6e6d6d", fontWeight: "bold", display: "flex", alignItems: "center", gap: 1 }}>
                                         <HomeIcon />Trang chủ
                                     </Typography>
                                 </NavLink>
-                                <NavLink className={myStyle.menuItem}>
+                                <NavLink to="lich-dat" className={classNameNav}>
                                     <Typography sx={{ color: "#6e6d6d", fontWeight: "bold", display: "flex", alignItems: "center", gap: 1 }}>
                                         <CalendarMonthIcon />Lịch đặt
                                     </Typography>
                                 </NavLink>
-                                <NavLink className={myStyle.menuItem}>
+                                <NavLink to="thong-bao" className={classNameNav}>
                                     <Typography sx={{ color: "#6e6d6d", fontWeight: "bold", display: "flex", alignItems: "center", gap: 1 }}>
                                         <SmsIcon />Thông báo
                                     </Typography>
@@ -61,32 +63,32 @@ const Sidebar = () => {
                                 Quản lý
                             </Typography>
                             <Box className={myStyle.menuContainer}>
-                                <NavLink className={myStyle.menuItem}>
+                                <NavLink to="quan-ly-tai-khoan" className={classNameNav}>
                                     <Typography sx={{ color: "#6e6d6d", fontWeight: "bold", display: "flex", alignItems: "center", gap: 1 }}>
                                         <PersonIcon />Tài khoản
                                     </Typography>
                                 </NavLink>
-                                <NavLink className={myStyle.menuItem}>
+                                <NavLink to="quan-ly-san-pham" className={classNameNav}>
                                     <Typography sx={{ color: "#6e6d6d", fontWeight: "bold", display: "flex", alignItems: "center", gap: 1 }}>
                                         <InventoryIcon />Sản phẩm
                                     </Typography>
                                 </NavLink>
-                                <NavLink className={myStyle.menuItem}>
+                                <NavLink to="quan-ly-don-hang" className={classNameNav}>
                                     <Typography sx={{ color: "#6e6d6d", fontWeight: "bold", display: "flex", alignItems: "center", gap: 1 }}>
                                         <ViewQuiltIcon />Đơn hàng
                                     </Typography>
                                 </NavLink>
-                                <NavLink className={myStyle.menuItem}>
+                                <NavLink to="quan-ly-khuyen-mai" className={classNameNav}>
                                     <Typography sx={{ color: "#6e6d6d", fontWeight: "bold", display: "flex", alignItems: "center", gap: 1 }}>
                                         <LoyaltyIcon />Khuyến mãi
                                     </Typography>
                                 </NavLink>
-                                <NavLink className={myStyle.menuItem}>
+                                <NavLink to="quan-ly-dich-vu" className={classNameNav}>
                                     <Typography sx={{ color: "#6e6d6d", fontWeight: "bold", display: "flex", alignItems: "center", gap: 1 }}>
                                         <RoomServiceIcon />Dịch vụ
                                     </Typography>
                                 </NavLink>
-                                <NavLink className={myStyle.menuItem}>
+                                <NavLink to="quan-ly-danh-muc" className={classNameNav}>
                                     <Typography sx={{ color: "#6e6d6d", fontWeight: "bold", display: "flex", alignItems: "center", gap: 1 }}>
                                         <CategoryIcon />Danh mục
                                     </Typography>
@@ -101,17 +103,17 @@ const Sidebar = () => {
                                 Thống kê
                             </Typography>
                             <Box className={myStyle.menuContainer}>
-                                <NavLink className={myStyle.menuItem}>
+                                <NavLink to="thong-ke-doanh-thu" className={classNameNav}>
                                     <Typography sx={{ color: "#6e6d6d", fontWeight: "bold", display: "flex", alignItems: "center", gap: 1 }}>
                                         <MovingIcon />Doanh thu
                                     </Typography>
                                 </NavLink>
-                                <NavLink className={myStyle.menuItem}>
+                                <NavLink to="thong-ke-san-pham" className={classNameNav}>
                                     <Typography sx={{ color: "#6e6d6d", fontWeight: "bold", display: "flex", alignItems: "center", gap: 1 }}>
                                         <InventoryIcon />Sản phẩm
                                     </Typography>
                                 </NavLink>
-                                <NavLink className={myStyle.menuItem}>
+                                <NavLink to="thong-ke-tai-khoan" className={classNameNav}>
                                     <Typography sx={{ color: "#6e6d6d", fontWeight: "bold", display: "flex", alignItems: "center", gap: 1 }}>
                                         <PersonIcon />Tài khoản
                                     </Typography>
