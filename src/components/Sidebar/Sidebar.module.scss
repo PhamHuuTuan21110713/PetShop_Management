@@ -16,12 +16,22 @@
 
 .menuItem {
     padding: 10px;
-   cursor: pointer;
+    cursor: pointer;
     border-radius: 4px;
     text-decoration: none;
 }
 
+.activeLink {
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 4px;
+    text-decoration: none;
+    background-color: #6b6b6b;
+}
 
+.activeLink p {
+    color: #fff;
+}
 
 .menuItem:hover {
     background-color: #c2c2c2;
