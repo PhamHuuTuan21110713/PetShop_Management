@@ -11,11 +11,14 @@ function Manager() {
     <Box>
       <Sidebar />
       <Box sx={{ display: "flex" }}>
-        <Box sx={{ width: (theme) => theme.customSize.sidebarWidth }}></Box>
-        <Box sx={{ flex:1, padding:"10px"}}>
+        <Box sx={{ width: (theme) => theme.customSize.sidebarWidth , minWidth: (theme) => theme.customSize.sidebarWidth}}></Box>
+        <Box sx={{ flex: 1, padding: "10px", maxWidth: (theme) => `calc( 100% - ${theme.customSize.sidebarWidth})` }}>
           <Appbar />
-          <Divider sx={{marginY:"10px"}}/>
-          <Outlet />
+          <Box sx={{marginTop:(theme) => `calc( ${theme.customSize.headerHeight} + 10px)`,
+             }}>
+            <Divider sx={{ marginY: "20px" }} />
+            <Outlet />
+          </Box>
         </Box>
       </Box>
 
