@@ -1,0 +1,8 @@
+.subMenuContainer {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.subMenuContainer:hover {
+  background-color: #b5b5b5;
+}/*# sourceMappingURL=Revenu.module.css.map */

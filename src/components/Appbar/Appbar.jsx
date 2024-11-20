@@ -16,6 +16,7 @@ const classNameNav = ({ isActive }) => {
     return (isActive ? "active-link" : "inactive-link")
 }
 const Appbar = () => {
+    console.log("re-render appbar")
     const [open, setOpen] = useState(false);
     const anchorRef = useRef(null);
     const handleToggle = () => {
@@ -38,21 +39,30 @@ const Appbar = () => {
     };
 
     return (
-        <Box sx={{ height: (theme) => theme.customSize.headerHeight }} className={myStyle.appbarContainer}>
+        <Box
+            sx={{
+                height: (theme) => theme.customSize.headerHeight,
+                width: (theme) => `calc( 100% - ${theme.customSize.sidebarWidth})`,
+                padding:"10px"
+            }} 
+            className={myStyle.appbarContainer}
+        >
             {/* left part */}
             <Box>
-                <Typography variant="h6" sx={{fontWeight:"bold"}}>Trang chủ</Typography>
+                <Typography variant="h6" sx={{ fontWeight: "bold" }}>Trang chủ</Typography>
             </Box>
             {/* right part */}
-            <Box sx={{display:"flex", alignItems:"center", gap: 3}}>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 3 }}>
                 {/* Chat */}
-                <Box 
-                sx={{display:"flex", justifyContent:"center", alignItems:"center", cursor:"pointer",
-                    backgroundColor:"#c0bcc0", borderRadius:"50%", height:"40px", width:"40px"}}
+                <Box
+                    sx={{
+                        display: "flex", justifyContent: "center", alignItems: "center", cursor: "pointer",
+                        backgroundColor: "#c0bcc0", borderRadius: "50%", height: "40px", width: "40px"
+                    }}
                 >
-                    <ChatIcon sx={{color:"#fff"}}/>
+                    <ChatIcon sx={{ color: "#fff" }} />
                 </Box>
- 
+
                 {/* Avatar */}
                 <Box >
                     <Box

@@ -1,0 +1,10 @@
+.noticeItemContainer:hover {
+  border: solid 1px #de5945;
+}
+
+.col6 {
+  padding-left: 4px;
+  padding-right: 4px;
+  flex: 0 0 50%;
+  max-width: 50%;
+}/*# sourceMappingURL=Home.module.css.map */

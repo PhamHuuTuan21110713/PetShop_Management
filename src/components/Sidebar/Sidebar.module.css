@@ -1,0 +1,41 @@
+.sidebarContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 1000;
+  padding: 10px;
+}
+
+.menuContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.menuItem {
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 4px;
+  text-decoration: none;
+}
+
+.activeLink {
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 4px;
+  text-decoration: none;
+  background-color: #de5945;
+}
+
+.activeLink p {
+  color: #fff;
+}
+
+.menuItem:hover {
+  background-color: #f8d4cf;
+}
+
+.menuItem:hover p {
+  color: #000;
+}/*# sourceMappingURL=Sidebar.module.css.map */
