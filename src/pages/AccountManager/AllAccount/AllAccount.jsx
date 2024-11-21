@@ -11,20 +11,41 @@ const AllAccount = () => {
     const [openModal, setOpenModal] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [users, setUsers] = useState();
-
+    const [filter, setFilter] = useState("all");
+    const [sort, setSort] = useState("default");
+    const [find, setFind] = useState("");
+    const [page, setPage] = useState(1);
     const indexUser = useRef(0);
-    useEffect(() => {
-        UserFetch.get()
+    const fetchUser = (paged, sorted, filtered, finded) => {
+        let sorting; let filtering; let finding;
+        let paging = paged; let limiting = 3;
+        if (sorted === "default") {
+            sorting = { createdAt: -1 }
+        } else {
+            sorting = { name: 1 }
+        }
+        if (finded !== "") finding = finded;
+        if (filtered === "active") {
+            filtering = { state: 1 }
+        } else if (filtered === "lock") {
+            filtering = { state: 0 }
+        }
+        setIsLoading(true);
+        UserFetch.get({ paging, limiting }, sorting, finding, filtering)
             .then(data => {
-                // console.log("data: ", data);
-                setUsers(data.data);
+                console.log("data: ", data);
+                setUsers(data);
                 setIsLoading(false)
             })
             .catch(err => {
                 // console.log("ërr: ", err);
                 window.alert(`Lỗi lấy dữ liệu người dùng: \n ${err}`)
             })
-    }, []);
+    }
+    useEffect(() => {
+        console.log("filter: ", filter);
+        fetchUser(page, sort, filter, find);
+    }, [page, sort, filter]);
     const onChangeUsers = (data) => {
         const newUsers = [...users];
         newUsers[indexUser.current] = data;
@@ -37,7 +58,7 @@ const AllAccount = () => {
         indexUser.current = index;
         setOpenModal(true);
     }
-    const updateStateUser = async (user, newState,index) => {
+    const updateStateUser = async (user, newState, index) => {
         const formData = new FormData();
         formData.append("name", user?.name);
         formData.append("email", user?.email);
@@ -61,12 +82,17 @@ const AllAccount = () => {
                 window.alert(`Lỗi cập nhật dữ liệu người dùng: \n ${err}`)
             })
     }
-    if (isLoading) {
-        return (
-            <Box sx={{ display: 'flex', justifyContent: "center", alignItems: "center" }}>
-                <CircularProgress />
-            </Box>
-        )
+    const handleSort = (type) => {
+        setSort(type);
+    }
+    const handleFilter = (type) => {
+        setFilter(type)
+    }
+    const handleChangeFind = (e) => {
+        setFind(e.target.value);
+    }
+    const handleSearch = () => {
+        fetchUser(page, sort, filter, find);
     }
     return (
         <Box>
@@ -74,23 +100,49 @@ const AllAccount = () => {
                 <Box>
                     {/* Tìm kiếm */}
                     <Box sx={{ display: "flex", alignItems: "center", border: "solid 1px #000", width: "400px", gap: "2px", borderRadius: "20px", overflow: "hidden" }}>
-                        <input className={myStyle.searchInput} placeholder="Tìm kiếm" type="text" />
-                        <button className={myStyle.searchButton}><SearchIcon /></button>
+                        <input className={myStyle.searchInput} placeholder="Tìm kiếm" type="text" value={find} onChange={handleChangeFind} />
+                        <button onClick={handleSearch} className={myStyle.searchButton}><SearchIcon /></button>
                     </Box>
                 </Box>
                 {/* Sắp xếp */}
                 <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
                     <Typography sx={{ fontSize: "1rem", fontWeight: "bold" }}>Sắp xếp: </Typography>
-                    <Button sx={{ textTransform: "none" }} variant="contained">Mặc định</Button>
-                    <Button sx={{ textTransform: "none" }} variant="outlined">Theo tên</Button>
+                    <Button
+                        onClick={() => handleSort("default")}
+                        sx={{ textTransform: "none" }}
+                        variant={sort === "default" ? "contained" : "outlined"}>
+                        Mặc định
+                    </Button>
+                    <Button
+                        onClick={() => handleSort("name")}
+                        sx={{ textTransform: "none" }}
+                        variant={sort === "name" ? "contained" : "outlined"}>
+                        Theo tên
+                    </Button>
                 </Box>
 
             </Box>
             {/* Bộ lọc */}
             <Box sx={{ display: "flex", alignItems: "center", gap: 2, marginTop: "20px" }}>
                 <Typography sx={{ fontSize: "1rem", fontWeight: "bold" }}>Bộ lọc: </Typography>
-                <Button sx={{ textTransform: "none" }} variant="contained">Đang hoạt động</Button>
-                <Button sx={{ textTransform: "none" }} variant="outlined">Hủy kích hoạt</Button>
+                <Button
+                    onClick={() => handleFilter("all")}
+                    sx={{ textTransform: "none" }}
+                    variant={filter === "all" ? "contained" : "outlined"}>
+                    Tất cả
+                </Button>
+                <Button
+                    onClick={() => handleFilter("active")}
+                    sx={{ textTransform: "none" }}
+                    variant={filter === "active" ? "contained" : "outlined"}>
+                    Đang hoạt động
+                </Button>
+                <Button
+                    onClick={() => handleFilter("lock")}
+                    sx={{ textTransform: "none" }}
+                    variant={filter === "lock" ? "contained" : "outlined"}>
+                    Đã khóa
+                </Button>
             </Box>
             {/* Table */}
             <Box sx={{ marginTop: "20px" }}>
@@ -107,73 +159,85 @@ const AllAccount = () => {
                                 <th style={{ width: "20%" }}>Hành động</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            {
-                                users?.map((user, index) => {
-                                    return (
-                                        <tr key={index}>
+                        {
+                            isLoading ?
+                                (<Box sx={{ display: 'flex', justifyContent: "center", alignItems: "center" }}>
+                                    <CircularProgress />
+                                </Box>) :
+                                <tbody>
+                                    {
+                                        users.data?.map((user, index) => {
+                                            return (
+                                                <tr key={index}>
 
-                                            <td>{user?._id}</td>
-                                            <td>{user?.name}</td>
-                                            <td>{user?.email}</td>
-                                            <td>{user?.phone}</td>
-                                            <td>
-                                                {
-                                                    user?.state === 1 ? <Chip label="hoạt động" color="success" /> :
-                                                        <Chip label="đã khóa" color="error" />
-                                                }
+                                                    <td>{user?._id}</td>
+                                                    <td>{user?.name}</td>
+                                                    <td>{user?.email}</td>
+                                                    <td>{user?.phone}</td>
+                                                    <td>
+                                                        {
+                                                            user?.state === 1 ? <Chip label="hoạt động" color="success" /> :
+                                                                <Chip label="đã khóa" color="error" />
+                                                        }
 
-                                            </td>
-                                            <td >
-                                                <Box sx={{ display: "flex", justifyContent: "center", gap: 2 }}>
-                                                    <Tooltip title="Chi tiết">
-                                                        <button
-                                                            onClick={() => {
-                                                                handleOpenModal(index)
-                                                            }}
-                                                            style={{ border: "none", cursor: "pointer", color: "#fff", background: "#346791", borderRadius: "4px" }}>
-                                                            <DetailsIcon />
-                                                        </button>
-                                                    </Tooltip>
-                                                    {
-                                                        user?.state === 1 ?
-                                                            (
-                                                                <Tooltip title="khóa tài khoản">
-                                                                    <button
-                                                                        onClick={() => updateStateUser(user, 0,index)}
-                                                                        style={{ border: "none", cursor: "pointer", color: "#fff", background: "#b55050", borderRadius: "4px" }}>
-                                                                        <LockIcon />
-                                                                    </button>
-                                                                </Tooltip>
-                                                            ) :
-                                                            (
-                                                                <Tooltip title="mở khóa tài khoản">
-                                                                    <button
-                                                                        onClick={() => updateStateUser(user, 1,index)}
-                                                                        style={{ border: "none", cursor: "pointer", color: "#fff", background: "#50c77f", borderRadius: "4px" }}>
-                                                                        <LockOpenIcon />
-                                                                    </button>
-                                                                </Tooltip>
-                                                            )
-                                                    }
+                                                    </td>
+                                                    <td >
+                                                        <Box sx={{ display: "flex", justifyContent: "center", gap: 2 }}>
+                                                            <Tooltip title="Chi tiết">
+                                                                <button
+                                                                    onClick={() => {
+                                                                        handleOpenModal(index)
+                                                                    }}
+                                                                    style={{ border: "none", cursor: "pointer", color: "#fff", background: "#346791", borderRadius: "4px" }}>
+                                                                    <DetailsIcon />
+                                                                </button>
+                                                            </Tooltip>
+                                                            {
+                                                                user?.state === 1 ?
+                                                                    (
+                                                                        <Tooltip title="khóa tài khoản">
+                                                                            <button
+                                                                                onClick={() => updateStateUser(user, 0, index)}
+                                                                                style={{ border: "none", cursor: "pointer", color: "#fff", background: "#b55050", borderRadius: "4px" }}>
+                                                                                <LockIcon />
+                                                                            </button>
+                                                                        </Tooltip>
+                                                                    ) :
+                                                                    (
+                                                                        <Tooltip title="mở khóa tài khoản">
+                                                                            <button
+                                                                                onClick={() => updateStateUser(user, 1, index)}
+                                                                                style={{ border: "none", cursor: "pointer", color: "#fff", background: "#50c77f", borderRadius: "4px" }}>
+                                                                                <LockOpenIcon />
+                                                                            </button>
+                                                                        </Tooltip>
+                                                                    )
+                                                            }
 
-                                                </Box>
-                                            </td>
-                                        </tr>
-                                    )
-                                })
-                            }
+                                                        </Box>
+                                                    </td>
+                                                </tr>
+                                            )
+                                        })
+                                    }
+                                </tbody>
+                        }
 
-                        </tbody>
                     </table>
 
                 </Box>
             </Box>
 
-            <Box sx={{ marginTop: "10px", display: "flex", justifyContent: "flex-end" }}>
-                <Pagination />
-            </Box>
-            <DetailAccountModal open={openModal} onClose={handleCloseModal} user={users[indexUser.current]} onChange={onChangeUsers} />
+            {
+                isLoading ? null :
+                    <>
+                        <Box sx={{ marginTop: "10px", display: "flex", justifyContent: "flex-end" }}>
+                            <Pagination page={page} onChange={(e,value) => setPage(value) } count={users.totalPages} size="small" />
+                        </Box>
+                        <DetailAccountModal open={openModal} onClose={handleCloseModal} user={users.data[indexUser.current]} onChange={onChangeUsers} />
+                    </>
+            }
+
         </Box>
     )
 }

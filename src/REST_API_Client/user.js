@@ -1,13 +1,22 @@
 
 const UserAPI = (axiosInstance) => {
 
-    async function get() {
+    async function get(paging, sorting, finding, filtering) {
+        const params = new URLSearchParams({});
         const accessToken = localStorage.getItem("access_token")
         console.log("fetch user token: ", accessToken);
+        console.log("filters: ",filtering);
+        console.log("sort: ", sorting);
         try {
-            const res = await axiosInstance.get(`/users`, {
+            if(paging.paging) params.append("page",paging.paging);
+            if(paging.limiting) params.append("limit", paging.limiting);
+            if(finding) params.append("find", finding);
+            if (sorting) params.append("sort", (JSON.stringify(sorting)));
+            if(filtering) params.append("filters",(JSON.stringify(filtering)));
+            const res = await axiosInstance.get(`/users?${params}`, {
                 headers: {
-                    Authorization: `Bearer ${accessToken}`
+                    Authorization: `Bearer ${accessToken}`,
+                    "Accept": "application/json",
                 }
             })
 
@@ -188,7 +197,7 @@ const UserAPI = (axiosInstance) => {
     async function removeFromCart(id, productId) {
         const access_token = localStorage.getItem("access_token");
         try {
-            const res = await axiosInstance.patch(`/users/remove-from-cart/${id}`,  {productId} , {
+            const res = await axiosInstance.patch(`/users/remove-from-cart/${id}`, { productId }, {
                 headers: {
                     Authorization: `Bearer ${access_token}`,
                     "Content-Type": "application/json"
@@ -228,24 +237,24 @@ const UserAPI = (axiosInstance) => {
     }
 
     async function sendMessage(data) {
-        try{
+        try {
             const res = await axiosInstance.post("/users/send-message", data)
             return res.data
         }
-        catch(error) {
-            if(error.response){
+        catch (error) {
+            if (error.response) {
                 throw new Error(error.response.data.message.message)
-            }else if (error.request) {
+            } else if (error.request) {
                 throw new Error("Server không phản hồi");
             } else {
                 throw new Error(error.message);
             }
         }
-        
+
     }
-    
-    
-    
+
+
+
     return {
         get,
         getById,
