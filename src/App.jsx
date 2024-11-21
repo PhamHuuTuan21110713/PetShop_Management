@@ -8,6 +8,7 @@ import { AuthProvider } from './components/Authentication/authentication';
 import Login from './pages/Login/Login';
 import AllAccount from './pages/AccountManager/AllAccount/AllAccount';
 import AddAccount from './pages/AccountManager/AddAccount/AddAccount';
+import Account from './pages/Account/Account';
 
 function App() {
 
@@ -21,6 +22,7 @@ function App() {
             <Route path='danh-sach' element={<AllAccount />} />
             <Route path='them-moi' element={<AddAccount />} />
           </Route>
+          <Route path='tai-khoan/:id' element={<Account />}/>
         </Route>
         <Route path="dang-nhap" element={<Login />} />
       </Routes>

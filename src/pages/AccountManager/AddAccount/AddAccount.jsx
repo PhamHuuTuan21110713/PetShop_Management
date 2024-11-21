@@ -27,6 +27,21 @@ const AddAccount = () => {
     const [selectedRole, setSelectedRole] = useState("user");
     const [isLoading, setIsLoading] = useState(false);
     const [users, setUsers] = useState();
+    const fetchData = (data) => {
+        setIsLoading(true)
+        UserFetch.createUsers(data)
+            .then(res => {
+                window.alert(`Thêm tài khoản thành công\n ${res.data.message}`);
+                // console.log("them thanh con: ", res);
+                setIsLoading(false);
+                handleCancel();
+            })
+            .catch(err => {
+                window.alert(`Tạo người dùng thất bại: \n ${err}`);
+                // console.log("them loi: ", err);
+                setIsLoading(false);
+            })
+    }
     const handleChangeRole = (e) => {
         setSelectedRole(e.target.value);
     }
@@ -52,30 +67,26 @@ const AddAccount = () => {
             gender: selectedGender,
             role: selectedRole
         }]
-        UserFetch.createUsers(data)
-            .then(res => {
-                window.alert("Thêm tài khoản thành công");
-                // console.log("them thanh con: ", res);
-            })
-            .catch(err => {
-                window.alert(`Tạo người dùng thất bại: \n ${err}`);
-                // console.log("them loi: ", err);
-            })
+        fetchData(data);
     };
     const handleFileUpload = async (e) => {
         const file = e.target.files[0];
         if (file) {
             try {
                 const data = await excel.readExcelFile(file);
-                console.log('Dữ liệu từ Excel:', data);
+                // console.log('Dữ liệu từ Excel:', data);
                 setUsers(data);
             } catch (error) {
-                console.error('Lỗi đọc file:', error);
+                // console.error('Lỗi đọc file:', error);
+                window.alert(`Lỗi đọc file: \n ${error}`);
             } finally {
                 e.target.value = null;
             }
         }
         e.target.value = null;
+    }
+    const hanleConfirmMany = () => {
+        fetchData(users);
     }
     return (
         <>
@@ -162,8 +173,8 @@ const AddAccount = () => {
                         </Box>
                     </Box>
                     <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2, marginTop: "20px" }}>
-                        <Button onClick={handleCancel} variant="contained" color="secondary">Hủy</Button>
-                        <Button onClick={handleConfirm} variant="contained" color="success">Xác nhận</Button>
+                        <Button disabled = {isLoading} onClick={handleCancel} variant="contained" color="secondary">Hủy</Button>
+                        <Button disabled = {isLoading} onClick={handleConfirm} variant="contained" color="success">Xác nhận</Button>
                     </Box>
                 </Box>
 
@@ -220,7 +231,7 @@ const AddAccount = () => {
                                 </Box>
                                 <Box sx={{ marginTop: "20px", display: "flex", justifyContent: "flex-end", gap: 2 }}>
                                     <Button onClick={() => setUsers(null)} variant="contained" color="error" sx={{ textTransform: "none" }}>Hủy</Button>
-                                    <Button variant="contained" color="success" sx={{ textTransform: "none" }}>Xác nhận</Button>
+                                    <Button onClick={hanleConfirmMany} variant="contained" color="success" sx={{ textTransform: "none" }}>Xác nhận</Button>
                                 </Box>
                             </>
 
