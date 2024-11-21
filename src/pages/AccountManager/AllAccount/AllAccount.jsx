@@ -33,7 +33,7 @@ const AllAccount = () => {
         setIsLoading(true);
         UserFetch.get({ paging, limiting }, sorting, finding, filtering)
             .then(data => {
-                console.log("data: ", data);
+                // console.log("data: ", data);
                 setUsers(data);
                 setIsLoading(false)
             })
@@ -43,7 +43,7 @@ const AllAccount = () => {
             })
     }
     useEffect(() => {
-        console.log("filter: ", filter);
+        // console.log("filter: ", filter);
         fetchUser(page, sort, filter, find);
     }, [page, sort, filter]);
     const onChangeUsers = (data) => {
@@ -161,9 +161,9 @@ const AllAccount = () => {
                         </thead>
                         {
                             isLoading ?
-                                (<Box sx={{ display: 'flex', justifyContent: "center", alignItems: "center" }}>
+                                (
                                     <CircularProgress />
-                                </Box>) :
+                                ) :
                                 <tbody>
                                     {
                                         users.data?.map((user, index) => {
