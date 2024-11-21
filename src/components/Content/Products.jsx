@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, TextField, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button, Paper } from '@mui/material';
+import { Box, TextField, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button, Paper, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
 import ProductModal from '../Modal/ProductModal';
 import CreateProductModal from '../Modal/CreateProductModal';
 
@@ -13,6 +13,7 @@ const Products = () => {
 
   // State cho giá trị tìm kiếm và modal
   const [search, setSearch] = useState('');
+  const [selectedType, setSelectedType] = useState('');
   const [openModal, setOpenModal] = useState(false);
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -42,22 +43,28 @@ const Products = () => {
     setSearch(e.target.value);
   };
 
+  // Hàm xử lý thay đổi loại sản phẩm
+  const handleTypeChange = (e) => {
+    setSelectedType(e.target.value);
+  };
+
   const handleAddProduct = (newProduct) => {
     setProducts([...products, { ...newProduct, id: `p${products.length + 1}` }]);
   };
 
-  const filteredProducts = products.filter(product =>
-    product.name.toLowerCase().includes(search.toLowerCase()) || // Lọc theo tên
-    product.id.toLowerCase().includes(search.toLowerCase()) || // Lọc theo ID
-    product.type.toLowerCase().includes(search.toLowerCase()) // Lọc theo loại
-  );
+  // Lọc sản phẩm theo tên, id và loại
+  const filteredProducts = products.filter(product => {
+    const matchesSearch = product.name.toLowerCase().includes(search.toLowerCase()) || product.id.toLowerCase().includes(search.toLowerCase());
+    const matchesType = selectedType ? product.type === selectedType : true;
+    return matchesSearch && matchesType;
+  });
 
   return (
     <Box sx={{ padding: 3 }}>
       {/* Header và thanh tìm kiếm */}
       <Box sx={{ display: 'flex', justifyContent: 'space-between', marginBottom: 2 }}>
         <h3>Quản lý sản phẩm</h3>
-        <Box sx={{display: 'flex', alignItems: 'center', gap: 3}}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
           <TextField
             label="Tìm kiếm sản phẩm"
             variant="outlined"
@@ -66,6 +73,18 @@ const Products = () => {
             onChange={handleSearchChange}
             sx={{ width: '300px' }}
           />
+          <FormControl sx={{ width: 200 }} size="small">
+            <InputLabel>Tất cả sản phẩm</InputLabel>
+            <Select
+              value={selectedType}
+              label="Tất cả sản phẩm"
+              onChange={handleTypeChange}
+            >
+              <MenuItem value="">Tất cả</MenuItem>
+              <MenuItem value="Loại A">Loại A</MenuItem>
+              <MenuItem value="Loại B">Loại B</MenuItem>
+            </Select>
+          </FormControl>
           <Button
             variant="contained"
             onClick={openCreateProductForm}

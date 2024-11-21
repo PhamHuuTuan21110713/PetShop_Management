@@ -12,6 +12,7 @@ import Box from "@mui/material/Box"
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import ChatIcon from '@mui/icons-material/Chat';
 import { NavLink } from "react-router-dom/dist";
+import ModeSelect from "../ModeSelect/ModeSelect";
 const classNameNav = ({ isActive }) => {
     return (isActive ? "active-link" : "inactive-link")
 }
@@ -111,6 +112,7 @@ const Appbar = () => {
                         )}
                     </Popper>
                 </Box>
+                <ModeSelect/>
             </Box>
         </Box>
     )
