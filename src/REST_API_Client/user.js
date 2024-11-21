@@ -265,6 +265,7 @@ const UserAPI = (axiosInstance) => {
             return res;
         } catch (error) {
             if (error.response) {
+                console.log("loi ne: ", error);
                 throw new Error(error.response.data.message)
             } else if (error.request) {
                 throw new Error("Server không phản hồi");

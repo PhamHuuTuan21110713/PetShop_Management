@@ -8,7 +8,7 @@ const styleNavlink = ({ isActive }) => {
         color: isActive ? "#fff" : null
     } 
 }
-const Account = () => {
+const AccountManager = () => {
     return (
         <Box>
             <Box sx={{ display: "flex", justifyContent: "flex-start", gap: 1 }}>
@@ -26,4 +26,4 @@ const Account = () => {
     )
 }
 
-export default Account
+export default AccountManager

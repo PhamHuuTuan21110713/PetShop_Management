@@ -47,9 +47,9 @@ const AllAccount = () => {
         fetchUser(page, sort, filter, find);
     }, [page, sort, filter]);
     const onChangeUsers = (data) => {
-        const newUsers = [...users];
+        const newUsers = [...users.data];
         newUsers[indexUser.current] = data;
-        setUsers(newUsers);
+        setUsers({ ...users, data: newUsers });
     }
     const handleCloseModal = () => {
         setOpenModal(false);
@@ -74,9 +74,9 @@ const AllAccount = () => {
                 // setgender(newUser?.gender); setName(newUser?.name); setEmail(newUser?.email);
                 // setPhone(newUser?.phone); setAddress(newUser?.address); setState(newUser?.state);
                 // defaultInfor.current = { ...newUser };
-                const newUsers = [...users];
+                const newUsers = [...users.data];
                 newUsers[index] = userData;
-                setUsers(newUsers);
+                setUsers({ ...users, data: newUsers });
             })
             .catch(err => {
                 window.alert(`Lỗi cập nhật dữ liệu người dùng: \n ${err}`)
@@ -232,7 +232,7 @@ const AllAccount = () => {
                 isLoading ? null :
                     <>
                         <Box sx={{ marginTop: "10px", display: "flex", justifyContent: "flex-end" }}>
-                            <Pagination page={page} onChange={(e,value) => setPage(value) } count={users.totalPages} size="small" />
+                            <Pagination page={page} onChange={(e, value) => setPage(value)} count={users.totalPages} size="small" />
                         </Box>
                         <DetailAccountModal open={openModal} onClose={handleCloseModal} user={users.data[indexUser.current]} onChange={onChangeUsers} />
                     </>
