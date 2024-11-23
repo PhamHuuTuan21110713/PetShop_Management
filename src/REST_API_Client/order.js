@@ -1,8 +1,15 @@
 const OrderAPI = (axiosInstance) => {
-    const getOrderByUserId = async (userId) => {
+    const getOrderByUserId = async (userId, condition, find) => {
+        const params = new URLSearchParams({});
         const accessToken = localStorage.getItem("access_token");
         try {
-            const res = await axiosInstance.get(`/order/get-by-user/${userId}`, {
+            if(condition) {
+                params.append("filter", JSON.stringify(condition));
+            }
+            if(find) {
+                params.append("finding", find)
+            }
+            const res = await axiosInstance.get(`/order/get-by-user/${userId}?${params}`, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`,
                     "Accept": "application/json",

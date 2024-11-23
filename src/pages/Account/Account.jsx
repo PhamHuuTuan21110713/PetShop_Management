@@ -2,7 +2,7 @@ import { Avatar, Box, Chip, Divider, Typography, Button, CircularProgress } from
 import myStyle from './Account.module.scss';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { useNavigate, useParams } from "react-router-dom";
-import BoughtOrders from "./BoughtOrders";
+import BoughtOrders from "./BoughtOrders/BoughtOrders";
 import ResgisteredServices from "./ResgisteredServices";
 import { useEffect, useState } from "react";
 import { UserFetch } from "~/REST_API_Client";
