@@ -5,6 +5,7 @@ import { API_URL } from '~/constants';  // URL API
 import configAxios from './config';
 import AuthenAPI from './authen';
 import UserAPI from './user'; // Import User API
+import OrderAPI from './order';
 // Tạo một instance của axios
 
 const axiosInstance = axios.create({
@@ -19,3 +20,4 @@ configAxios(axiosInstance);
 
 export const AuthenFetch = AuthenAPI(axiosInstance);
 export const UserFetch = UserAPI(axiosInstance);
+export const OrderFetch = OrderAPI(axiosInstance);

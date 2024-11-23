@@ -4,9 +4,9 @@ const UserAPI = (axiosInstance) => {
     async function get(paging, sorting, finding, filtering) {
         const params = new URLSearchParams({});
         const accessToken = localStorage.getItem("access_token")
-        console.log("fetch user token: ", accessToken);
-        console.log("filters: ", filtering);
-        console.log("sort: ", sorting);
+        // console.log("fetch user token: ", accessToken);
+        // console.log("filters: ", filtering);
+        // console.log("sort: ", sorting);
         try {
             if (paging.paging) params.append("page", paging.paging);
             if (paging.limiting) params.append("limit", paging.limiting);
@@ -265,7 +265,7 @@ const UserAPI = (axiosInstance) => {
             return res;
         } catch (error) {
             if (error.response) {
-                console.log("loi ne: ", error);
+                // console.log("loi ne: ", error);
                 throw new Error(error.response.data.message)
             } else if (error.request) {
                 throw new Error("Server không phản hồi");
