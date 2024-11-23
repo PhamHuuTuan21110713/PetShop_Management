@@ -13,7 +13,7 @@ const ProductModal = ({ open, onClose, product }) => {
     >
       <Box sx={modalStyle}>
         <Typography variant="h6" id="product-details-title">Thông tin chi tiết sản phẩm</Typography>
-        <Typography id="product-details-description"><strong>ID:</strong> {product.id}</Typography>
+        <Typography id="product-details-description"><strong>ID:</strong> {product._id}</Typography>
         <Typography><strong>Tên:</strong> {product.name}</Typography>
         <Typography><strong>Danh mục:</strong> {product.type}</Typography>
         <Typography><strong>Số lượng:</strong> {product.quantity}</Typography>

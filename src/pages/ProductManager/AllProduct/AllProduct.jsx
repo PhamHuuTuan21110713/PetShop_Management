@@ -1,0 +1,377 @@
+import React, { useEffect, useRef, useState } from "react";
+import myStyle from "~/pages/AccountManager/AllAccount/AllAccount.module.scss";
+import { Box, Button, Pagination, Tooltip, Typography, CircularProgress, Chip, Select, MenuItem, FormControl, InputLabel } from "@mui/material";
+import SearchIcon from '@mui/icons-material/Search';
+import LockIcon from '@mui/icons-material/Lock';
+import LockOpenIcon from '@mui/icons-material/LockOpen';
+import DetailsIcon from '@mui/icons-material/Details';
+import { CategoryFetch, ProductFetch } from "~/REST_API_Client"; // Assuming this is your API client for categories
+import ProductModal from "~/components/Modal/Product/ProductModal";
+
+const AllProduct = () => {
+  const [openModal, setOpenModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]); // Store categories
+  const [selectedCategory, setSelectedCategory] = useState(""); // Store selected category ID
+  //const [selectedCategoryName, setSelectedCategoryName] = useState("")
+  const [totalPages, setTotalPages] = useState(0);
+  const [sort, setSort] = useState("sold");
+  const [find, setFind] = useState("");
+  const [page, setPage] = useState(1);
+  const [filters, setFilters] = useState({
+    minPrice: "",
+    maxPrice: "",
+    minStar: 0,
+    maxStar: 5,
+    onlyPromotion: false
+  })
+
+  const indexProduct = useRef(0);
+  // Create instance of CategoryAPI
+
+  // Fetch categories
+  const fetchCategories = async () => {
+    try {
+      const data = await CategoryFetch.get();
+      console.log("sadasf", data);
+
+      setCategories(data.data); // Store the fetched categories
+    } catch (error) {
+      window.alert(`Error fetching categories: \n${error.message}`);
+    }
+  };
+
+  console.log("day la cate ", categories);
+  categories.map(cate => {
+    console.log("quai dan", cate.subCategory);
+
+  })
+
+  const fetchProducts = async (cateValue, page, condition, sorting) => {
+
+
+    console.log("Fetching products with page:", page, "limit:", condition.limit);
+    try {
+      let data;
+      if (!cateValue) {
+        data = await ProductFetch.getAllProduct(page);
+        console.log("Vai ca cuc", data);
+
+        setProducts(data.data);  // Cập nhật sản phẩm
+        setTotalPages(data.data.totalPage);
+      } else {
+        data = await CategoryFetch.getById(cateValue, condition, filters, sorting);
+        setProducts(data.data);  // Cập nhật sản phẩm
+        console.log("total", data);
+
+        setTotalPages(data.datapage);
+        //setPage(page)
+      }
+
+      setIsLoading(false);
+    } catch (error) {
+      window.alert(`Error fetching products: \n${error.message}`);
+      setIsLoading(false);
+    }
+  };
+
+
+  console.log("product nhe ", products.products);
+
+
+
+  useEffect(() => {
+    fetchCategories(); // Fetch categories when the component mounts
+
+    const condition = { page: 1, limit: 10 }
+    fetchProducts(selectedCategory, 1, condition, sort);
+
+
+
+  }, [selectedCategory]);
+
+
+  const updateStateProduct = async (product, newState, index) => {
+    const formData = new FormData();
+    formData.append("name", product?.name);
+    formData.append("desc", product?.desc);
+    formData.append("type", product?.type);
+    formData.append("price", product?.price);
+    formData.append("state", newState);
+    console.log("update State", formData);
+
+    ProductFetch.updateProduct(product?._id, formData)
+  .then(data => {
+    try {
+      console.log("Cập nhật thành công:", data);
+      const productData = data.data;
+      const newData = [...products.products];
+      newData[index] = productData;
+
+      // Cập nhật state
+      setProducts(prevProducts => {
+        console.log("State sản phẩm cũ: ", prevProducts);
+        return { ...prevProducts, products: newData };
+      });
+    } catch (err) {
+      console.error("Lỗi khi cập nhật state:", err);
+      window.alert(`Lỗi khi cập nhật trạng thái sản phẩm: \n ${err.message}`);
+    }
+  })
+  .catch(err => {
+    console.error("Lỗi cập nhật:", err); // In ra lỗi chi tiết
+    window.alert(`Lỗi cập nhật dữ liệu sản phẩm: \n ${err.message}`);
+  });
+
+      
+  }
+
+  const handleOpenModal = (index) => {
+    indexProduct.current = index;
+    setOpenModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+  };
+
+  const handleSort = (type) => {
+    setSort(type);
+    const condition = { page: 1, limit: 10 };
+    fetchProducts(selectedCategory, condition, 1, type)
+  };
+
+  const searchProducts = (products, searchTerm) => {
+    return products?.filter((product) => {
+      const lowercasedTerm = searchTerm.toLowerCase();
+      return (
+        product._id.toLowerCase().includes(lowercasedTerm) ||
+        product.name.toLowerCase().includes(lowercasedTerm)
+      );
+    });
+  };
+
+
+  const handleChangeFind = (e) => {
+    setFind(e.target.value);  // Cập nhật từ khóa tìm kiếm
+    const filteredProducts = searchProducts(products.products, e.target.value);  // Lọc sản phẩm
+    setProducts({ products: filteredProducts, page: 1 });  // Cập nhật lại mảng sản phẩm đã lọc
+  };
+
+
+  const handleSearch = () => {
+    const filteredProducts = searchProducts(products.products, find);  // Tìm kiếm sản phẩm
+    setProducts({ products: filteredProducts, page: 1 });  // Cập nhật lại danh sách sản phẩm
+  };
+
+  const handlePageChange = (e, newPage) => {
+    console.log("newpage", newPage);
+
+    setPage(newPage); // Cập nhật giá trị page
+    const condition = { page: newPage, limit: 10 };
+    fetchProducts(selectedCategory, parseInt(newPage), condition, sort);
+  };
+
+  const handleCategoryChange = (event) => {
+    console.log("Danh mujc test: ", event.target.value);
+
+    setSelectedCategory(event.target.value);
+    //setSelectedCategoryName(event.target.value.cateName)
+
+  };
+  console.log("Nguoi dc chon", selectedCategory);
+
+  const selectedCategoryName = categories
+    .map(category => {
+      // Kiểm tra danh mục con có phải là lựa chọn không
+      if (category._id === selectedCategory) {
+        return category.name;
+      }
+      // Kiểm tra danh mục con
+      const subCategory = category.subCategory?.find(sub => sub._id === selectedCategory);
+      return subCategory ? subCategory.name : null;
+    })
+    .filter(name => name !== null)[0] || "Tất cả";  // Hiển thị tên danh mục hoặc "Tất cả" nếu không có
+
+  return (
+    <Box>
+      <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        <Box>
+          {/* Search Bar */}
+          <Box sx={{ display: "flex", alignItems: "center", border: "solid 1px #000", width: "400px", gap: "2px", borderRadius: "20px", overflow: "hidden" }}>
+            <input className={myStyle.searchInput} placeholder="Tìm kiếm" type="text" value={find} onChange={handleChangeFind} />
+            <button onClick={handleSearch} className={myStyle.searchButton}><SearchIcon /></button>
+          </Box>
+        </Box>
+
+        {/* Sort Controls */}
+        <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+          <Typography sx={{ fontSize: "1rem", fontWeight: "bold" }}>Sắp xếp: </Typography>
+          <Button
+            onClick={() => handleSort("default")}
+            sx={{ textTransform: "none" }}
+            variant={sort === "default" ? "contained" : "outlined"}>
+            Mặc định
+          </Button>
+          <Button
+            onClick={() => handleSort("sold")}
+            sx={{ textTransform: "none" }}
+            variant={sort === "sold" ? "contained" : "outlined"}>
+            Theo tên
+          </Button>
+        </Box>
+      </Box>
+
+      {/* Filter Controls */}
+      <Box sx={{ display: "flex", alignItems: "center", gap: 2, marginTop: "20px" }}>
+        <Typography sx={{ fontSize: "1rem", fontWeight: "bold" }}>Bộ lọc: </Typography>
+        {/* Dropdown for categories */}
+        <FormControl variant="outlined" sx={{ minWidth: 150, position: 'relative' }}>
+          <InputLabel>Danh mục</InputLabel>
+          <Select
+            value={selectedCategory}
+            onChange={handleCategoryChange}
+            label="Danh mục"
+            sx={{ width: '100%' }}
+          >
+            <MenuItem value="">
+              <em>Tất cả</em>
+            </MenuItem>
+            {categories.map((category) => {
+              // Tạo mảng các MenuItem cho danh mục cha và danh mục con
+              const menuItems = [
+                <MenuItem key={category._id} value={category._id}>
+                  {category.name}
+                </MenuItem>,
+                // Nếu có các danh mục con, hiển thị chúng
+                ...(category.subCategory?.map((subCateItem) => (
+                  <MenuItem key={subCateItem._id} value={subCateItem._id} sx={{ paddingLeft: 3 }}>
+                    {subCateItem.name}
+                  </MenuItem>
+                )) || []) // Nếu không có subCategory, trả về mảng trống
+              ];
+
+              // Trả về mảng các MenuItem
+              return menuItems;
+            })}
+          </Select>
+        </FormControl>
+
+
+
+
+      </Box>
+
+      {/* Table */}
+      <Box sx={{ marginTop: "20px" }}>
+        <Box className={myStyle.tableContainer}>
+          <table>
+            <thead>
+              <tr>
+                <th style={{ width: "15%" }}>ID</th>
+                <th style={{ width: "20%" }}>Tên sản phẩm</th>
+                <th style={{ width: "15%" }}>Danh mục</th>
+                <th style={{ width: "10%" }}>Số lượng</th>
+                <th style={{ width: "10%" }}>Đã bán</th>
+                <th style={{ width: "10%" }}>Trạng thái</th>
+                <th style={{ width: "20%" }}>Hành động</th>
+              </tr>
+            </thead>
+            {isLoading ? (
+              <tbody>
+                <tr>
+                  <td colSpan="7" style={{ textAlign: "center" }}>
+                    <CircularProgress />
+                  </td>
+                </tr>
+              </tbody>
+            ) : (
+              <tbody>
+                {products?.products?.map((product, index) => (
+                  <tr key={product._id}>
+                    <td>{product._id}</td>
+                    <td>{product.name}</td>
+                    <td>{selectedCategoryName}</td>
+                    <td>{product.quantity}</td>
+                    <td>{product.sold}</td>
+                    <td>
+                      {product.state === 1 ? (
+                        <Chip label="kinh doanh" color="success" />
+                      ) : (
+                        <Chip label="dừng kinh doanh" color="error" />
+                      )}
+                    </td>
+                    <td>
+                      <Box sx={{ display: "flex", justifyContent: "center", gap: 2 }}>
+                        <Tooltip title="Chi tiết">
+                          <button
+                            onClick={() => handleOpenModal(index)}
+                            style={{
+                              border: "none",
+                              cursor: "pointer",
+                              color: "#fff",
+                              background: "#346791",
+                              borderRadius: "4px"
+                            }}>
+                            <DetailsIcon />
+                          </button>
+                        </Tooltip>
+                        {product.state === 1 ? (
+                          <Tooltip title="Khóa sản phẩm">
+                            <button
+                              onClick={() => updateStateProduct(product, 0, index)}
+                              style={{
+                                border: "none",
+                                cursor: "pointer",
+                                color: "#fff",
+                                background: "#b55050",
+                                borderRadius: "4px"
+                              }}>
+                              <LockIcon />
+                            </button>
+                          </Tooltip>
+                        ) : (
+                          <Tooltip title="Mở khóa sản phẩm">
+                            <button
+                              onClick={() => updateStateProduct(product, 1, index)}
+                              style={{
+                                border: "none",
+                                cursor: "pointer",
+                                color: "#fff",
+                                background: "#50c77f",
+                                borderRadius: "4px"
+                              }}>
+                              <LockOpenIcon />
+                            </button>
+                          </Tooltip>
+                        )}
+                      </Box>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            )}
+          </table>
+        </Box>
+      </Box>
+
+      {!isLoading && (
+        <>
+          <Box sx={{ marginTop: "10px", display: "flex", justifyContent: "flex-end" }}>
+            <Pagination
+              page={page}
+              onChange={handlePageChange}
+              count={totalPages} // Tính số trang dựa trên tổng số sản phẩm
+              size="small"
+            />
+          </Box>
+          {/* Modal for product details */}
+          <ProductModal open={openModal} onClose={handleCloseModal} product={products?.products[indexProduct.current]} />
+        </>
+      )}
+    </Box>
+  );
+};
+
+export default AllProduct;
