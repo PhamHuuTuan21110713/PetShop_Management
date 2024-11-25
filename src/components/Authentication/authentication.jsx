@@ -10,7 +10,7 @@ export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const page = useRef(1);
     useEffect(() => {
-        if (user == null) {
+        if (user === null) {
             AuthenFetch.checkToken()
                 .then(data => {
                     // console.log(data);

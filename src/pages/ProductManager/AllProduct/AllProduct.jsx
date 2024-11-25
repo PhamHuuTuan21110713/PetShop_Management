@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useOutletContext } from "react-router-dom";
 import myStyle from "~/pages/AccountManager/AllAccount/AllAccount.module.scss";
 import { Box, Button, Pagination, Tooltip, Typography, CircularProgress, Chip, Select, MenuItem, FormControl, InputLabel } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
@@ -12,7 +13,8 @@ const AllProduct = () => {
   const [openModal, setOpenModal] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [products, setProducts] = useState([]);
-  const [categories, setCategories] = useState([]); // Store categories
+  const { categories } = useOutletContext(); 
+  //const [categories, setCategories] = useState([]); // Store categories
   const [selectedCategory, setSelectedCategory] = useState(""); // Store selected category ID
   //const [selectedCategoryName, setSelectedCategoryName] = useState("")
   const [totalPages, setTotalPages] = useState(0);
@@ -31,44 +33,38 @@ const AllProduct = () => {
   // Create instance of CategoryAPI
 
   // Fetch categories
-  const fetchCategories = async () => {
-    try {
-      const data = await CategoryFetch.get();
-      console.log("sadasf", data);
+  // const fetchCategories = async () => {
+  //   try {
+  //     const data = await CategoryFetch.get();
+  //     //console.log("sadasf", data);
 
-      setCategories(data.data); // Store the fetched categories
-    } catch (error) {
-      window.alert(`Error fetching categories: \n${error.message}`);
-    }
-  };
+  //     setCategories(data.data); // Store the fetched categories
+  //   } catch (error) {
+  //     window.alert(`Error fetching categories: \n${error.message}`);
+  //   }
+  // };
 
-  console.log("day la cate ", categories);
-  categories.map(cate => {
-    console.log("quai dan", cate.subCategory);
+  //console.log("day la cate ", categories);
+  // categories.map(cate => {
+  //   //console.log("quai dan", cate.subCategory);
 
-  })
+  // })
 
   const fetchProducts = async (cateValue, page, condition, sorting) => {
-
-
-    console.log("Fetching products with page:", page, "limit:", condition.limit);
+    //console.log("Fetching products with categoryId:", cateValue);
     try {
       let data;
       if (!cateValue) {
-        data = await ProductFetch.getAllProduct(page);
-        console.log("Vai ca cuc", data);
-
-        setProducts(data.data);  // Cập nhật sản phẩm
+        data = await ProductFetch.getAllProduct(page, sorting);
+        console.log("Products fetched without category:", data);
+        setProducts(data.data); // Cập nhật sản phẩm
         setTotalPages(data.data.totalPage);
       } else {
         data = await CategoryFetch.getById(cateValue, condition, filters, sorting);
-        setProducts(data.data);  // Cập nhật sản phẩm
-        console.log("total", data);
-
-        setTotalPages(data.datapage);
-        //setPage(page)
+        console.log("Products fetched with categoryId:", cateValue, data); // In kết quả trả về
+        setProducts(data.data); // Cập nhật sản phẩm
+        setTotalPages(data.page);
       }
-
       setIsLoading(false);
     } catch (error) {
       window.alert(`Error fetching products: \n${error.message}`);
@@ -77,12 +73,13 @@ const AllProduct = () => {
   };
 
 
+
   console.log("product nhe ", products.products);
 
 
 
   useEffect(() => {
-    fetchCategories(); // Fetch categories when the component mounts
+    //fetchCategories(); // Fetch categories when the component mounts
 
     const condition = { page: 1, limit: 10 }
     fetchProducts(selectedCategory, 1, condition, sort);
@@ -98,34 +95,46 @@ const AllProduct = () => {
     formData.append("desc", product?.desc);
     formData.append("type", product?.type);
     formData.append("price", product?.price);
-    formData.append("state", newState);
+    formData.append("state", JSON.parse(newState));
     console.log("update State", formData);
 
     ProductFetch.updateProduct(product?._id, formData)
-  .then(data => {
-    try {
-      console.log("Cập nhật thành công:", data);
-      const productData = data.data;
-      const newData = [...products.products];
-      newData[index] = productData;
+      .then(data => {
+        try {
+          //console.log("Cập nhật thành công:", data);
+          const productData = data.data;
+          const newData = [...products.products];
+          newData[index] = productData;
 
-      // Cập nhật state
-      setProducts(prevProducts => {
-        console.log("State sản phẩm cũ: ", prevProducts);
-        return { ...prevProducts, products: newData };
+          // Cập nhật state
+          setProducts(prevProducts => {
+            console.log("State sản phẩm cũ: ", prevProducts);
+            return { ...prevProducts, products: newData };
+          });
+        } catch (err) {
+          console.error("Lỗi khi cập nhật state:", err);
+          window.alert(`Lỗi khi cập nhật trạng thái sản phẩm: \n ${err.message}`);
+        }
+      })
+      .catch(err => {
+        console.error("Lỗi cập nhật:", err); // In ra lỗi chi tiết
+        window.alert(`Lỗi cập nhật dữ liệu sản phẩm: \n ${err.message}`);
       });
-    } catch (err) {
-      console.error("Lỗi khi cập nhật state:", err);
-      window.alert(`Lỗi khi cập nhật trạng thái sản phẩm: \n ${err.message}`);
-    }
-  })
-  .catch(err => {
-    console.error("Lỗi cập nhật:", err); // In ra lỗi chi tiết
-    window.alert(`Lỗi cập nhật dữ liệu sản phẩm: \n ${err.message}`);
-  });
-
-      
   }
+
+  const onChangeProducts = (data) => {
+    console.log("data modal: ", data);
+    console.log("data products: ", products);
+
+    
+    const newProducs = [...products.products];
+    newProducs[indexProduct.current] = data;
+    // setProducts({products: newProducs});
+    setProducts(prevProducts => {
+      console.log("State sản phẩm cũ: ", prevProducts);
+      return { ...prevProducts, products: newProducs };
+    });
+}
 
   const handleOpenModal = (index) => {
     indexProduct.current = index;
@@ -138,8 +147,10 @@ const AllProduct = () => {
 
   const handleSort = (type) => {
     setSort(type);
+    console.log("Kieur loc: ", type);
+
     const condition = { page: 1, limit: 10 };
-    fetchProducts(selectedCategory, condition, 1, type)
+    fetchProducts(selectedCategory, 1,condition , type)
   };
 
   const searchProducts = (products, searchTerm) => {
@@ -218,7 +229,7 @@ const AllProduct = () => {
             onClick={() => handleSort("sold")}
             sx={{ textTransform: "none" }}
             variant={sort === "sold" ? "contained" : "outlined"}>
-            Theo tên
+            Bán chạy
           </Button>
         </Box>
       </Box>
@@ -272,9 +283,9 @@ const AllProduct = () => {
                 <th style={{ width: "15%" }}>ID</th>
                 <th style={{ width: "20%" }}>Tên sản phẩm</th>
                 <th style={{ width: "15%" }}>Danh mục</th>
-                <th style={{ width: "10%" }}>Số lượng</th>
-                <th style={{ width: "10%" }}>Đã bán</th>
-                <th style={{ width: "10%" }}>Trạng thái</th>
+                <th style={{ width: "8%" }}>Số lượng</th>
+                <th style={{ width: "8%" }}>Đã bán</th>
+                <th style={{ width: "14%" }}>Trạng thái</th>
                 <th style={{ width: "20%" }}>Hành động</th>
               </tr>
             </thead>
@@ -288,69 +299,82 @@ const AllProduct = () => {
               </tbody>
             ) : (
               <tbody>
-                {products?.products?.map((product, index) => (
-                  <tr key={product._id}>
-                    <td>{product._id}</td>
-                    <td>{product.name}</td>
-                    <td>{selectedCategoryName}</td>
-                    <td>{product.quantity}</td>
-                    <td>{product.sold}</td>
-                    <td>
-                      {product.state === 1 ? (
-                        <Chip label="kinh doanh" color="success" />
-                      ) : (
-                        <Chip label="dừng kinh doanh" color="error" />
-                      )}
-                    </td>
-                    <td>
-                      <Box sx={{ display: "flex", justifyContent: "center", gap: 2 }}>
-                        <Tooltip title="Chi tiết">
-                          <button
-                            onClick={() => handleOpenModal(index)}
-                            style={{
-                              border: "none",
-                              cursor: "pointer",
-                              color: "#fff",
-                              background: "#346791",
-                              borderRadius: "4px"
-                            }}>
-                            <DetailsIcon />
-                          </button>
-                        </Tooltip>
-                        {product.state === 1 ? (
-                          <Tooltip title="Khóa sản phẩm">
-                            <button
-                              onClick={() => updateStateProduct(product, 0, index)}
-                              style={{
-                                border: "none",
-                                cursor: "pointer",
-                                color: "#fff",
-                                background: "#b55050",
-                                borderRadius: "4px"
-                              }}>
-                              <LockIcon />
-                            </button>
-                          </Tooltip>
-                        ) : (
-                          <Tooltip title="Mở khóa sản phẩm">
-                            <button
-                              onClick={() => updateStateProduct(product, 1, index)}
-                              style={{
-                                border: "none",
-                                cursor: "pointer",
-                                color: "#fff",
-                                background: "#50c77f",
-                                borderRadius: "4px"
-                              }}>
-                              <LockOpenIcon />
-                            </button>
-                          </Tooltip>
-                        )}
-                      </Box>
-                    </td>
-                  </tr>
-                ))}
+                {products?.products?.length > 0 &&
+                  products.products.map((product, index) => (
+                    // Kiểm tra nếu sản phẩm không có tên hoặc không có trạng thái, không hiển thị dòng này
+                    (product.name && product.state !== undefined) && (
+                      <tr key={product._id || index}>
+                        <td>{product._id}</td>
+                        <td>{product.name}</td>
+                        <td>{selectedCategoryName}</td>
+                        <td>{product.quantity}</td>
+                        <td>{product.sold}</td>
+                        <td style={{ textAlign: 'center', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                          {product.state === true ? (
+                            product.quantity !== 0 ? (
+                              <Chip label="Kinh doanh" color="success" />
+                            ) : (
+                              <Chip label="Hết hàng" color="warning" />
+                            )
+                          ) : (
+                            <Chip label="Dừng kinh doanh" color="error" />
+                          )}
+                        </td>
+
+                        <td>
+                          <Box sx={{ display: "flex", justifyContent: "center", gap: 2 }}>
+                            <Tooltip title="Chi tiết">
+                              <button
+                                onClick={() => handleOpenModal(index)}
+                                style={{
+                                  border: "none",
+                                  cursor: "pointer",
+                                  color: "#fff",
+                                  background: "#346791",
+                                  borderRadius: "4px"
+                                }}
+                              >
+                                <DetailsIcon />
+                              </button>
+                            </Tooltip>
+                            {product.state === true ? (
+                              <Tooltip title="Khóa sản phẩm">
+                                <button
+                                  onClick={() => updateStateProduct(product, false, index)}
+                                  style={{
+                                    border: "none",
+                                    cursor: "pointer",
+                                    color: "#fff",
+                                    background: "#b55050",
+                                    borderRadius: "4px"
+                                  }}
+                                >
+                                  <LockIcon />
+                                </button>
+                              </Tooltip>
+                            ) : (
+                              <Tooltip title="Mở khóa sản phẩm">
+                                <button
+                                  onClick={() => updateStateProduct(product, true, index)}
+                                  style={{
+                                    border: "none",
+                                    cursor: "pointer",
+                                    color: "#fff",
+                                    background: "#50c77f",
+                                    borderRadius: "4px"
+                                  }}
+                                >
+                                  <LockOpenIcon />
+                                </button>
+                              </Tooltip>
+                            )}
+                          </Box>
+                        </td>
+                      </tr>
+                    )
+                  ))}
               </tbody>
+
             )}
           </table>
         </Box>
@@ -367,7 +391,7 @@ const AllProduct = () => {
             />
           </Box>
           {/* Modal for product details */}
-          <ProductModal open={openModal} onClose={handleCloseModal} product={products?.products[indexProduct.current]} />
+          <ProductModal open={openModal} onClose={handleCloseModal} product={products?.products[indexProduct.current]} onChange={onChangeProducts}/>
         </>
       )}
     </Box>

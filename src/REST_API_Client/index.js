@@ -7,6 +7,7 @@ import AuthenAPI from './authen';
 import UserAPI from './user'; // Import User API
 import CategoryAPI from './category';
 import ProductAPI from './product';
+import OrderAPI from './order';
 // Tạo một instance của axios
 
 const axiosInstance = axios.create({
@@ -23,3 +24,4 @@ export const AuthenFetch = AuthenAPI(axiosInstance);
 export const UserFetch = UserAPI(axiosInstance);
 export const ProductFetch = ProductAPI(axiosInstance);
 export const CategoryFetch = CategoryAPI(axiosInstance);
+export const OrderFetch = OrderAPI(axiosInstance);

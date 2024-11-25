@@ -33,7 +33,7 @@ const AllAccount = () => {
         setIsLoading(true);
         UserFetch.get({ paging, limiting }, sorting, finding, filtering)
             .then(data => {
-                console.log("data: ", data);
+                // console.log("data: ", data);
                 setUsers(data);
                 setIsLoading(false)
             })
@@ -74,7 +74,7 @@ const AllAccount = () => {
                 // setgender(newUser?.gender); setName(newUser?.name); setEmail(newUser?.email);
                 // setPhone(newUser?.phone); setAddress(newUser?.address); setState(newUser?.state);
                 // defaultInfor.current = { ...newUser };
-                const newUsers = [...users.data];
+                const newUsers = [...users];
                 newUsers[index] = userData;
                 setUsers(newUsers);
             })

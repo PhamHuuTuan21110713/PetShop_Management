@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Modal, Box, Typography, Button, Avatar, Chip, TextField, Divider } from '@mui/material';
 import Radio from '@mui/material/Radio';
 import { UserFetch } from '~/REST_API_Client';
+import { Link } from 'react-router-dom';
 
 const DetailAccountModal = ({ open, onClose, user, onChange }) => {
   // if (!user) return null; // Nếu không có user thì không render modal;
@@ -77,6 +78,7 @@ const DetailAccountModal = ({ open, onClose, user, onChange }) => {
       <Box sx={modalStyle}>
         <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <Typography variant="h6" sx={{ fontWeight: "bold" }} id="user-details-title">Thông tin cơ bản</Typography>
+          <Link to={`/tai-khoan/${user?._id}`}>Xem chi tiết ➡️</Link>
         </Box>
         {/* Detail */}
         <Box sx={{ display: "flex", marginTop: "10px", width: "100%" }}>
