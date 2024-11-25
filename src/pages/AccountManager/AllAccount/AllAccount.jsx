@@ -159,69 +159,72 @@ const AllAccount = () => {
                                 <th style={{ width: "20%" }}>Hành động</th>
                             </tr>
                         </thead>
-                        {
-                            isLoading ?
+
+                        <tbody>
+                            {
+                                isLoading ?
                                 (
-                                    <CircularProgress />
+                                    <tr>
+                                        <td colSpan={6} style={{ textAlign: "center" }}>
+                                            <CircularProgress />
+                                        </td>
+                                    </tr>
                                 ) :
-                                <tbody>
-                                    {
-                                        users.data?.map((user, index) => {
-                                            return (
-                                                <tr key={index}>
+                                users.data?.map((user, index) => {
+                                    return (
+                                        <tr key={index}>
 
-                                                    <td>{user?._id}</td>
-                                                    <td>{user?.name}</td>
-                                                    <td>{user?.email}</td>
-                                                    <td>{user?.phone}</td>
-                                                    <td>
-                                                        {
-                                                            user?.state === 1 ? <Chip label="hoạt động" color="success" /> :
-                                                                <Chip label="đã khóa" color="error" />
-                                                        }
+                                            <td>{user?._id}</td>
+                                            <td>{user?.name}</td>
+                                            <td>{user?.email}</td>
+                                            <td>{user?.phone}</td>
+                                            <td>
+                                                {
+                                                    user?.state === 1 ? <Chip label="hoạt động" color="success" /> :
+                                                        <Chip label="đã khóa" color="error" />
+                                                }
 
-                                                    </td>
-                                                    <td >
-                                                        <Box sx={{ display: "flex", justifyContent: "center", gap: 2 }}>
-                                                            <Tooltip title="Chi tiết">
-                                                                <button
-                                                                    onClick={() => {
-                                                                        handleOpenModal(index)
-                                                                    }}
-                                                                    style={{ border: "none", cursor: "pointer", color: "#fff", background: "#346791", borderRadius: "4px" }}>
-                                                                    <DetailsIcon />
-                                                                </button>
-                                                            </Tooltip>
-                                                            {
-                                                                user?.state === 1 ?
-                                                                    (
-                                                                        <Tooltip title="khóa tài khoản">
-                                                                            <button
-                                                                                onClick={() => updateStateUser(user, 0, index)}
-                                                                                style={{ border: "none", cursor: "pointer", color: "#fff", background: "#b55050", borderRadius: "4px" }}>
-                                                                                <LockIcon />
-                                                                            </button>
-                                                                        </Tooltip>
-                                                                    ) :
-                                                                    (
-                                                                        <Tooltip title="mở khóa tài khoản">
-                                                                            <button
-                                                                                onClick={() => updateStateUser(user, 1, index)}
-                                                                                style={{ border: "none", cursor: "pointer", color: "#fff", background: "#50c77f", borderRadius: "4px" }}>
-                                                                                <LockOpenIcon />
-                                                                            </button>
-                                                                        </Tooltip>
-                                                                    )
-                                                            }
+                                            </td>
+                                            <td >
+                                                <Box sx={{ display: "flex", justifyContent: "center", gap: 2 }}>
+                                                    <Tooltip title="Chi tiết">
+                                                        <button
+                                                            onClick={() => {
+                                                                handleOpenModal(index)
+                                                            }}
+                                                            style={{ border: "none", cursor: "pointer", color: "#fff", background: "#346791", borderRadius: "4px" }}>
+                                                            <DetailsIcon />
+                                                        </button>
+                                                    </Tooltip>
+                                                    {
+                                                        user?.state === 1 ?
+                                                            (
+                                                                <Tooltip title="khóa tài khoản">
+                                                                    <button
+                                                                        onClick={() => updateStateUser(user, 0, index)}
+                                                                        style={{ border: "none", cursor: "pointer", color: "#fff", background: "#b55050", borderRadius: "4px" }}>
+                                                                        <LockIcon />
+                                                                    </button>
+                                                                </Tooltip>
+                                                            ) :
+                                                            (
+                                                                <Tooltip title="mở khóa tài khoản">
+                                                                    <button
+                                                                        onClick={() => updateStateUser(user, 1, index)}
+                                                                        style={{ border: "none", cursor: "pointer", color: "#fff", background: "#50c77f", borderRadius: "4px" }}>
+                                                                        <LockOpenIcon />
+                                                                    </button>
+                                                                </Tooltip>
+                                                            )
+                                                    }
 
-                                                        </Box>
-                                                    </td>
-                                                </tr>
-                                            )
-                                        })
-                                    }
-                                </tbody>
-                        }
+                                                </Box>
+                                            </td>
+                                        </tr>
+                                    )
+                                })
+                            }
+                        </tbody>
 
                     </table>
 
