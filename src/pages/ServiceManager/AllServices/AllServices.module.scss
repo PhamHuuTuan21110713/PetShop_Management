@@ -1,0 +1,47 @@
+
+
+.tableContainer {
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th,
+    td {
+        border: 1px solid #ccc;
+        padding: 10px;
+        text-align: left;
+    }
+
+    th {
+        background-color: #f4f4f4;
+        
+    }
+}
+
+.searchInput {
+    height:40px;
+    border:none;
+    flex: 1;
+    padding: 4px;
+    padding-left: 8px;
+    font-size: 1rem;
+}
+
+.searchInput:focus {
+    outline: none;
+}
+.searchButton {
+    border: none;
+    background-color: #de5945;
+    color: #fff;
+    cursor: pointer;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    width: 50px;
+    justify-content: center;
+}
+.searchButton:hover {
+    background-color: #eda59a;
+}
