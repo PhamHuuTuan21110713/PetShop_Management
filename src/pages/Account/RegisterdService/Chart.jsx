@@ -7,7 +7,7 @@ import { Box, Typography, Button } from "@mui/material";
 import { useState, memo } from "react";
 import { axisClasses } from '@mui/x-charts/ChartsAxis';
 
-
+import { PieChart } from '@mui/x-charts/PieChart';
 import { useDrawingArea } from '@mui/x-charts/hooks';
 import { styled } from '@mui/material/styles';
 function valueFormatter(value) {
@@ -27,7 +27,7 @@ const chartSetting = {
         },
     },
 };
-import { PieChart } from '@mui/x-charts/PieChart';
+
 
 const size = {
     width: 400,
@@ -52,29 +52,29 @@ function PieCenterLabel({ children }) {
 
 
 
-const BoughtOrdersChart = ({ orders, year }) => {
+const RegisterdBookingChart = ({ orders, year }) => {
 
     const changeToBarData = (orders, year) => {
         if (year === "") {
             year = new Date().getFullYear();
         }
-
+        
         // Tạo object tóm tắt theo tháng và trạng thái
         const summary = {};
-
-        // Duyệt qua danh sách đơn hàng và nhóm dữ liệu
+        
+        // Duyệt qua danh sách đơn hàng và tính toán
         orders.forEach((order) => {
-            const date = new Date(order.orderDate);
+            const date = new Date(order.bookingDate);
             const month = date.getMonth(); // Lấy tháng (0-11)
             const orderYear = date.getFullYear();
             const status = order.status;
-
+        
             // Chỉ xử lý đơn hàng thuộc năm được chọn
             if (orderYear === year) {
                 if (!summary[month]) {
                     summary[month] = {};
                 }
-
+        
                 // Đếm số lượng trạng thái
                 if (!summary[month][status]) {
                     summary[month][status] = 0;
@@ -82,29 +82,29 @@ const BoughtOrdersChart = ({ orders, year }) => {
                 summary[month][status] += 1;
             }
         });
-
+        
         // Khởi tạo dữ liệu kết quả với 12 tháng
         const prevData = [
             { month: 'Jan' }, { month: 'Feb' }, { month: 'Mar' }, { month: 'Apr' },
             { month: 'May' }, { month: 'June' }, { month: 'July' }, { month: 'Aug' },
             { month: 'Sept' }, { month: 'Oct' }, { month: 'Nov' }, { month: 'Dec' }
         ];
-
-        // Chuyển dữ liệu từ `summary` vào `prevData`
+        
+        // Đưa dữ liệu từ `summary` vào `prevData`
         prevData.forEach((item, index) => {
             const monthSummary = summary[index] || {};
             Object.keys(monthSummary).forEach((status) => {
                 item[status] = monthSummary[status];
             });
-
-            // Đảm bảo mọi trạng thái đều là số hoặc `0`
-            ['tc', 'hbb', 'hbs'].forEach((status) => {
+        
+            // Đảm bảo mọi trạng thái đều là số hoặc `null`
+            ['hoan-thanh', 'da-huy'].forEach((status) => {
                 if (!item[status]) {
                     item[status] = 0; // Gán 0 nếu không có đơn hàng
                 }
             });
         });
-
+        
         return prevData;
     }
     const changeToPieData = (datas, year) => {
@@ -116,29 +116,26 @@ const BoughtOrdersChart = ({ orders, year }) => {
         // Dữ liệu đầu ra ban đầu
         const prevData = [
             { label: "Thành công", count: 0, value: 0 },
-            { label: "Hủy bởi shop", count: 0, value: 0 },
-            { label: "Hủy bởi khách", count: 0, value: 0 },
+            { label: "Đã hủy", count: 0, value: 0 },
         ];
 
         // Duyệt qua danh sách đơn hàng
         datas.forEach((order) => {
-            const date = new Date(order.orderDate);
+            const date = new Date(order.bookingDate);
             const orderYear = date.getFullYear();
             const status = order.status;
 
             // Tính tổng đơn hàng hoàn thành và đã hủy
-            if (status === "tc" || status === "hbb" || status === "hbs") {
+            if (status === "hoan-thanh" || status === "da-huy") {
                 totalOrders++;
             }
 
             // Chỉ tính các đơn hàng trong năm hiện tại
             if (orderYear == year) {
-                if (status === "tc") {
+                if (status === "hoan-thanh") {
                     prevData[0].count++;
-                } else if (status === "hbb") {
+                } else if (status === "da-huy") {
                     prevData[1].count++;
-                } else if (status === "hbs") {
-                    prevData[2].count++;
                 }
             }
         });
@@ -148,6 +145,7 @@ const BoughtOrdersChart = ({ orders, year }) => {
             item.value = totalOrders > 0 ? item.count / totalOrders : 0;
         });
         return prevData;
+
     }
 
     const [typeChart, setTypeChart] = useState("bar");
@@ -163,7 +161,7 @@ const BoughtOrdersChart = ({ orders, year }) => {
 
         <Box sx={{ boxShadow: "rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;", padding: "10px", borderRadius: "8px" }}>
             <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                <Typography sx={{ fontWeight: "bold", fontSize: "1.2rem", textAlign: "center" }}>Thống kê đơn mua</Typography>
+                <Typography sx={{ fontWeight: "bold", fontSize: "1.2rem", textAlign: "center" }}>Thống kê đơn dịch vụ</Typography>
 
                 <Box>
                     <Button
@@ -212,16 +210,15 @@ const BoughtOrdersChart = ({ orders, year }) => {
                                             dataset={year === "" ? changeToBarData(orders, new Date().getFullYear()) : changeToBarData(orders, parseInt(year))}
                                             xAxis={[{ scaleType: 'band', dataKey: 'month' }]}
                                             series={[
-                                                { dataKey: 'tc', label: 'Hoàn thành', valueFormatter },
-                                                { dataKey: 'hbs', label: 'Hủy bởi shop', valueFormatter },
-                                                { dataKey: 'hbb', label: 'Hủy bởi khách', valueFormatter },
+                                                { dataKey: 'hoan-thanh', label: 'Hoàn thành', valueFormatter },
+                                                { dataKey: 'da-huy', label: 'Đã hủy', valueFormatter },
                                             ]}
                                             {...chartSetting}
                                         />
                                     ) :
                                     (
                                         <PieChart series={[{ data: changeToPieData(orders, year), innerRadius: 50 }]} {...size}>
-                                            <PieCenterLabel>Đơn mua</PieCenterLabel>
+                                            <PieCenterLabel>Lịch đặt</PieCenterLabel>
                                         </PieChart>
                                     )
                             }
@@ -236,4 +233,4 @@ const BoughtOrdersChart = ({ orders, year }) => {
     )
 }
 
-export default memo(BoughtOrdersChart);
+export default memo(RegisterdBookingChart);
