@@ -20,18 +20,19 @@ const AddService = () => {
         setSubPage(value);
         setData(data);
     }
-    console.log(subPage);
+    // console.log(data);
+    // console.log(subPage);
     return (
         <Box>
             <Box>
                 {
-                    subPage === 1 ? <AddNamePage onChange={changeSubPage} value={subPage} /> :
+                    subPage === 1 ? <AddNamePage onChange={changeSubPage} value={subPage} data={data} /> :
                         (
-                            subPage === 2 ? <Description onChange={changeSubPage} value={subPage} /> :
+                            subPage === 2 ? <Description onChange={changeSubPage} value={subPage} data={data} /> :
                                 (
-                                    subPage === 3 ? <Price onChange={changeSubPage} value={subPage} /> :
+                                    subPage === 3 ? <Price onChange={changeSubPage} value={subPage} data={data} /> :
                                         (
-                                            subPage === 4 ? <Procedures isFinal={true} onChange={changeSubPage} value={subPage} /> : null
+                                            subPage === 4 ? <Procedures isFinal={true} onChange={changeSubPage} value={subPage} data={data} /> : null
                                         )
                                 )
                         )

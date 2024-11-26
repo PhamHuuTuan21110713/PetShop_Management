@@ -1,25 +1,25 @@
 import { Box, Button, Typography } from "@mui/material";
 import { useRef, useState } from "react";
-const data = [
-    {
-        heading: "Tắm rửa cho chó",
-        content: [
-            "Cởi đồ",
-            "Xoa nhẹ",
-            "mát xa"
-        ]
-    },
-    {
-        heading: "Tắm rửa cho chó",
-        content: [
-            "Cởi đồ",
-            "Xoa nhẹ",
-            "mát xa"
-        ]
-    }
-]
-const Description = ({ onChange, value }) => {
-    const [descriptions, setDescriptions] = useState(data);
+// const data = [
+//     {
+//         heading: "Tắm rửa cho chó",
+//         content: [
+//             "Cởi đồ",
+//             "Xoa nhẹ",
+//             "mát xa"
+//         ]
+//     },
+//     {
+//         heading: "Tắm rửa cho chó",
+//         content: [
+//             "Cởi đồ",
+//             "Xoa nhẹ",
+//             "mát xa"
+//         ]
+//     }
+// ]
+const Description = ({ onChange, value, data }) => {
+    const [descriptions, setDescriptions] = useState(data.description);
     const [subAddContent, setSubAddConent] = useState([])
     const [newDescription, setNewDescription] = useState({
         heading: "",
@@ -27,10 +27,15 @@ const Description = ({ onChange, value }) => {
     });
     const [newSubConent, setNewSubContent] = useState("");
     const handleBack = () => {
-        onChange(value - 1)
+        const reData = {...data};
+        reData.description = descriptions
+        onChange(value - 1,reData)
+        
     }
     const handleNext = () => {
-        onChange(value + 1)
+        const reData = {...data};
+        reData.description = descriptions
+        onChange(value + 1, reData);
     }
 
     const handleChangeHeader = (e, chimuc) => {
@@ -81,7 +86,31 @@ const Description = ({ onChange, value }) => {
         setNewDescription(news);
     }
     const handleChangeNewSubContent = (e) => {
-        
+        setNewSubContent(e.target.value)
+    }
+    const handleAddNewSubContent = () => {
+        if(newSubConent !== '') {
+            const news = { ...newDescription };
+            news.content.push(newSubConent);
+            setNewDescription(news);
+            setNewSubContent("");
+        }
+    }
+    const handleRemoveNewContent = (idx) => {
+        const news = { ...newDescription };
+        news.content.splice(idx, 1) ;
+        setNewDescription(news);
+    }
+    const handleAddDescription = () => {
+        if(newDescription.heading !== "" && newDescription.content.length > 0) {
+            const newDescriptions = [...descriptions];
+            newDescriptions.push(newDescription);
+            setDescriptions(newDescriptions);
+            setNewDescription({
+                heading:"",
+                content:[]
+            })
+        }
     }
     return (
         <Box>
@@ -140,7 +169,7 @@ const Description = ({ onChange, value }) => {
                                             return (
                                                 <Box key={idx} sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                                                     <input value={content} onChange={(e) => handleChangeNewContent(e, idx)} style={{ width: "400px" }} type="text" />
-                                                    <Button color="error" variant="contained" sx={{ textTransform: "none" }}>xóa</Button>
+                                                    <Button onClick={() => handleRemoveNewContent(idx)} color="error" variant="contained" sx={{ textTransform: "none" }}>xóa</Button>
                                                 </Box>
                                             )
                                         })
@@ -148,7 +177,7 @@ const Description = ({ onChange, value }) => {
                                 }
                                 <Box sx={{ display: "flex", flexDirection: "column", gap: 2, alignItems: "center" }}>
                                     <input value={newSubConent} onChange={handleChangeNewSubContent}  style={{ width: "400px" }} type="text" />
-                                    <Button variant="contained" sx={{ textTransform: "none" }}>Thêm nội dung</Button>
+                                    <Button onClick={handleAddNewSubContent} variant="contained" sx={{ textTransform: "none" }}>Thêm nội dung</Button>
                                 </Box>
                             </Box>
                         </Box>
@@ -156,11 +185,13 @@ const Description = ({ onChange, value }) => {
                 </Box>
             </Box>
             <Box sx={{ display: "flex", justifyContent: "center", gap: 3, marginTop: "10px" }}>
-                <Button variant="contained" sx={{ textTransform: "none" }}>Thêm mô tả</Button>
+                <Button onClick={handleAddDescription} variant="contained" sx={{ textTransform: "none" }}>Thêm mô tả</Button>
             </Box>
             <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 3, marginTop: "10px" }}>
                 <Button variant="contained" onClick={handleBack}>Quay lại</Button>
-                <Button variant="contained" onClick={handleNext}>Tiếp</Button>
+                {
+                    descriptions.length > 0 && <Button variant="contained" onClick={handleNext}>Tiếp</Button>
+                }
             </Box>
         </Box>
     )

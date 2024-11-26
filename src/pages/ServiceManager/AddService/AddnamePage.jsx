@@ -2,7 +2,7 @@ import { Box, Button, Typography } from "@mui/material";
 import { useState } from "react";
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
-const AddNamePage = ({ onChange, value }) => {
+const AddNamePage = ({ onChange, value,data }) => {
     const [name, SetName] = useState("");
     const [checked, setChecked] =useState([true, false]);
 
@@ -18,7 +18,7 @@ const AddNamePage = ({ onChange, value }) => {
         setChecked([checked[0], event.target.checked]);
     };
     const handleNext = () => {
-        onChange(value + 1);
+        onChange(value + 1,data); //can sua lai
     }
     return (
         <Box>
