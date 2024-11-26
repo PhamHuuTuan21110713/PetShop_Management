@@ -1,24 +1,45 @@
 import { Box, Button, Typography } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
-const AddNamePage = ({ onChange, value,data }) => {
-    const [name, SetName] = useState("");
-    const [checked, setChecked] =useState([true, false]);
-
-    const handleChange1 = (event) => {
-        setChecked([event.target.checked, event.target.checked]);
-    };
-
-    const handleChange2 = (event) => {
-        setChecked([event.target.checked, checked[1]]);
-    };
-
-    const handleChange3 = (event) => {
-        setChecked([checked[0], event.target.checked]);
+import { ShopFetch } from "~/REST_API_Client";
+const AddNamePage = ({ onChange, value, data }) => {
+    const [name, SetName] = useState(data.name);
+    const [addresses, setAddresses] = useState([]);
+    const [applicableBranches, setApplicableBranches] = useState(data.applicableBranches)
+    const handleChangeAddresses = (event, id, index) => {
+        if(event.target.checked) {
+          
+            const news = [...applicableBranches];
+            news.push(id);
+            setApplicableBranches(news);
+        } else {
+           
+            const news = applicableBranches.filter(item => item !== id);;
+            setApplicableBranches(news);
+        }
     };
     const handleNext = () => {
-        onChange(value + 1,data); //can sua lai
+        if(name !== "" && applicableBranches.length > 0) {
+            const reData = {...data};
+            reData.applicableBranches = applicableBranches;
+            reData.name = name
+            onChange(value + 1, reData);
+        }
+    }
+    useEffect(() => {
+        fetchAddress();
+    }, [])
+    const fetchAddress = () => {
+        ShopFetch.getInfo()
+            .then(data => {
+                console.log("shop: ", data);
+                setAddresses(data.data.branches);
+            })
+            .catch(err => {
+                console.log("err: ", err);
+                window.alert(`Lỗi lấy thông tin cửa hàng: \n${err}`)
+            })
     }
     return (
         <Box>
@@ -34,25 +55,23 @@ const AddNamePage = ({ onChange, value,data }) => {
             <Box>
                 <Typography sx={{ fontWeight: "bold", fontSize: '1.2rem' }}>Địa chỉ áp dụng</Typography>
                 <Box>
-                    <FormControlLabel
-                        label="Chọn tất cả"
-                        control={
-                            <Checkbox
-                                checked={checked[0] && checked[1]}
-                                indeterminate={checked[0] !== checked[1]}
-                                onChange={handleChange1}
-                            />
-                        }
-                    />
+
                     <Box sx={{ display: 'flex', flexDirection: 'column', ml: 3 }}>
-                        <FormControlLabel
-                            label="Child 1"
-                            control={<Checkbox checked={checked[0]} onChange={handleChange2} />}
-                        />
-                        <FormControlLabel
-                            label="Child 2"
-                            control={<Checkbox checked={checked[1]} onChange={handleChange3} />}
-                        />
+                        {
+                            addresses && addresses.length > 0 &&
+                            (
+                                addresses.map((address, index) => {
+                                    return (
+                                        <FormControlLabel
+                                            key={index}
+                                            label= {address.address}
+                                            control={<Checkbox checked={applicableBranches.includes(address._id)} onChange={(e) => handleChangeAddresses(e, address._id, index)} />}
+                                        />
+                                    )
+                                })
+                            )
+                        }
+
                     </Box>
                 </Box>
             </Box>

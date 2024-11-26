@@ -16,11 +16,13 @@ const Price = ({ onChange, value, data }) => {
         onChange(value - 1, reData)
     }
     const handleNext = () => {
-        const reData = {
-            ...data
+        if(prices.length > 0) {
+            const reData = {
+                ...data
+            }
+            reData.price = prices
+            onChange(value + 1, reData)
         }
-        reData.price = prices
-        onChange(value + 1, reData)
     }
     const handleChangeWeight = (e, index) => {
         if (!isNaN(e.target.value)) {
@@ -141,7 +143,10 @@ const Price = ({ onChange, value, data }) => {
             </Box>
             <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
                 <Button variant="contained" onClick={handleBack}>Quay lại</Button>
-                <Button variant="contained" onClick={handleNext}>Tiếp</Button>
+                {
+                    prices.length > 0 && <Button variant="contained" onClick={handleNext}>Tiếp</Button>
+                }
+                
             </Box>
         </Box>
     )

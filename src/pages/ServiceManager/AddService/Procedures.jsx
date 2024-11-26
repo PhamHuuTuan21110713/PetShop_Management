@@ -4,18 +4,20 @@ import { useState } from "react";
 const Procedures = ({ isFinal, onChange, value, data }) => {
     const [procedures, setProcedures] = useState(data.procedures);
     const [standProcedure, setStandProcedure] = useState({
-        summary:"",
-        detail:""
+        summary: "",
+        detail: ""
     })
     const handleBack = () => {
-        const prev = {...data};
+        const prev = { ...data };
         prev.procedures = procedures;
         onChange(value - 1, prev)
     }
     const handleNext = () => {
-        const prev = {...data};
-        prev.procedures = procedures;
-        onChange(value + 1, prev)
+        if (procedures.length > 0) {
+            const prev = { ...data };
+            prev.procedures = procedures;
+            onChange(value + 1, prev)
+        }
     }
     const handleChangeSumary = (e, index) => {
         const newProcedures = [...procedures];
@@ -37,40 +39,40 @@ const Procedures = ({ isFinal, onChange, value, data }) => {
         setProcedures(newProcedures);
     }
     const handleChangeStandSummary = (e) => {
-        const newStand = {...standProcedure};
+        const newStand = { ...standProcedure };
         newStand.summary = e.target.value;
         setStandProcedure(newStand);
     }
     const handleChangeStandDetail = (e) => {
-        const newStand = {...standProcedure};
+        const newStand = { ...standProcedure };
         newStand.detail = e.target.value;
         setStandProcedure(newStand);
     }
     const handleAddProcedure = () => {
-        if(standProcedure.summary !== "" && standProcedure.detail !== "") {
-            const newStand = {...standProcedure};
+        if (standProcedure.summary !== "" && standProcedure.detail !== "") {
+            const newStand = { ...standProcedure };
             newStand.serial = procedures.length + 1;
             const newProcedures = [...procedures];
             newProcedures.push(newStand);
             setStandProcedure({
-                summary:"",
-                detail:""
+                summary: "",
+                detail: ""
             })
             setProcedures(newProcedures);
         }
     }
     return (
         <Box>
-            <Box sx={{display:"flex", justifyContent:"center", marginBottom:"10px"}}>
-                <Typography sx={{fontWeight:"bold", fontSize:"1.2rem"}}>Quy trình thực hiện</Typography>
+            <Box sx={{ display: "flex", justifyContent: "center", marginBottom: "10px" }}>
+                <Typography sx={{ fontWeight: "bold", fontSize: "1.2rem" }}>Quy trình thực hiện</Typography>
             </Box>
-            <Box sx={{display:"flex", flexDirection:"column", gap:1}}> 
+            <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
                 {
                     procedures.length > 0 && (
                         procedures.map((procedure, index) => {
                             return (
                                 <Box key={index} sx={{ boxShadow: "rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;", padding: "20px" }}>
-                                    <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center"}}>
+                                    <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
                                         <Box>
                                             <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                                                 <Typography> Thứ tự: </Typography>
@@ -97,17 +99,17 @@ const Procedures = ({ isFinal, onChange, value, data }) => {
 
             </Box>
             <Box sx={{ marginTop: "10px", boxShadow: "rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;", padding: "20px" }}>
-                <Typography sx={{textAlign:"center", fontWeight:"bold", fontSize:"1.2rem", marginBottom:"10px"}}>Thêm bước mới</Typography>
-                <Box sx={{display:"flex", flexDirection:"column", gap:2}}>
-                    <Box sx={{ display: "flex", flexDirection: "row", gap: 1, justifyContent:"center" }}>
+                <Typography sx={{ textAlign: "center", fontWeight: "bold", fontSize: "1.2rem", marginBottom: "10px" }}>Thêm bước mới</Typography>
+                <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                    <Box sx={{ display: "flex", flexDirection: "row", gap: 1, justifyContent: "center" }}>
                         <Typography><strong>Số thứ tự:</strong></Typography>
                         <Typography>{procedures.length + 1}</Typography>
                     </Box>
-                    <Box sx={{display:"flex", flexDirection:"column", gap:1, alignItems:"center"}}>
+                    <Box sx={{ display: "flex", flexDirection: "column", gap: 1, alignItems: "center" }}>
                         <Typography>Tổng quan</Typography>
                         <input value={standProcedure.summary} onChange={handleChangeStandSummary} type="text" style={{ height: "40px", width: "300px" }} />
                     </Box>
-                    <Box sx={{display:"flex", flexDirection:"column", gap:1, alignItems:"center"}}>
+                    <Box sx={{ display: "flex", flexDirection: "column", gap: 1, alignItems: "center" }}>
                         <Typography>Chi tiết</Typography>
                         <input value={standProcedure.detail} onChange={handleChangeStandDetail} type="text" style={{ height: "40px", width: "300px" }} />
                     </Box>
@@ -117,14 +119,13 @@ const Procedures = ({ isFinal, onChange, value, data }) => {
                 </Box>
 
             </Box>
-            <Box sx={{ display: "flex", justifyContent: "flex-end", marginTop: "10px" }}>
+            <Box sx={{ display: "flex", justifyContent: "flex-end", marginTop: "10px", gap: 2 }}>
                 <Button variant="contained" sx={{ textTransform: "none" }} onClick={handleBack}>Quay lại</Button>
+                {
+                    procedures.length > 0 && <Button variant="contained" sx={{ textTransform: "none" }} onClick={handleNext}>Tiếp</Button>
+                }
             </Box>
 
-
-            {
-                !isFinal && <Button onClick={handleNext}>Next</Button>
-            }
         </Box>
     )
 }

@@ -8,6 +8,7 @@ import UserAPI from './user'; // Import User API
 import OrderAPI from './order';
 import BookingAPI from './booking';
 import ServiceAPI from './service';
+import ShopAPI from './shop';
 // Tạo một instance của axios
 
 const axiosInstance = axios.create({
@@ -25,3 +26,4 @@ export const UserFetch = UserAPI(axiosInstance);
 export const OrderFetch = OrderAPI(axiosInstance);
 export const BookingFetch = BookingAPI(axiosInstance);
 export const ServiceFetch = ServiceAPI(axiosInstance);
+export const ShopFetch = ShopAPI(axiosInstance);

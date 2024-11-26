@@ -4,6 +4,7 @@ import AddNamePage from "./AddnamePage";
 import Description from "./Description";
 import Price from "./Price";
 import Procedures from "./Procedures";
+import Summary from "./Summary";
 
 const AddService = () => {
     const [subPage, setSubPage] = useState(1);
@@ -16,12 +17,10 @@ const AddService = () => {
             applicableBranches: [],
         }
     )
-    const changeSubPage = (value,data) => {
+    const changeSubPage = (value, data) => {
         setSubPage(value);
         setData(data);
     }
-    // console.log(data);
-    // console.log(subPage);
     return (
         <Box>
             <Box>
@@ -32,18 +31,13 @@ const AddService = () => {
                                 (
                                     subPage === 3 ? <Price onChange={changeSubPage} value={subPage} data={data} /> :
                                         (
-                                            subPage === 4 ? <Procedures isFinal={true} onChange={changeSubPage} value={subPage} data={data} /> : null
+                                            subPage === 4 ? <Procedures onChange={changeSubPage} value={subPage} data={data} /> :
+                                                <Summary value={subPage}  onChange={changeSubPage} data={data} />
                                         )
                                 )
                         )
                 }
             </Box>
-            <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 3, marginTop:"10px" }}>
-                <Button variant="contained" color="warning">Hủy</Button>
-                {
-                    subPage === 4 && < Button variant="contained" color="success">Gửi</Button>
-                }
-        </Box>
         </Box >
     )
 }
