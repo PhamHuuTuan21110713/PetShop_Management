@@ -11,7 +11,11 @@ import AddAccount from './pages/AccountManager/AddAccount/AddAccount';
 import Products from './pages/ProductManager/Products';
 import AllProduct from './pages/ProductManager/AllProduct/AllProduct';
 import Account from './pages/Account/Account';
+import ServiceManager from './pages/ServiceManager/ServiceManager';
+import AllService from './pages/ServiceManager/AllServices/AllServices';
+import AddService from './pages/ServiceManager/AddService/AddService';
 import AddProduct from './pages/ProductManager/AddProduct/Addproduct';
+
 
 function App() {
 
@@ -27,12 +31,19 @@ function App() {
             <Route path='danh-sach' element={<AllAccount />} />
             <Route path='them-moi' element={<AddAccount />} />
           </Route>
+          <Route path='quan-ly-dich-vu' element={<ServiceManager />}>
+            <Route index element={<Navigate to="danh-sach" />} />
+            <Route path='danh-sach' element={<AllService />} />
+            <Route path='them-moi' element={<AddService />} />
+          </Route>
+          <Route path='tai-khoan/:id' element={<Account />} />
           <Route path="quan-ly-san-pham" element={<Products />}>
             <Route index element={<Navigate to="danh-sach-san-pham" />} />
             <Route path='danh-sach-san-pham' element={<AllProduct />} />
             <Route path='them-san-pham' element={<AddProduct />} />
           </Route>
           <Route path='tai-khoan/:id' element={<Account />}/>
+
         </Route>
         <Route path="dang-nhap" element={<Login />} />
       </Routes>
