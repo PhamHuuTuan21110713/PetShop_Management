@@ -5,6 +5,8 @@ import { API_URL } from '~/constants';  // URL API
 import configAxios from './config';
 import AuthenAPI from './authen';
 import UserAPI from './user'; // Import User API
+import CategoryAPI from './category';
+import ProductAPI from './product';
 import OrderAPI from './order';
 import BookingAPI from './booking';
 import ServiceAPI from './service';
@@ -23,7 +25,10 @@ configAxios(axiosInstance);
 
 export const AuthenFetch = AuthenAPI(axiosInstance);
 export const UserFetch = UserAPI(axiosInstance);
+export const ProductFetch = ProductAPI(axiosInstance);
+export const CategoryFetch = CategoryAPI(axiosInstance);
 export const OrderFetch = OrderAPI(axiosInstance);
 export const BookingFetch = BookingAPI(axiosInstance);
 export const ServiceFetch = ServiceAPI(axiosInstance);
 export const ShopFetch = ShopAPI(axiosInstance);
+
