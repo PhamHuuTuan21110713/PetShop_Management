@@ -8,10 +8,14 @@ import { AuthProvider } from './components/Authentication/authentication';
 import Login from './pages/Login/Login';
 import AllAccount from './pages/AccountManager/AllAccount/AllAccount';
 import AddAccount from './pages/AccountManager/AddAccount/AddAccount';
-import Products from './pages/ProductManager/Products';
+import Products from './pages/ProductManager/ProductsManager';
 import AllProduct from './pages/ProductManager/AllProduct/AllProduct';
 import Account from './pages/Account/Account';
 import AddProduct from './pages/ProductManager/AddProduct/Addproduct';
+import OrdersManager from './pages/OrderManager/OrdersManager';
+import Promotion from './pages/PromotionManager/Promotion';
+import AllPromotion from './pages/PromotionManager/AllPromotion/AllPromotion';
+import AddPromotion from './pages/PromotionManager/AddPromotion/AddPromotion';
 
 function App() {
 
@@ -31,6 +35,12 @@ function App() {
             <Route index element={<Navigate to="danh-sach-san-pham" />} />
             <Route path='danh-sach-san-pham' element={<AllProduct />} />
             <Route path='them-san-pham' element={<AddProduct />} />
+          </Route>
+          <Route path='quan-ly-don-hang' element={<OrdersManager/>}/>
+          <Route path="quan-ly-khuyen-mai" element={<Promotion />}>
+            <Route index element={<Navigate to="danh-sach-khuyen-mai" />} />
+            <Route path='danh-sach-khuyen-mai' element={<AllPromotion />} />
+            <Route path='them-khuyen-mai' element={<AddPromotion />} />
           </Route>
           <Route path='tai-khoan/:id' element={<Account />}/>
         </Route>

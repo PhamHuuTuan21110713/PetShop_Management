@@ -8,6 +8,7 @@ import UserAPI from './user'; // Import User API
 import CategoryAPI from './category';
 import ProductAPI from './product';
 import OrderAPI from './order';
+import PromotionAPI from './promotion';
 import BookingAPI from './booking';
 // Tạo một instance của axios
 
@@ -26,4 +27,5 @@ export const UserFetch = UserAPI(axiosInstance);
 export const ProductFetch = ProductAPI(axiosInstance);
 export const CategoryFetch = CategoryAPI(axiosInstance);
 export const OrderFetch = OrderAPI(axiosInstance);
+export const PromotionFetch = PromotionAPI(axiosInstance);
 export const BookingFetch = BookingAPI(axiosInstance);

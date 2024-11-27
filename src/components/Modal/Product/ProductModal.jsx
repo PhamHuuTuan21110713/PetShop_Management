@@ -252,7 +252,7 @@ const DetailAccountModal = ({ open, onClose, product, onChange }) => {
                   </Box>
 
                   <Box style={inputContainer}>
-                    <strong>Ảnh sản phẩm:</strong>
+                    <strong>Thêm ảnh thumbnail:</strong>
                     <input
                             type="file"
                             accept="image/*"
