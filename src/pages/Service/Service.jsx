@@ -1,6 +1,6 @@
 import { Box, Button, CircularProgress, Divider, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import { Outlet, useNavigate, useParams, useLocation } from "react-router-dom";
+import { Outlet, useNavigate, useParams, useLocation, Link } from "react-router-dom";
 import { ServiceFetch } from "~/REST_API_Client";
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 const Service = () => {
@@ -12,6 +12,7 @@ const Service = () => {
     const [isUpdateDesctiptions, setIsUpdateDesctiptions] = useState(false);
     const [isUpdatePrice, setIsUpdatePrice] = useState(false);
     const [isUpdateProcedure, setIsUpdateProcedure] = useState(false);
+    const [isMonitoring, setIsMonitoring] = useState(false);
     console.log("rerender par")
     const navigate = useNavigate();
     const fetchDdata = () => {
@@ -38,13 +39,14 @@ const Service = () => {
             setIsUpdateDesctiptions(false);
             setIsUpdatePrice(false);
             setIsUpdateProcedure(false);
+            setIsMonitoring(false);
             fetchDdata()
         }
 
     }, [location.pathname])
 
     const handleBackPrevPage = () => {
-        navigate(-1);
+        navigate('/quan-ly-dich-vu');
     }
 
     const handleUpdateBaseInfor = () => {
@@ -88,6 +90,16 @@ const Service = () => {
         } );
     }
 
+    const handleMonitoring = () => {
+        setIsMonitoring(true);
+        navigate("giam-sat",{
+            state: {
+                _id: id,
+                name: service.name
+            }
+        });
+    }
+
     if (loading) {
         return (
             <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
@@ -95,15 +107,25 @@ const Service = () => {
             </Box>
         )
     }
+    if(isMonitoring) {
+        return(
+            <Box>
+                <Outlet />
+            </Box>
+        )
+    }
     return (
         <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
             {/* ID */}
-            <Box sx={{ display: "flex", justifyContent: "flex-start", gap: 4, cursor: "pointer" }} onClick={handleBackPrevPage}>
-                <Box sx={{ display: "flex", justifyContent: "flex-start", alignItems: "center", gap: 0 }}>
+            <Box sx={{ display: "flex", justifyContent: "flex-start", gap: 4 }} >
+                <Box sx={{ display: "flex", justifyContent: "flex-start", alignItems: "center", gap: 0,cursor: "pointer" }} onClick={handleBackPrevPage}>
                     <ArrowBackIosIcon />
                     <Typography>Quay lại</Typography>
                 </Box>
                 <Typography>ID dịch vụ: <strong>{id}</strong></Typography>
+                <Box>
+                    <Typography sx={{textDecoration:"underline", cursor:"pointer"}} onClick={handleMonitoring}>Giám sát</Typography>
+                </Box>
             </Box>
             {/* Thon tin co ban */}
             {

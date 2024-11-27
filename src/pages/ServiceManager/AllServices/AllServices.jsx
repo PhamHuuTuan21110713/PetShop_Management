@@ -21,11 +21,11 @@ const AllServices = () => {
         if (finded !== "") finding = finded;
         if (sorted === "default") {
             sorting = { createdAt: -1 }
-        }else {
+        } else {
             sorting = { name: 1 }
         }
         setIsLoading(true);
-        ServiceFetch.get(sorting, finding)
+        ServiceFetch.get(sorting, { state: true }, finding)
             .then(data => {
                 console.log("Service", data)
                 setData(data);
@@ -40,13 +40,22 @@ const AllServices = () => {
         setSort(type);
     }
     const handleFind = () => {
-        fetchData(sort,find)
+        fetchData(sort, find)
     }
     useEffect(() => {
-        fetchData(sort,find);
+        fetchData(sort, find);
     }, [sort]);
     const navToDetail = (id) => {
         navigate(`/dich-vu/${id}`);
+    }
+    const handleDelete = (id) => {
+        ServiceFetch.deleteById(id)
+            .then(data => {
+                fetchData(sort,find);
+            })
+            .catch(err => {
+                window.alert(`Xóa dịch vụ thất bại: \n${err}`);
+            })
     }
     return (
         <Box>
@@ -142,7 +151,7 @@ const AllServices = () => {
                                                 <td>
                                                     <Box sx={{ display: "flex", justifyContent: "center", gap: 2 }}>
                                                         <button
-
+                                                            onClick={() => handleDelete(item._id)}
                                                             style={{ border: "none", cursor: "pointer", color: "#fff", background: "#b55050", borderRadius: "4px" }}>
                                                             <DeleteIcon />
                                                         </button>
