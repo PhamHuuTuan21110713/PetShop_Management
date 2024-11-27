@@ -6,8 +6,10 @@ import LockIcon from '@mui/icons-material/Lock';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DetailsIcon from '@mui/icons-material/Details';
 import { ServiceFetch } from "~/REST_API_Client";
+import { useNavigate } from "react-router-dom";
 
 const AllServices = () => {
+    const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(true);
     const [data, setData] = useState();
     const [sort, setSort] = useState("default");
@@ -43,7 +45,9 @@ const AllServices = () => {
     useEffect(() => {
         fetchData(sort,find);
     }, [sort]);
-
+    const navToDetail = (id) => {
+        navigate(`/dich-vu/${id}`);
+    }
     return (
         <Box>
             <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap" }}>
@@ -128,6 +132,7 @@ const AllServices = () => {
                                                     <Box sx={{ display: "flex", justifyContent: "center", gap: 2 }}>
 
                                                         <button
+                                                            onClick={() => navToDetail(item._id)}
                                                             style={{ border: "none", cursor: "pointer", color: "#fff", background: "#346791", borderRadius: "4px" }}>
                                                             <DetailsIcon />
                                                         </button>

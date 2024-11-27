@@ -51,10 +51,30 @@ const ServiceAPI = (axiosInstance) => {
             }
         }
     }
+    const update = async (id,data) => {
+        try {
+            const access_token = localStorage.getItem("access_token");
+            const res = await axiosInstance.patch(`/services/${id}`, data, {
+                headers: {
+                    Authorization: `Bearer ${access_token}`,
+                }
+            });
+            return res.data;
+        } catch (error) {
+            if (error.response) {
+                throw new Error(error.response.data.message);
+            } else if (error.request) {
+                throw new Error("Server không phản hồi");
+            } else {
+                throw new Error(error.message)
+            }
+        }
+    }
     return {
         get,
         getById,
-        create
+        create,
+        update
     }
 }
 
