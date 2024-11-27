@@ -20,6 +20,7 @@ import UpdateBaseInfor from './pages/Service/UpdateBaseInfor';
 import UpdateDescriptions from './pages/Service/UpdateDescriptions';
 import UpdatePrice from './pages/Service/UpdatePrice';
 import UpdateProcedure from './pages/Service/UpdateProcedure';
+import MonitoringService from './pages/Service/MonitoringService';
 
 function App() {
 
@@ -52,6 +53,7 @@ function App() {
             <Route path='mo-ta' element = {<UpdateDescriptions />}/>
             <Route path='bang-gia' element = {<UpdatePrice />} />
             <Route path='quy-trinh' element={<UpdateProcedure />}/>
+            <Route path='giam-sat' element={<MonitoringService />}/>
           </Route>
         </Route>
         <Route path="dang-nhap" element={<Login />} />

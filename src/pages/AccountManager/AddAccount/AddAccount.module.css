@@ -1,0 +1,30 @@
+.inputContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 4px;
+}
+
+.inputLabel {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.textFeild {
+  height: 35px;
+  padding: 4px;
+}
+
+.containerTable table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.containerTable th,
+.containerTable td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: left;
+}
+.containerTable th {
+  background-color: #f4f4f4;
+}/*# sourceMappingURL=AddAccount.module.css.map */
