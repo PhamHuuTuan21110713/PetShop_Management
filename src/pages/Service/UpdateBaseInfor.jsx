@@ -10,6 +10,7 @@ const UpdateBaseInfor = () => {
     const [addresses, setAddresses] = useState([]);
     const navigate = useNavigate();
     const rootData = useRef(location.state);
+    console.log("re-rendering Update Base infor service")
     const [applicableBranches, setApplicableBranches] = useState(() => {
         return location.state.applicableBranches.map((add, index) => {
             return add._id

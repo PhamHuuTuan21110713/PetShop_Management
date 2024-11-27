@@ -47,7 +47,7 @@ const BoughtOrders = ({ userId }) => {
         }
         OrderFetch.getOrderByUserId(userId, condition, myFind)
             .then((data) => {
-                console.log(`orders: ${userId}`, data);
+                // console.log(`orders: ${userId}`, data);
                 if (orders === null) {
                     originalOrders.current = data.data;
                 }

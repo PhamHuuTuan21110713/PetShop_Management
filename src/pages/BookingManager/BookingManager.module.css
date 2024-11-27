@@ -1,0 +1,13 @@
+.tabContainer {
+  background-color: #e2e2e2;
+  padding: 10px;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  cursor: pointer;
+  text-decoration: none;
+  color: #000;
+}
+
+.tabContainer:hover {
+  background-color: #8fabc2;
+}/*# sourceMappingURL=BookingManager.module.css.map */

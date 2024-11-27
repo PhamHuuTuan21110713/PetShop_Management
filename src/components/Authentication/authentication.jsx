@@ -1,14 +1,15 @@
 import { CircularProgress, Box } from "@mui/material";
 import { useState, createContext, useContext, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { UserFetch } from "~/REST_API_Client";
 import { AuthenFetch } from "~/REST_API_Client";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
     const [user, setUser] = useState(null);
     const page = useRef(1);
+    console.log("re-renderauth:")
     useEffect(() => {
         if (user === null) {
             AuthenFetch.checkToken()
@@ -24,7 +25,7 @@ export const AuthProvider = ({ children }) => {
                 .catch(err => {
                     setUser(null);
                     page.current = 2
-                    navigate("/dang-nhap")
+                    // navigate("/dang-nhap")
                 })
         }
     }, [])
@@ -41,11 +42,19 @@ export const AuthProvider = ({ children }) => {
             </Box>
         )
     }
-    return (
-        <AuthContext.Provider value={{ user, authenUser, clearAuthenUser }}>
-            {children}
-        </AuthContext.Provider>
-    )
+    if(user === null && page.current === 2) {
+        return(
+            <Navigate to="/dang-nhap"/>
+        )
+    }
+    if(user) {
+        return (
+            <AuthContext.Provider value={{ user, authenUser, clearAuthenUser }}>
+                {children}
+            </AuthContext.Provider>
+        )
+    }
+   
 }
 
 export const useAuth = () => {

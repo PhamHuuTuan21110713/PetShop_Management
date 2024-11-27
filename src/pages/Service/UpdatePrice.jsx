@@ -6,6 +6,7 @@ const UpdatePrice = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const [prices, setPrices] = useState(location.state.price);
+    console.log("re-rendering Update price service")
     const [standPrice, setStandPrice] = useState({
         maxWeight: 0,
         value: 0,

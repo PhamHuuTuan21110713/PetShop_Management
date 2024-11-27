@@ -13,7 +13,7 @@ const Service = () => {
     const [isUpdatePrice, setIsUpdatePrice] = useState(false);
     const [isUpdateProcedure, setIsUpdateProcedure] = useState(false);
     const [isMonitoring, setIsMonitoring] = useState(false);
-    console.log("rerender par")
+    console.log("rerender service items")
     const navigate = useNavigate();
     const fetchDdata = () => {
         setLoading(true)
@@ -124,7 +124,7 @@ const Service = () => {
                 </Box>
                 <Typography>ID dịch vụ: <strong>{id}</strong></Typography>
                 <Box>
-                    <Typography sx={{textDecoration:"underline", cursor:"pointer"}} onClick={handleMonitoring}>Giám sát</Typography>
+                    <Typography sx={{textDecoration:"underline", cursor:"pointer", color:"red"}} onClick={handleMonitoring}>Giám sát</Typography>
                 </Box>
             </Box>
             {/* Thon tin co ban */}

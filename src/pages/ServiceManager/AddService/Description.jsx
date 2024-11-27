@@ -1,23 +1,6 @@
 import { Box, Button, Typography } from "@mui/material";
 import { useRef, useState } from "react";
-// const data = [
-//     {
-//         heading: "Tắm rửa cho chó",
-//         content: [
-//             "Cởi đồ",
-//             "Xoa nhẹ",
-//             "mát xa"
-//         ]
-//     },
-//     {
-//         heading: "Tắm rửa cho chó",
-//         content: [
-//             "Cởi đồ",
-//             "Xoa nhẹ",
-//             "mát xa"
-//         ]
-//     }
-// ]
+
 const Description = ({ onChange, value, data }) => {
     const [descriptions, setDescriptions] = useState(data.description);
     const [subAddContent, setSubAddConent] = useState([])
