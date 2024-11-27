@@ -26,6 +26,7 @@ const AllProduct = () => {
     maxPrice: "",
     minStar: 0,
     maxStar: 5,
+    productId: "",
     onlyPromotion: false
   })
 
@@ -55,7 +56,7 @@ const AllProduct = () => {
     try {
       let data;
       if (!cateValue) {
-        data = await ProductFetch.getAllProduct(page, sorting);
+        data = await ProductFetch.getAllProduct(page, sorting, filters);
         console.log("Products fetched without category:", data);
         setProducts(data.data); // Cập nhật sản phẩm
         setTotalPages(data.data.totalPage);
@@ -86,7 +87,7 @@ const AllProduct = () => {
 
 
 
-  }, [selectedCategory]);
+  }, [selectedCategory, filters]);
 
 
   const updateStateProduct = async (product, newState, index) => {
@@ -166,14 +167,15 @@ const AllProduct = () => {
 
   const handleChangeFind = (e) => {
     setFind(e.target.value);  // Cập nhật từ khóa tìm kiếm
-    const filteredProducts = searchProducts(products.products, e.target.value);  // Lọc sản phẩm
-    setProducts({ products: filteredProducts, page: 1 });  // Cập nhật lại mảng sản phẩm đã lọc
+    // const filteredProducts = searchProducts(products.products, e.target.value);  // Lọc sản phẩm
+    // setProducts({ products: filteredProducts, page: 1 });  // Cập nhật lại mảng sản phẩm đã lọc
   };
 
 
   const handleSearch = () => {
-    const filteredProducts = searchProducts(products.products, find);  // Tìm kiếm sản phẩm
-    setProducts({ products: filteredProducts, page: 1 });  // Cập nhật lại danh sách sản phẩm
+    // const filteredProducts = searchProducts(products.products, find);  // Tìm kiếm sản phẩm
+    // setProducts({ products: filteredProducts, page: 1 });  // Cập nhật lại danh sách sản phẩm
+    setFilters(prevFilters => ({ ...prevFilters, productId: find }));
   };
 
   const handlePageChange = (e, newPage) => {

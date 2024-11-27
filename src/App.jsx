@@ -8,13 +8,17 @@ import { AuthProvider } from './components/Authentication/authentication';
 import Login from './pages/Login/Login';
 import AllAccount from './pages/AccountManager/AllAccount/AllAccount';
 import AddAccount from './pages/AccountManager/AddAccount/AddAccount';
-import Products from './pages/ProductManager/Products';
+import Products from './pages/ProductManager/ProductsManager';
 import AllProduct from './pages/ProductManager/AllProduct/AllProduct';
 import Account from './pages/Account/Account';
 import ServiceManager from './pages/ServiceManager/ServiceManager';
 import AllService from './pages/ServiceManager/AllServices/AllServices';
 import AddService from './pages/ServiceManager/AddService/AddService';
 import AddProduct from './pages/ProductManager/AddProduct/Addproduct';
+import OrdersManager from './pages/OrderManager/OrdersManager';
+import Promotion from './pages/PromotionManager/Promotion';
+import AllPromotion from './pages/PromotionManager/AllPromotion/AllPromotion';
+import AddPromotion from './pages/PromotionManager/AddPromotion/AddPromotion';
 import Service from './pages/Service/Service';
 import UpdateBaseInfor from './pages/Service/UpdateBaseInfor';
 import UpdateDescriptions from './pages/Service/UpdateDescriptions';
@@ -47,7 +51,14 @@ function App() {
             <Route path='danh-sach-san-pham' element={<AllProduct />} />
             <Route path='them-san-pham' element={<AddProduct />} />
           </Route>
-          <Route path='tai-khoan/:id' element={<Account />} />
+          <Route path='quan-ly-don-hang' element={<OrdersManager/>}/>
+          <Route path="quan-ly-khuyen-mai" element={<Promotion />}>
+            <Route index element={<Navigate to="danh-sach-khuyen-mai" />} />
+            <Route path='danh-sach-khuyen-mai' element={<AllPromotion />} />
+            <Route path='them-khuyen-mai' element={<AddPromotion />} />
+          </Route>
+          <Route path='tai-khoan/:id' element={<Account />}/>
+          {/* <Route path='tai-khoan/:id' element={<Account />} /> */}
           <Route path='dich-vu/:id' element={<Service />}>
             <Route path='co-ban' element={<UpdateBaseInfor />}/>
             <Route path='mo-ta' element = {<UpdateDescriptions />}/>
