@@ -1,1 +1,1 @@
-{"version":3,"sources":["Appbar.module.scss","Appbar.module.css"],"names":[],"mappings":"AAAA;EAEI,aAAA;EACA,mBAAA;EACA,8BAAA;EACA,eAAA;EACA,QAAA;EACA,SAAA;EACA,cAAA;ACAJ","file":"Appbar.module.css"}
+{"version":3,"sources":["Appbar.module.scss","Appbar.module.css"],"names":[],"mappings":"AAAA;EAEI,aAAA;EACA,mBAAA;EACA,8BAAA;EACA,eAAA;EACA,QAAA;EACA,MAAA;EACA,WAAA;EACA,sBAAA;EACA,iBAAA;ACAJ","file":"Appbar.module.css"}

@@ -25,8 +25,9 @@ const BookingAPI = (axiosInstance) => {
         }
     }
 
+
     return {
-        getAll
+        getAll,
     }
 }
 

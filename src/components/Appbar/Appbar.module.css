@@ -4,6 +4,8 @@
   justify-content: space-between;
   position: fixed;
   right: 0;
-  top: 10px;
-  z-index: 10000;
+  top: 0;
+  z-index: 99;
+  background-color: #fff;
+  padding-top: 10px;
 }/*# sourceMappingURL=Appbar.module.css.map */

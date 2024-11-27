@@ -1,0 +1,84 @@
+.inforItem {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.searchButton {
+  border: none;
+  background-color: #de5945;
+  color: #fff;
+  cursor: pointer;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  width: 50px;
+  justify-content: center;
+}
+
+.searchInput {
+  height: 40px;
+  border: none;
+  flex: 1;
+  padding: 4px;
+  padding-left: 8px;
+  font-size: 1rem;
+}
+
+.searchInput:focus {
+  outline: none;
+}
+
+.textInfor {
+  font-size: 1.1rem;
+  font-weight: bold !important;
+}
+
+.colLeft {
+  padding-left: 8px;
+  padding-right: 8px;
+  flex: 0 0 33.3333%;
+  max-width: 33.3333%;
+}
+
+.colRight {
+  padding-left: 8px;
+  padding-right: 8px;
+  flex: 0 0 66.6667%;
+  max-width: 66.6667%;
+}
+
+.colLeftOrders {
+  padding-left: 8px;
+  padding-right: 8px;
+  flex: 0 0 50%;
+  max-width: 50%;
+}
+
+.colRightOrders {
+  padding-left: 8px;
+  padding-right: 8px;
+  flex: 0 0 50%;
+  max-width: 50%;
+}
+
+@media (max-width: 1500px) {
+  .colLeftOrders {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+  .colRightOrders {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}
+@media (max-width: 1000px) {
+  .colLeft {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+  .colRight {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}/*# sourceMappingURL=Account.module.css.map */
