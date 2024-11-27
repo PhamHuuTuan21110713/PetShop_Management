@@ -17,7 +17,9 @@ import AddService from './pages/ServiceManager/AddService/AddService';
 import AddProduct from './pages/ProductManager/AddProduct/Addproduct';
 import Service from './pages/Service/Service';
 import UpdateBaseInfor from './pages/Service/UpdateBaseInfor';
-
+import UpdateDescriptions from './pages/Service/UpdateDescriptions';
+import UpdatePrice from './pages/Service/UpdatePrice';
+import UpdateProcedure from './pages/Service/UpdateProcedure';
 
 function App() {
 
@@ -47,6 +49,9 @@ function App() {
           <Route path='tai-khoan/:id' element={<Account />} />
           <Route path='dich-vu/:id' element={<Service />}>
             <Route path='co-ban' element={<UpdateBaseInfor />}/>
+            <Route path='mo-ta' element = {<UpdateDescriptions />}/>
+            <Route path='bang-gia' element = {<UpdatePrice />} />
+            <Route path='quy-trinh' element={<UpdateProcedure />}/>
           </Route>
         </Route>
         <Route path="dang-nhap" element={<Login />} />

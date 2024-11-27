@@ -9,6 +9,9 @@ const Service = () => {
     const [loading, setLoading] = useState(true);
     const [service, setService] = useState();
     const [isUpdateBase, setIsUpdateBase] = useState(false);
+    const [isUpdateDesctiptions, setIsUpdateDesctiptions] = useState(false);
+    const [isUpdatePrice, setIsUpdatePrice] = useState(false);
+    const [isUpdateProcedure, setIsUpdateProcedure] = useState(false);
     console.log("rerender par")
     const navigate = useNavigate();
     const fetchDdata = () => {
@@ -32,6 +35,9 @@ const Service = () => {
         if (isId) {
             // console.log("reftch data");
             setIsUpdateBase(false);
+            setIsUpdateDesctiptions(false);
+            setIsUpdatePrice(false);
+            setIsUpdateProcedure(false);
             fetchDdata()
         }
 
@@ -50,6 +56,36 @@ const Service = () => {
                 applicableBranches: service.applicableBranches
             }
         });
+    }
+
+    const handleUpdateDescriptions = () => {
+        setIsUpdateDesctiptions(true);
+        navigate('mo-ta', {
+            state: {
+                _id: id,
+                description: service.description
+            }
+        })
+    }
+
+    const updatePrice = () => {
+        setIsUpdatePrice(true);
+        navigate('bang-gia', {
+            state: {
+                _id: id,
+                price: service.price
+            }
+        })
+    }
+
+    const handleUpdateProcedure = () => {
+        setIsUpdateProcedure(true);
+        navigate('quy-trinh',{
+            state: {
+                _id: id,
+                procedures: service.procedures
+            }
+        } );
     }
 
     if (loading) {
@@ -110,98 +146,127 @@ const Service = () => {
 
 
             {/* Mo ta */}
-            <Box sx={{ boxShadow: "rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;", padding: "20px", position: "relative" }}>
-                <Typography variant="h5" sx={{ fontWeight: "bold", textAlign: "center" }}>Mô tả dịch vụ</Typography>
-                <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
-                    {
-                        service.description.map((des, index) => {
-                            return (
-                                <Box key={index} sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+            {
+                isUpdateDesctiptions ? (
+                    <Box sx={{ boxShadow: "rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;", padding: "20px" }}>
+                        <Outlet />
+                    </Box>
+                ) :
+                    (
+                        <Box sx={{ boxShadow: "rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;", padding: "20px", position: "relative" }}>
+                            <Typography variant="h5" sx={{ fontWeight: "bold", textAlign: "center" }}>Mô tả dịch vụ</Typography>
+                            <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
+                                {
+                                    service.description.map((des, index) => {
+                                        return (
+                                            <Box key={index} sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
 
-                                    <Box>
-                                        <Typography sx={{ fontSize: "1.2rem" }}>Tiêu đề: <strong>{des.heading}</strong></Typography>
-                                    </Box>
-                                    <Box sx={{ paddingLeft: "20px" }}>
-                                        <Typography sx={{ fontSize: "1.2rem" }}>Nội dung</Typography>
-                                        {/* Lặp */}
-                                        <Box sx={{ paddingLeft: '20px' }}>
-                                            {
-                                                des.content.map((cont, idx) => {
-                                                    return (
-                                                        <Typography key={idx}>{cont}</Typography>
-                                                    )
-                                                })
-                                            }
-                                        </Box>
-                                    </Box>
-                                </Box>
-                            )
-                        })
-                    }
-                </Box>
-                <Box>
-                    <Button variant="contained" color="warning"
-                        sx={{ textTransform: "none", position: "absolute", right: 0, top: 0 }}>
-                        Cập nhật
-                    </Button>
-                </Box>
-            </Box>
+                                                <Box>
+                                                    <Typography sx={{ fontSize: "1.2rem" }}>Tiêu đề: <strong>{des.heading}</strong></Typography>
+                                                </Box>
+                                                <Box sx={{ paddingLeft: "20px" }}>
+                                                    <Typography sx={{ fontSize: "1.2rem" }}>Nội dung</Typography>
+                                                    {/* Lặp */}
+                                                    <Box sx={{ paddingLeft: '20px' }}>
+                                                        {
+                                                            des.content.map((cont, idx) => {
+                                                                return (
+                                                                    <Typography key={idx}>{cont}</Typography>
+                                                                )
+                                                            })
+                                                        }
+                                                    </Box>
+                                                </Box>
+                                            </Box>
+                                        )
+                                    })
+                                }
+                            </Box>
+                            <Box>
+                                <Button variant="contained" color="warning"
+                                    onClick={handleUpdateDescriptions}
+                                    sx={{ textTransform: "none", position: "absolute", right: 0, top: 0 }}>
+                                    Cập nhật
+                                </Button>
+                            </Box>
+                        </Box>
+                    )
+            }
+
 
             {/* bang gia */}
-            <Box sx={{ boxShadow: "rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;", padding: "20px", position: "relative" }}>
-                <Typography variant="h5" sx={{ fontWeight: "bold", textAlign: "center" }}>Bảng giá</Typography>
-                <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
-                    {/* lawpj */}
-                    {
-                        service.price.map((pric, index) => {
-                            return (
-                                <Box key={index} sx={{ display: "flex", flexDirection: "row", gap: 1 }}>
-                                    <Typography>Cân nặng tối đa: <strong>{pric.maxWeight}</strong>kg</Typography>
-                                    <Divider orientation="vertical" flexItem />
-                                    <Typography>Giá trị dịch vụ: <strong>{pric.value.toLocaleString('vi-VN')}đ</strong></Typography>
-                                    <Divider orientation="vertical" flexItem />
-                                    <Typography>Đơn vị tính phí: <strong>/{pric.billingUnit}</strong></Typography>
-                                </Box>
-                            )
-                        })
-                    }
+            {
+                isUpdatePrice ? <Box sx={{ boxShadow: "rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;", padding: "20px" }}>
+                    <Outlet />
+                </Box> :
+                    (
+                        <Box sx={{ boxShadow: "rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;", padding: "20px", position: "relative" }}>
+                            <Typography variant="h5" sx={{ fontWeight: "bold", textAlign: "center" }}>Bảng giá</Typography>
+                            <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
+                                {/* lawpj */}
+                                {
+                                    service.price.map((pric, index) => {
+                                        return (
+                                            <Box key={index} sx={{ display: "flex", flexDirection: "row", gap: 1 }}>
+                                                <Typography>Cân nặng tối đa: <strong>{pric.maxWeight}</strong>kg</Typography>
+                                                <Divider orientation="vertical" flexItem />
+                                                <Typography>Giá trị dịch vụ: <strong>{pric.value.toLocaleString('vi-VN')}đ</strong></Typography>
+                                                <Divider orientation="vertical" flexItem />
+                                                <Typography>Đơn vị tính phí: <strong>/{pric.billingUnit}</strong></Typography>
+                                            </Box>
+                                        )
+                                    })
+                                }
 
-                </Box>
+                            </Box>
 
-                <Box>
-                    <Button variant="contained" color="warning"
-                        sx={{ textTransform: "none", position: "absolute", right: 0, top: 0 }}>
-                        Cập nhật
-                    </Button>
-                </Box>
-            </Box>
+                            <Box>
+                                <Button variant="contained" color="warning"
+                                    onClick={updatePrice}
+                                    sx={{ textTransform: "none", position: "absolute", right: 0, top: 0 }}>
+                                    Cập nhật
+                                </Button>
+                            </Box>
+                        </Box>
+                    )
+            }
+
 
             {/* Qui trinh */}
-            <Box sx={{ boxShadow: "rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;", padding: "20px", position: "relative" }}>
-                <Typography variant="h5" sx={{ fontWeight: "bold", textAlign: "center" }}>Quy trình thực hiện</Typography>
-                <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
-                    {/* lawpj */}
-                    {
-                        service.procedures.map((proce, index) => {
-                            return (
-                                <Box key={index} sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
-                                    <Typography><strong>Số thứ tự:</strong>{proce.serial}</Typography>
-                                    <Typography><strong>Tổng quan:</strong> {proce.summary}</Typography>
-                                    <Typography><strong>Chi tiết:</strong> {proce.detail}</Typography>
-                                </Box>
-                            )
-                        })
-                    }
+            {
+                isUpdateProcedure ? <Box sx={{ boxShadow: "rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;", padding: "20px" }}>
+                    <Outlet />
+                </Box> :
+                    (
+                        <Box sx={{ boxShadow: "rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;", padding: "20px", position: "relative" }}>
+                            <Typography variant="h5" sx={{ fontWeight: "bold", textAlign: "center" }}>Quy trình thực hiện</Typography>
+                            <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
+                                {/* lawpj */}
+                                {
+                                    service.procedures.map((proce, index) => {
+                                        return (
+                                            <Box key={index} sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+                                                <Typography><strong>Số thứ tự:</strong>{proce.serial}</Typography>
+                                                <Typography><strong>Tổng quan:</strong> {proce.summary}</Typography>
+                                                <Typography><strong>Chi tiết:</strong> {proce.detail}</Typography>
+                                            </Box>
+                                        )
+                                    })
+                                }
 
-                </Box>
+                            </Box>
 
-                <Box>
-                    <Button variant="contained" color="warning"
-                        sx={{ textTransform: "none", position: "absolute", right: 0, top: 0 }}>
-                        Cập nhật
-                    </Button>
-                </Box>
-            </Box>
+                            <Box>
+                                <Button variant="contained" color="warning"
+                                    onClick={handleUpdateProcedure}
+                                    sx={{ textTransform: "none", position: "absolute", right: 0, top: 0 }}>
+                                    Cập nhật
+                                </Button>
+                            </Box>
+                        </Box>
+                    )
+            }
+
         </Box>
     )
 }
