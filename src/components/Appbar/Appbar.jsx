@@ -13,6 +13,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import ChatIcon from '@mui/icons-material/Chat';
 import { NavLink } from "react-router-dom/dist";
 import ModeSelect from "../ModeSelect/ModeSelect";
+import { useAuth } from "../Authentication/authentication";
 const classNameNav = ({ isActive }) => {
     return (isActive ? "active-link" : "inactive-link")
 }
@@ -20,6 +21,7 @@ const Appbar = () => {
     console.log("re-render appbar")
     const [open, setOpen] = useState(false);
     const anchorRef = useRef(null);
+    const auth = useAuth();
     const handleToggle = () => {
         setOpen((prevOpen) => !prevOpen);
     };
@@ -50,7 +52,7 @@ const Appbar = () => {
         >
             {/* left part */}
             <Box>
-                <Typography variant="h6" sx={{ fontWeight: "bold" }}>Trang chủ</Typography>
+                {/* <Typography variant="h6" sx={{ fontWeight: "bold" }}>Trang chủ</Typography> */}
             </Box>
             {/* right part */}
             <Box sx={{ display: "flex", alignItems: "center", gap: 3 }}>
@@ -77,7 +79,9 @@ const Appbar = () => {
                     >
                         <Avatar />
                         <Box>
-                            <Typography sx={{ fontWeight: "bold", color: "#000" }}>Phạm Hữu Tuấn</Typography>
+                            <Typography sx={{ fontWeight: "bold", color: "#000" }}>
+                                {auth.user.name}
+                            </Typography>
                         </Box>
                         <KeyboardArrowDownIcon />
                     </Box>

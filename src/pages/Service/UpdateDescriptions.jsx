@@ -7,6 +7,7 @@ const UpdateDescriptions = () => {
     const location = useLocation();
     const [descriptions, setDescriptions] = useState(location.state.description);
     const [subAddContent, setSubAddConent] = useState([])
+    console.log("re-rendering update description service")
     const [newDescription, setNewDescription] = useState({
         heading: "",
         content: []

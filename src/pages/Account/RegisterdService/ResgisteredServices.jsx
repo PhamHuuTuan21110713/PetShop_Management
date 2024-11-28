@@ -35,7 +35,7 @@ const ResgisteredServices = ({ userId }) => {
             window.alert("Bộ lọc không hợp lệ hoặc không còn hỗ trợ");
         }
 
-        BookingFetch.getAll(userId, condition, myFind)
+        BookingFetch.getAll(userId, condition, myFind, undefined,undefined,undefined)
             .then(data => {
                 if(bookings == null) {
                     originalOrders.current = data.data;

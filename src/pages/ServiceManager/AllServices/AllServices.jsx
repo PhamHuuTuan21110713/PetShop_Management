@@ -27,7 +27,7 @@ const AllServices = () => {
         setIsLoading(true);
         ServiceFetch.get(sorting, { state: true }, finding)
             .then(data => {
-                console.log("Service", data)
+                // console.log("Service", data)
                 setData(data);
                 setIsLoading(false)
             })

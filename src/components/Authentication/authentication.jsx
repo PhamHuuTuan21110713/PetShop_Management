@@ -1,16 +1,19 @@
 import { CircularProgress, Box } from "@mui/material";
 import { useState, createContext, useContext, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { UserFetch } from "~/REST_API_Client";
 import { AuthenFetch } from "~/REST_API_Client";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
     const [user, setUser] = useState(null);
-    const page = useRef(1);
+    const [loading, setLoading] = useState(true);
+    // console.log("loading: ", loading)
+    console.log("re-renderauth:")
     useEffect(() => {
         if (user === null) {
+            setLoading(true);
             AuthenFetch.checkToken()
                 .then(data => {
                     // console.log(data);
@@ -19,13 +22,16 @@ export const AuthProvider = ({ children }) => {
                         .then(userInfo => {
                             // console.log(userInfo.data)
                             setUser(userInfo.data)
+                            setLoading(false)
                         });
                 })
                 .catch(err => {
+                    console.log("Loi authen component: ", err)
                     setUser(null);
-                    page.current = 2
-                    navigate("/dang-nhap")
+                    setLoading(false)
+                    // navigate("/dang-nhap")
                 })
+               
         }
     }, [])
     const authenUser = user => {
@@ -34,18 +40,20 @@ export const AuthProvider = ({ children }) => {
     const clearAuthenUser = () => {
         setUser(null)
     }
-    if (user === null && page.current === 1) {
+    if (loading) {
         return (
-            <Box sx={{display:"flex", justifyContent:"center", alignItems:"center"}}>
+            <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
                 <CircularProgress />
             </Box>
         )
     }
     return (
         <AuthContext.Provider value={{ user, authenUser, clearAuthenUser }}>
-            {children}
+           {children}
         </AuthContext.Provider>
     )
+
+
 }
 
 export const useAuth = () => {
