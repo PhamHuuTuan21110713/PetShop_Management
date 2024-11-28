@@ -9,7 +9,7 @@ const AuthenAPI = (axiosInstance) => {
         // Lỗi từ server phản hồi (4xx, 5xx)
         // console.log('Status Code:', error.response.status); // Mã trạng thái
         // console.log('Error Message:', error.response.data.message.message); // Nội dung lỗi
-        throw new Error(error.response.data.message.message);
+        throw new Error(error.response.data.message);
       } else if (error.request) {
         // Không nhận được phản hồi từ server
         // console.log('No response received', error.request);
@@ -36,7 +36,7 @@ const AuthenAPI = (axiosInstance) => {
         // Lỗi từ server phản hồi (4xx, 5xx)
         // console.log('Status Code:', error.response.status); // Mã trạng thái
         // console.log('Error Message:', error.response.data.message.message); // Nội dung lỗi
-        throw new Error(error.response.data.message.message);
+        throw new Error(error.response.data.message);
       } else if (error.request) {
         // Không nhận được phản hồi từ server
         // console.log('No response received', error.request);

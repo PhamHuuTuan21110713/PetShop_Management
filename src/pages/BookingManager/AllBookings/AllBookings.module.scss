@@ -1,27 +1,12 @@
-
-
-.tableContainer {
-    table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-
-    th,
-    td {
-        border: 1px solid #ccc;
-        padding: 10px;
-        text-align: left;
-    }
-
-    th {
-        background-color: #f4f4f4;
-        
-    }
+.colBooking {
+    padding: 4px;
+    flex: 0 0 50%;
+    max-width: 50%;
 }
 
 .searchInput {
-    height:40px;
-    border:none;
+    height: 40px;
+    border: none;
     flex: 1;
     padding: 4px;
     padding-left: 8px;
@@ -31,6 +16,7 @@
 .searchInput:focus {
     outline: none;
 }
+
 .searchButton {
     border: none;
     background-color: #de5945;
@@ -42,6 +28,14 @@
     width: 50px;
     justify-content: center;
 }
+
 .searchButton:hover {
     background-color: #eda59a;
+}
+
+@media (max-width: 1100px) {
+    .colBooking {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
 }
