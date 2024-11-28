@@ -58,9 +58,12 @@ const ProductAPI = (axiosInstance) => {
   // }
 
   // Lấy tất cả sản phẩm
-  async function getAllProduct(page, sort) {
+  async function getAllProduct(page, sort, filters) {
+    console.log("filter", filters);
+    
     try {
-      const res = await axiosInstance.get(`/product?page=${page}&limit=10&sort_by=${sort}`);
+      const filtersString = encodeURIComponent(JSON.stringify(filters));
+      const res = await axiosInstance.get(`/product?page=${page}&limit=10&sort_by=${sort}&filters=${filtersString}`);
       return res.data;
     } catch (error) {
       handleApiError(error);

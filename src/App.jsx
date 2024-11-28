@@ -8,13 +8,17 @@ import { AuthProvider } from './components/Authentication/authentication';
 import Login from './pages/Login/Login';
 import AllAccount from './pages/AccountManager/AllAccount/AllAccount';
 import AddAccount from './pages/AccountManager/AddAccount/AddAccount';
-import Products from './pages/ProductManager/Products';
+import Products from './pages/ProductManager/ProductsManager';
 import AllProduct from './pages/ProductManager/AllProduct/AllProduct';
 import Account from './pages/Account/Account';
 import ServiceManager from './pages/ServiceManager/ServiceManager';
 import AllService from './pages/ServiceManager/AllServices/AllServices';
 import AddService from './pages/ServiceManager/AddService/AddService';
 import AddProduct from './pages/ProductManager/AddProduct/Addproduct';
+import OrdersManager from './pages/OrderManager/OrdersManager';
+import Promotion from './pages/PromotionManager/Promotion';
+import AllPromotion from './pages/PromotionManager/AllPromotion/AllPromotion';
+import AddPromotion from './pages/PromotionManager/AddPromotion/AddPromotion';
 import Service from './pages/Service/Service';
 import UpdateBaseInfor from './pages/Service/UpdateBaseInfor';
 import UpdateDescriptions from './pages/Service/UpdateDescriptions';
@@ -71,6 +75,7 @@ function App() {
               <Route path='quy-trinh' element={<UpdateProcedure />} />
               <Route path='giam-sat' element={<MonitoringService />} />
             </Route>
+
           </Route>
         </Route>
 
