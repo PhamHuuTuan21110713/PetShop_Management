@@ -176,9 +176,9 @@ const AddBooking = () => {
                 <Box sx={{ display: "flex", alignItems: "center", justifyContent: "flex-start", gap: 2 }}>
                     <Typography sx={{ minWidth: "200px" }}>Chi nhánh: </Typography>
                     <FormControl sx={{ width: "500px" }} value={selectedBranch} onChange={handleChangeSelectBranch}>
-                        <InputLabel variant="standard" htmlFor="uncontrolled-native">
+                        {/* <InputLabel variant="standard" htmlFor="uncontrolled-native">
                             Chi nhánh
-                        </InputLabel>
+                        </InputLabel> */}
                         <NativeSelect
                             defaultValue={30}
                             inputProps={{
@@ -281,7 +281,7 @@ const AddBooking = () => {
                         setDetailPet("");
                         setNote("");
                         setWeightPet(2);
-                        setTotalPrice(getTotalPrice(2))
+                        setTotalPrice(getTotalPrice(2,prices))
                     }} variant="contained" color="secondary">
                         Hủy
                     </Button>

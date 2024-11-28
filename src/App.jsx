@@ -30,6 +30,7 @@ import AllBooking from './pages/BookingManager/AllBookings/AllBookings';
 import AddBooking from './pages/BookingManager/AddBooking/AddBooking';
 import StatisticalBooking from './pages/BookingManager/StatisticalBooking/StatisticalBooking';
 import ProtectedRoutes from './components/Authentication/protectedRoute';
+import Booking from './pages/Booking/Booking';
 function App() {
 
   return (
@@ -67,6 +68,8 @@ function App() {
               <Route path='them-moi' element={<AddBooking />} />
               <Route path='thong-ke' element={<StatisticalBooking />} />
             </Route>
+            {/* Chi tiết lịch đặt */}
+            <Route path='lich-dat/:id' element={<Booking />}/>
             {/* Chi tiết dịch vụ */}
             <Route path='dich-vu/:id' element={<Service />}>
               <Route path='co-ban' element={<UpdateBaseInfor />} />
@@ -76,6 +79,15 @@ function App() {
               <Route path='giam-sat' element={<MonitoringService />} />
             </Route>
 
+            {/* Quản lý khuyến mãi */}
+            <Route path="quan-ly-khuyen-mai" element={<Promotion />}>
+              <Route index element={<Navigate to="danh-sach-khuyen-mai" />} />
+              <Route path='danh-sach-khuyen-mai' element={<AllPromotion />} />
+              <Route path='them-khuyen-mai' element={<AddPromotion />} />
+            </Route>
+
+            {/* Quản lý đơn hàng */}
+            <Route path='quan-ly-don-hang' element={<OrdersManager/>}/>
           </Route>
         </Route>
 
