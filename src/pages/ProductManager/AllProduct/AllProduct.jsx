@@ -57,7 +57,7 @@ const AllProduct = () => {
     try {
       let data;
       if (!cateValue) {
-        data = await ProductFetch.getAllProduct(page, sorting, filters);
+        data = await ProductFetch.getAllProduct(page, sorting, filters, condition.limit);
         console.log("Products fetched without category:", data);
         setProducts(data.data); // Cập nhật sản phẩm
         setTotalPages(data.data.totalPage);

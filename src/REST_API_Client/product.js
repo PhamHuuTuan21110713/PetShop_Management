@@ -58,12 +58,12 @@ const ProductAPI = (axiosInstance) => {
   // }
 
   // Lấy tất cả sản phẩm
-  async function getAllProduct(page, sort, filters) {
+  async function getAllProduct(page, sort, filters, limit) {
     console.log("filter", filters);
     
     try {
       const filtersString = encodeURIComponent(JSON.stringify(filters));
-      const res = await axiosInstance.get(`/product?page=${page}&limit=10&sort_by=${sort}&filters=${filtersString}`);
+      const res = await axiosInstance.get(`/product?page=${page}&limit=${limit}&sort_by=${sort}&filters=${filtersString}`);
       return res.data;
     } catch (error) {
       handleApiError(error);
@@ -105,7 +105,7 @@ const ProductAPI = (axiosInstance) => {
   // Lấy sản phẩm bán chạy nhất
   async function fetchTopSaleProducts(page) {
     try {
-      const res = await axiosInstance.get(`/product/best-selling-products?page=${page}&limit=10`);
+      const res = await axiosInstance.get(`/product/best-selling-products?page=${page}&limit=1000`);
       return res.data;
     } catch (error) {
       handleApiError(error);

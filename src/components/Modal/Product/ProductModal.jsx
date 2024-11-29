@@ -180,7 +180,7 @@ const DetailAccountModal = ({ open, onClose, product, onChange }) => {
             {
               !isUpdate ? <>
                 <Typography><strong>Tên sản phẩm:</strong> {name}</Typography>
-                <Typography><strong>Mô tả:</strong> {desc === "male" ? "Nam" : desc === "female" ? "Nữ" : "Khác"}</Typography>
+                <Typography><strong>Mô tả:</strong> {desc}</Typography>
                 <Typography><strong>Loại sản phẩm:</strong>{type}</Typography>
                 <Typography><strong>Giá :</strong>{price ? price.toLocaleString('vi-VN') : ''}đ</Typography>
                 <Typography><strong>Số lượng:</strong>{quantity}</Typography>
