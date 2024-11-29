@@ -4,6 +4,8 @@ import { useRef, useState, useEffect } from 'react';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { ServiceFetch, ShopFetch } from "~/REST_API_Client";
+import { ToastContainer, toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 const UpdateBaseInfor = () => {
     const location = useLocation();
     const [originData, setOriginData] = useState(location.state);
@@ -24,7 +26,7 @@ const UpdateBaseInfor = () => {
             })
             .catch(err => {
                 // console.log("err: ", err);
-                window.alert(`Lỗi lấy thông tin cửa hàng: \n${err}`)
+                toast.error(`Lỗi lấy thông tin cửa hàng: \n${err}`)
             })
     }
     useEffect(() => {
@@ -58,11 +60,11 @@ const UpdateBaseInfor = () => {
                 applicableBranches: applicableBranches
             })
                 .then(data => {
-                    window.alert("Cập nhật thành công")
+                    toast.success("Cập nhật thành công")
                     navigate(-1);
                 })
                 .catch(err => {
-                    window.alert(`Cập nhật thất bại: \n${err}`)
+                    toast.error(`Cập nhật thất bại: \n${err}`)
                 })
         }
 
@@ -97,6 +99,7 @@ const UpdateBaseInfor = () => {
                 <Button onClick={changeToRootData} variant='contained' color='warning' sx={{ textTransform: "none" }}>Hủy</Button>
                 <Button onClick={submitData} variant='contained' color='success' sx={{ textTransform: "none" }}>Cập nhật</Button>
             </Box>
+            <ToastContainer />
         </Box>
     )
 }

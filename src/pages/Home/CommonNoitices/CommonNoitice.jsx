@@ -1,8 +1,10 @@
 import { Box, Divider, Typography } from "@mui/material";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import myStyle from "./CommonNoitice.module.scss";
 import { useEffect, useState } from "react";
 import { BookingFetch } from "~/REST_API_Client";
+import { ToastContainer, toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 const CommonNoitice = () => {
     const [countBooking, setCountBooking] = useState(0);
     useEffect(() => {
@@ -15,7 +17,7 @@ const CommonNoitice = () => {
                 setCountBooking(data.data.length)
             })
             .catch(err => {
-                window.alert(`Lỗi lấy thông tin lịch dịch vụ \n${err}`);
+                toast.error(`Lỗi lấy thông tin lịch dịch vụ \n${err}`);
             })
     },[])
     return (
@@ -57,6 +59,7 @@ const CommonNoitice = () => {
                     </NavLink>
                 </Box>
             </Box>
+            <ToastContainer />
         </Box>
     )
 }

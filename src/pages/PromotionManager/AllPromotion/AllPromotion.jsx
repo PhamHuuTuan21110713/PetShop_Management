@@ -5,7 +5,8 @@ import SearchIcon from '@mui/icons-material/Search';
 import DetailsIcon from '@mui/icons-material/Details';
 import { PromotionFetch } from "~/REST_API_Client"; // Giả sử đây là API client của bạn
 import PromotionModal from "~/components/Modal/Promotion/PromotionModal";
-
+import { ToastContainer, toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 
 const AllPromotion = () => {
     const [openModal, setOpenModal] = useState(false);
@@ -33,7 +34,7 @@ const AllPromotion = () => {
             setIsLoading(false);
         } catch (error) {
             console.error("Error fetching promotions: ", error);
-            window.alert("Error fetching promotions: " + error.message);
+            toast.error("Error fetching promotions: " + error.message);
             setIsLoading(false);
         }
     };
@@ -215,6 +216,7 @@ const AllPromotion = () => {
                     <PromotionModal open={openModal} onClose={handleCloseModal} promotion={promotions[indexProduct.current]} />
                 </Box>
             )}
+            <ToastContainer />
         </Box>
     );
 };

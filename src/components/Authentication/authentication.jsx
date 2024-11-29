@@ -3,6 +3,8 @@ import { useState, createContext, useContext, useEffect, useRef } from "react";
 import { Navigate } from "react-router-dom";
 import { UserFetch } from "~/REST_API_Client";
 import { AuthenFetch } from "~/REST_API_Client";
+import { ToastContainer, toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -28,7 +30,8 @@ export const AuthProvider = ({ children }) => {
                 .catch(err => {
                     console.log("Loi authen component: ", err)
                     setUser(null);
-                    setLoading(false)
+                    setLoading(false);
+                    toast.warning("Bạn cần đăng nhập để tiếp tục")
                     // navigate("/dang-nhap")
                 })
                
@@ -44,6 +47,7 @@ export const AuthProvider = ({ children }) => {
         return (
             <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
                 <CircularProgress />
+                <ToastContainer/>
             </Box>
         )
     }

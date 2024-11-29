@@ -1,6 +1,8 @@
 import myStyle from "../../AccountManager/AddAccount/AddAccount.module.scss";
 import { useState } from 'react';
 import { useOutletContext } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 import {
     TextField,
     Box,
@@ -61,13 +63,13 @@ const AddPromotion = () => {
         setIsLoading(true);
         PromotionFetch.createPromotion(data)
             .then(res => {
-                window.alert(`Thêm tài khoản thành công\n ${res.data.message}`);
+                toast.success(`Thêm tài khoản thành công\n ${res.data.message}`);
                 // console.log("them thanh con: ", res);
                 setIsLoading(false);
                 handleCancel();
             })
             .catch(err => {
-                window.alert(`Tạo người dùng thất bại: \n ${err}`);
+                toast.error(`Tạo người dùng thất bại: \n ${err}`);
                 // console.log("them loi: ", err);
                 setIsLoading(false);
             })
@@ -105,7 +107,7 @@ const AddPromotion = () => {
             const result = await PromotionFetch.createPromotion(dataForm);
 
             if (result.status === "OK") {
-                window.alert("Thêm khuyến mãi thành công!");
+                toast.success("Thêm khuyến mãi thành công!");
 
                 // Reset form sau khi thêm sản phẩm thành công
                 setName("");
@@ -116,10 +118,10 @@ const AddPromotion = () => {
                 setEndDate("");
                 setApplicableProducts([]);
             } else {
-                window.alert("Lỗi từ API khi tạo sản phẩm: " + result.message); // Hiển thị lỗi nếu API trả về lỗi
+                toast.error("Lỗi từ API khi tạo sản phẩm: " + result.message); // Hiển thị lỗi nếu API trả về lỗi
             }
         } catch (error) {
-            window.alert("Đã có lỗi xảy ra: " + error.message);  // Hiển thị lỗi khi có sự cố trong quá trình gửi yêu cầu
+            toast.error("Đã có lỗi xảy ra: " + error.message);  // Hiển thị lỗi khi có sự cố trong quá trình gửi yêu cầu
         } finally {
             setIsLoading(false); // Tắt trạng thái loading sau khi hoàn tất
         }
@@ -134,7 +136,7 @@ const AddPromotion = () => {
                 const data = await excel.readExcelFile(file);
                 setPromotions(data);
             } catch (error) {
-                window.alert(`Lỗi đọc file: \n ${error}`);
+                toast.error(`Lỗi đọc file: \n ${error}`);
             } finally {
                 e.target.value = null;
             }
@@ -255,6 +257,7 @@ const AddPromotion = () => {
                     </>
                 )}
             </Box>
+            <ToastContainer />
         </>
     );
 };

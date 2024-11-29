@@ -1,7 +1,8 @@
 import myStyle from "../../AccountManager/AddAccount/AddAccount.module.scss";
 import { useState } from 'react';
 import { useOutletContext } from "react-router-dom";
-
+import { ToastContainer, toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 import {
     TextField,
     Box,
@@ -41,7 +42,7 @@ const AddProduct = () => {
             })
             .catch(err => {
                 setIsLoading(false);
-                window.alert(`Tạo sản phẩm thất bại: \n ${err.message}`);
+                toast.error(`Tạo sản phẩm thất bại: \n ${err.message}`);
                 throw err;  // Đảm bảo lỗi được ném ra để catch phía ngoài
             });
     }
@@ -95,7 +96,7 @@ const AddProduct = () => {
     
             // Kiểm tra kết quả trả về từ API
             if (result.status === "OK") {
-                window.alert("Thêm sản phẩm thành công!");
+                toast.success("Thêm sản phẩm thành công!");
     
                 // Reset form sau khi thêm sản phẩm thành công
                 setName("");
@@ -119,14 +120,14 @@ const AddProduct = () => {
                         
                     } catch (err) {
                         console.log("Lỗi khi cập nhật ảnh thumbnail:", err);
-                        window.alert(`Lỗi khi cập nhật ảnh thumbnail: ${err.message || err}`);
+                        toast.error(`Lỗi khi cập nhật ảnh thumbnail: ${err.message || err}`);
                       }
                 }
             } else {
-                window.alert("Lỗi từ API khi tạo sản phẩm: " + result.message); // Hiển thị lỗi nếu API trả về lỗi
+                toast.error("Lỗi từ API khi tạo sản phẩm: " + result.message); // Hiển thị lỗi nếu API trả về lỗi
             }
         } catch (error) {
-            window.alert("Đã có lỗi xảy ra: " + error.message);  // Hiển thị lỗi khi có sự cố trong quá trình gửi yêu cầu
+            toast.error("Đã có lỗi xảy ra: " + error.message);  // Hiển thị lỗi khi có sự cố trong quá trình gửi yêu cầu
         } finally {
             setIsLoading(false); // Tắt trạng thái loading sau khi hoàn tất
         }
@@ -151,7 +152,7 @@ const AddProduct = () => {
                 setUsers(data);
             } catch (error) {
                 // console.error('Lỗi đọc file:', error);
-                window.alert(`Lỗi đọc file: \n ${error}`);
+                toast.error(`Lỗi đọc file: \n ${error}`);
             } finally {
                 e.target.value = null;
             }
@@ -296,6 +297,7 @@ const AddProduct = () => {
                     </>
                 )}
             </Box>
+            <ToastContainer />
         </>
     );
 };

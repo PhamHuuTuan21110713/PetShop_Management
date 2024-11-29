@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Modal, Box, Typography, Button, Chip, Divider, TextField } from '@mui/material';
 import { PromotionFetch } from '~/REST_API_Client';  // Import API to handle the update if needed
-
+import { ToastContainer, toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 const PromotionModal = ({ open, onClose, promotion }) => {
     const [isUpdate, setIsUpdate] = useState(false);
     const [promotionDetails, setPromotionDetails] = useState(promotion);
@@ -50,7 +51,7 @@ const PromotionModal = ({ open, onClose, promotion }) => {
                 setPromotionDetails(updatedPromotion);  // Cập nhật lại chi tiết khuyến mãi
             })
             .catch(err => {
-                window.alert(`Lỗi cập nhật trạng thái khuyến mãi: \n ${err}`);
+                toast.error(`Lỗi cập nhật trạng thái khuyến mãi: \n ${err}`);
             });
     };
 
@@ -136,6 +137,7 @@ const PromotionModal = ({ open, onClose, promotion }) => {
                     </Box>
                 )} */}
             </Box>
+            <ToastContainer />
         </Modal>
     );
 };

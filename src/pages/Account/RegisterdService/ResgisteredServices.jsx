@@ -5,7 +5,8 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 import { useEffect, useState, useRef } from "react";
 import RegisterdBookingChart from "./Chart";
 import { BookingFetch } from "~/REST_API_Client";
-
+import { ToastContainer, toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 const ResgisteredServices = ({ userId }) => {
     const [bookings, setBookings] = useState();
     const [filter, setFilter] = useState("all");
@@ -32,7 +33,7 @@ const ResgisteredServices = ({ userId }) => {
         } else if (myFilter === "da-huy") {
             condition = { ...condition, status: "da-huy" }
         } else {
-            window.alert("Bộ lọc không hợp lệ hoặc không còn hỗ trợ");
+           toast.error("Bộ lọc không hợp lệ hoặc không còn hỗ trợ");
         }
 
         BookingFetch.getAll(userId, condition, myFind, undefined,undefined,undefined)
@@ -44,7 +45,7 @@ const ResgisteredServices = ({ userId }) => {
                 setBookings(data.data);
             })
             .catch(err => {
-                window.alert(`Lỗi lấy dữ liệu lịch đặt \n${err}`);
+                toast.error(`Lỗi lấy dữ liệu lịch đặt \n${err}`);
 
             })
     }
@@ -152,6 +153,7 @@ const ResgisteredServices = ({ userId }) => {
                         </Box>
                     )
             }
+            <ToastContainer />
         </Box>
     )
 }

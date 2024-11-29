@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { Outlet, useNavigate, useParams, useLocation, Link } from "react-router-dom";
 import { ServiceFetch } from "~/REST_API_Client";
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import { ToastContainer, toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 const Service = () => {
     const { id } = useParams();
     const location = useLocation();
@@ -23,7 +25,7 @@ const Service = () => {
                 setLoading(false)
             })
             .catch(err => {
-                window.alert(`Lỗi lấy thông tin dịch vụ: \n${err}`);
+                toast.error(`Lỗi lấy thông tin dịch vụ: \n${err}`);
                 setLoading(false)
             })
     }
@@ -288,7 +290,7 @@ const Service = () => {
                         </Box>
                     )
             }
-
+            <ToastContainer />
         </Box>
     )
 }

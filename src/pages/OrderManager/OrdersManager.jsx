@@ -7,7 +7,8 @@ import DetailsIcon from '@mui/icons-material/Details';
 import { OrderFetch } from "~/REST_API_Client"; // Giả sử OrderFetch là API client của bạn để lấy đơn hàng
 import OrderModal from "~/components/Modal/Order/OrderModal";
 //import ProductModal from "~/components/Modal/Product/ProductModal";  // Nếu vẫn cần modal cho sản phẩm
-
+import { ToastContainer, toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 const OrdersManager = () => {
     const [openModal, setOpenModal] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
@@ -36,7 +37,7 @@ const OrdersManager = () => {
             setIsLoading(false);
         } catch (error) {
             console.error("Lỗi khi lấy đơn hàng: ", error);
-            window.alert("Lỗi khi lấy đơn hàng: " + error.message);
+            toast.error("Lỗi khi lấy đơn hàng: " + error.message);
             setIsLoading(false);
         }
     };
@@ -224,7 +225,7 @@ const OrdersManager = () => {
 
                 </>
             )}
-
+            <ToastContainer />
         </Box>
     );
 };

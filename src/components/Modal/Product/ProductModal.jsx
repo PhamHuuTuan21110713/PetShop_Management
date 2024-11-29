@@ -3,7 +3,8 @@ import { Modal, Box, Typography, Button, Avatar, Chip, TextField, Divider } from
 import Radio from '@mui/material/Radio';
 import { ProductFetch, UserFetch } from '~/REST_API_Client';
 import { Link } from 'react-router-dom';
-
+import { ToastContainer, toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 const DetailAccountModal = ({ open, onClose, product, onChange }) => {
   // if (!product) return null; // Nếu không có product thì không render modal;
   const defaultInfor = useRef({ ...product });
@@ -146,7 +147,7 @@ const DetailAccountModal = ({ open, onClose, product, onChange }) => {
           await ProductFetch.addThumbnail(product._id, imageFormData);
         } catch (err) {
           console.log("Lỗi khi cập nhật ảnh thumbnail:", err);
-          window.alert(`Lỗi khi cập nhật ảnh thumbnail: ${err.message || err}`);
+          toast.error(`Lỗi khi cập nhật ảnh thumbnail: ${err.message || err}`);
         }
       }
   
@@ -155,7 +156,7 @@ const DetailAccountModal = ({ open, onClose, product, onChange }) => {
       onClose();
     } catch (err) {
       console.log("Lỗi cập nhật thông tin sản phẩm:", err);
-      window.alert(`Lỗi cập nhật thông tin sản phẩm: \n ${err}`);
+      toast.error(`Lỗi cập nhật thông tin sản phẩm: \n ${err}`);
     }
   };
   
@@ -279,7 +280,7 @@ const DetailAccountModal = ({ open, onClose, product, onChange }) => {
           )
         }
       </Box>
-
+      <ToastContainer />
     </Modal>
   );
 };

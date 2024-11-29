@@ -3,7 +3,8 @@ import { Modal, Box, Typography, Button, Avatar, Chip, TextField, Divider } from
 import Radio from '@mui/material/Radio';
 import { UserFetch } from '~/REST_API_Client';
 import { Link } from 'react-router-dom';
-
+import { ToastContainer, toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 const DetailAccountModal = ({ open, onClose, user, onChange }) => {
   // if (!user) return null; // Nếu không có user thì không render modal;
   const defaultInfor = useRef({ ...user });
@@ -55,7 +56,7 @@ const DetailAccountModal = ({ open, onClose, user, onChange }) => {
     UserFetch.updateInfo(user._id, formData)
       .then(data => {
         // console.log("cap nhat thanh con: ", data);
-        window.alert("Cập nhật thông tin người dùng thành công");
+        toast.success("Cập nhật thông tin người dùng thành công");
         const newUser = data.data;
         // setgender(newUser?.gender); setName(newUser?.name); setEmail(newUser?.email);
         // setPhone(newUser?.phone); setAddress(newUser?.address); setState(newUser?.state);
@@ -65,7 +66,7 @@ const DetailAccountModal = ({ open, onClose, user, onChange }) => {
       })
       .catch(err => {
         console.log("loi cap nhat thong tin nguoi dung: ", err);
-        window.alert(`Lỗi cập nhật thông tin người dùng \n ${err}`);
+        toast.error(`Lỗi cập nhật thông tin người dùng \n ${err}`);
       })
   }
   return (
@@ -191,7 +192,7 @@ const DetailAccountModal = ({ open, onClose, user, onChange }) => {
           )
         }
       </Box>
-
+      <ToastContainer />
     </Modal>
   );
 };
