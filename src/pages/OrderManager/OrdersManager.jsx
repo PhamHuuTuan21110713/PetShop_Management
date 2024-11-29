@@ -12,6 +12,7 @@ const OrdersManager = () => {
     const [openModal, setOpenModal] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [orders, setOrders] = useState([]);
+    const [limit, setLimit] = useState(10)
     const [totalPages, setTotalPages] = useState(0);
     const [page, setPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState(""); // State mới để lưu giá trị tìm kiếm
@@ -21,14 +22,15 @@ const OrdersManager = () => {
         year: 0,
         orderId: "",
     });
+    
 
     const indexOrder = useRef(0);
 
 
-    const fetchOrders = async (page = 1, filters) => {
+    const fetchOrders = async (page = 1, limit, filters) => {
         try {
             console.log("Sending filters to API:", filters);
-            const response = await OrderFetch.getAllOrder(page, filters); // Lấy đơn hàng từ API
+            const response = await OrderFetch.getAllOrder(page, limit, filters); // Lấy đơn hàng từ API
             console.log("du lieu ve", response);
 
             setOrders(response.data);
@@ -42,8 +44,8 @@ const OrdersManager = () => {
     };
 
     useEffect(() => {
-        fetchOrders(page, filters); // Lấy đơn hàng khi trang hoặc bộ lọc thay đổi
-    }, [page, filters]);
+        fetchOrders(page, limit, filters); // Lấy đơn hàng khi trang hoặc bộ lọc thay đổi
+    }, [page,limit, filters]);
 
     const handleOpenModal = (index) => {
         indexOrder.current = index;
@@ -52,12 +54,12 @@ const OrdersManager = () => {
 
     const handleCloseModal =()=>{
         setOpenModal(false)
-        fetchOrders(page, filters);
+        fetchOrders(page, limit, filters);
     }
 
     const handlePageChange = (event, newPage) => {
         setPage(newPage);
-        fetchOrders(newPage, filters);
+        fetchOrders(newPage, limit,filters);
     };
 
     const handleSearch = () => {
@@ -75,7 +77,7 @@ const OrdersManager = () => {
         // Nếu status là "all", không truyền vào API
         const statusParam = status === "" ? undefined : status;
 
-        fetchOrders(1, { ...updatedFilters, status: statusParam });
+        fetchOrders(1, limit,{ ...updatedFilters, status: statusParam });
     };
 
     return (
