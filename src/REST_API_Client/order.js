@@ -29,14 +29,14 @@ const OrderAPI = (axiosInstance) => {
     }
 
     // Thêm phương thức getAllOrder
-    const getAllOrder = async (page, filters) => {
+    const getAllOrder = async (page, limit,filters) => {
 
         const accessToken = localStorage.getItem("access_token");
 
 
         try {
             const filtersString = encodeURIComponent(JSON.stringify(filters));
-            const res = await axiosInstance.get(`/order/?page=${page}&limit=10&filters=${filtersString}`, {
+            const res = await axiosInstance.get(`/order/?page=${page}&limit=${limit}&filters=${filtersString}`, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`,
                     "Accept": "application/json",
