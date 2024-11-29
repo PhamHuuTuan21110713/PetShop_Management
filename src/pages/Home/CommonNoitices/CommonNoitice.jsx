@@ -4,12 +4,8 @@ import myStyle from "./CommonNoitice.module.scss";
 import { useEffect, useState } from "react";
 import { OrderFetch, ProductFetch } from "~/REST_API_Client";
 import { BookingFetch } from "~/REST_API_Client";
-<<<<<<< HEAD
 import { ToastContainer, toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
-=======
-
->>>>>>> f2feed8b4ce3700880787bf0249fbdbb60f1d9a0
 const CommonNoitice = () => {
 
     const [countOrder, setCountOrder] = useState(0)
