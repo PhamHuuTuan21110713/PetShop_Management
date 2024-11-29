@@ -7,7 +7,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import DetailsIcon from '@mui/icons-material/Details';
 import { ServiceFetch } from "~/REST_API_Client";
 import { useNavigate } from "react-router-dom";
-
+import { ToastContainer, toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 const AllServices = () => {
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(true);
@@ -32,7 +33,7 @@ const AllServices = () => {
                 setIsLoading(false)
             })
             .catch(err => {
-                window.alert(`Lỗi lấy thông tin dịch vụ: \n${err}`);
+                toast.error(`Lỗi lấy thông tin dịch vụ: \n${err}`);
             })
     }
 
@@ -54,7 +55,7 @@ const AllServices = () => {
                 fetchData(sort,find);
             })
             .catch(err => {
-                window.alert(`Xóa dịch vụ thất bại: \n${err}`);
+                toast.error(`Xóa dịch vụ thất bại: \n${err}`);
             })
     }
     return (
@@ -167,7 +168,7 @@ const AllServices = () => {
 
                 </Box>
             </Box>
-
+            <ToastContainer />
         </Box>
     )
 }

@@ -5,6 +5,8 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useRef, useState, useEffect } from 'react';
 import { BookingFetch } from "~/REST_API_Client";
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import { ToastContainer, toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 // const pData = [2400, 0, 9800, 3908, 4800, 3800, 4300, 1000, 20321, 10, 22, 11];
 const xLabels = [
     'Jan',
@@ -87,7 +89,7 @@ const MonitoringService = () => {
                 setBookings(data.data);
             })
             .catch(err => {
-                window.alert(`Lỗi lấy dữ liệu đơn dịch vụ: \n${err}`);
+                toast.success(`Lỗi lấy dữ liệu đơn dịch vụ: \n${err}`);
             })
     }, [yearTK])
     const handleBack = () => {
@@ -208,7 +210,7 @@ const MonitoringService = () => {
                 )
             }
 
-
+            <ToastContainer />
         </Box>
     )
 }

@@ -13,6 +13,8 @@ import { useAuth } from "~/components/Authentication/authentication";
 import { Phone } from "@mui/icons-material";
 import { UserFetch } from "~/REST_API_Client";
 import { excel } from "~/utils/xlsx";
+import { ToastContainer, toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 // import { Link, useNavigate } from 'react-router-dom';
 // import { registerSchema } from '../../utils/rules'; // Đường dẫn đến file validate
 // import { RegisterFetch } from '~/REST-API-client';
@@ -31,13 +33,13 @@ const AddAccount = () => {
         setIsLoading(true)
         UserFetch.createUsers(data)
             .then(res => {
-                window.alert(`Thêm tài khoản thành công\n ${res.data.message}`);
+                toast.success(`Thêm tài khoản thành công\n ${res.data.message}`);
                 // console.log("them thanh con: ", res);
                 setIsLoading(false);
                 handleCancel();
             })
             .catch(err => {
-                window.alert(`Tạo người dùng thất bại: \n ${err}`);
+                toast.error(`Tạo tài khoản thất bại: \n ${err}`);
                 // console.log("them loi: ", err);
                 setIsLoading(false);
             })
@@ -78,7 +80,7 @@ const AddAccount = () => {
                 setUsers(data);
             } catch (error) {
                 // console.error('Lỗi đọc file:', error);
-                window.alert(`Lỗi đọc file: \n ${error}`);
+                toast.error(`Lỗi đọc file: \n ${error}`);
             } finally {
                 e.target.value = null;
             }
@@ -242,6 +244,7 @@ const AddAccount = () => {
                 }
 
             </Box>
+            <ToastContainer />
         </>
 
     );

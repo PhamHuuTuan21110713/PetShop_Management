@@ -3,15 +3,13 @@ import { Box, Typography, Divider, Button, CircularProgress } from "@mui/materia
 import SearchIcon from '@mui/icons-material/Search';
 import myStyle from '../Account.module.scss';
 import FilterListIcon from '@mui/icons-material/FilterList';
-
-
 import { useEffect, useRef, useState } from "react";
 
-
+import { ToastContainer, toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 
 import { OrderFetch } from "~/REST_API_Client";
 import BoughtOrdersChart from "./Chart";
-
 
 const BoughtOrders = ({ userId }) => {
 
@@ -43,7 +41,7 @@ const BoughtOrders = ({ userId }) => {
         } else if (myFilter === "huy") {
             condition = { ...condition, $or: [{ status: "hbb" }, { status: "hbs" }] }
         } else {
-            window.alert("Bộ lọc không hợp lệ hoặc không còn hỗ trợ");
+            toast.error("Bộ lọc không hợp lệ hoặc không còn hỗ trợ");
         }
         OrderFetch.getOrderByUserId(userId, condition, myFind)
             .then((data) => {
@@ -56,7 +54,8 @@ const BoughtOrders = ({ userId }) => {
                 setIsLoaing(false);
             })
             .catch(err => {
-                window.alert(`Lỗi lấy dữ liệu đơn hàng: \n ${err}`);
+                toast.error(`Lỗi lấy dữ liệu đơn hàng`);
+                console.log(`Lỗi lấy dữ liệu đơn hàng: \n ${err}`)
             })
     }
     useEffect(() => {
@@ -183,14 +182,14 @@ const BoughtOrders = ({ userId }) => {
                         <Box className={myStyle.colRightOrders}>
                             <BoughtOrdersChart orders={originalOrders.current} year={yearTK} />
                         </Box>
-                    ):
+                    ) :
                     (
-                        <Box sx={{display:"flex", justifyContent:"center", alignItems:"center"}}>
+                        <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
                             <CircularProgress />
                         </Box>
                     )
             }
-
+            <ToastContainer />
         </Box>
     )
 }

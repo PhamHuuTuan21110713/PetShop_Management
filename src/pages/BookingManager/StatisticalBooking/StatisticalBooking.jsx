@@ -3,7 +3,8 @@ import { useState, useEffect } from "react";
 import { LineChart } from '@mui/x-charts/LineChart';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { BookingFetch } from "~/REST_API_Client";
-const pData = [2400, 0, 9800, 3908, 4800, 3800, 4300, 1000, 20321, 10, 22, 11];
+import { ToastContainer, toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 const xLabels = [
     'Jan',
     'Feb',
@@ -84,7 +85,7 @@ const StatisticalBooking = () => {
                 setBookings(data.data);
             })
             .catch(err => {
-                window.alert(`Lỗi lấy dữ liệu đơn dịch vụ: \n${err}`);
+                toast.error(`Lỗi lấy dữ liệu đơn dịch vụ: \n${err}`);
             })
     }, [yearTK])
     return (
@@ -194,6 +195,7 @@ const StatisticalBooking = () => {
                     )
                 }
             </Box>
+            <ToastContainer />
         </div>
     )
 }

@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { BookingFetch } from "~/REST_API_Client";
 import FilterListIcon from '@mui/icons-material/FilterList';
+import { ToastContainer, toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 const AllBooking = () => {
     const [sort, setSort] = useState("down");
     const [bookings, setBookings] = useState();
@@ -44,7 +46,7 @@ const AllBooking = () => {
         } else if (myFilter === "da-huy") {
             condition = { ...condition, status: "da-huy" }
         } else {
-            window.alert("Bộ lọc không hợp lệ hoặc không còn hỗ trợ");
+            toast.error("Bộ lọc không hợp lệ hoặc không còn hỗ trợ");
         }
         const limit = 8;
         const page = myPage;
@@ -58,7 +60,7 @@ const AllBooking = () => {
                 setIsLoading(false)
             })
             .catch(err => {
-                window.alert(`Lỗi lấy dữ liệu lịch đặt \n${err}`);
+                toast.error(`Lỗi lấy dữ liệu lịch đặt \n${err}`);
                 setIsLoading(false)
             })
     }
@@ -91,7 +93,7 @@ const AllBooking = () => {
                     
                 })
                 .catch(err => {
-                    window.alert(`Lỗi cập nhật: \n${err}`)
+                    toast.error(`Lỗi cập nhật: \n${err}`)
                 })
         } else if (type === "huy") {
             BookingFetch.upDate(id, { status: "da-huy" })
@@ -108,7 +110,7 @@ const AllBooking = () => {
                     
                 })
                 .catch(err => {
-                    window.alert(`Lỗi cập nhật: \n${err}`)
+                    toast.error(`Lỗi cập nhật: \n${err}`)
                 })
         }
     }
@@ -278,6 +280,7 @@ const AllBooking = () => {
                 </Box>
 
             </Box>
+            <ToastContainer />
         </Box>
     )
 }

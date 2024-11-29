@@ -8,7 +8,8 @@ import LockOpenIcon from '@mui/icons-material/LockOpen';
 import DetailsIcon from '@mui/icons-material/Details';
 import { CategoryFetch, ProductFetch } from "~/REST_API_Client"; // Assuming this is your API client for categories
 import ProductModal from "~/components/Modal/Product/ProductModal";
-
+import { ToastContainer, toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 const AllProduct = () => {
   const [openModal, setOpenModal] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -68,7 +69,7 @@ const AllProduct = () => {
       }
       setIsLoading(false);
     } catch (error) {
-      window.alert(`Error fetching products: \n${error.message}`);
+      toast.error(`Lỗi lấy sản phẩm: \n${error.message}`);
       setIsLoading(false);
     }
   };
@@ -114,12 +115,12 @@ const AllProduct = () => {
           });
         } catch (err) {
           console.error("Lỗi khi cập nhật state:", err);
-          window.alert(`Lỗi khi cập nhật trạng thái sản phẩm: \n ${err.message}`);
+          toast.error(`Lỗi khi cập nhật trạng thái sản phẩm: \n ${err.message}`);
         }
       })
       .catch(err => {
         console.error("Lỗi cập nhật:", err); // In ra lỗi chi tiết
-        window.alert(`Lỗi cập nhật dữ liệu sản phẩm: \n ${err.message}`);
+        toast.error(`Lỗi cập nhật dữ liệu sản phẩm: \n ${err.message}`);
       });
   }
 
@@ -396,6 +397,7 @@ const AllProduct = () => {
           <ProductModal open={openModal} onClose={handleCloseModal} product={products?.products[indexProduct.current]} onChange={onChangeProducts}/>
         </>
       )}
+      <ToastContainer />
     </Box>
   );
 };

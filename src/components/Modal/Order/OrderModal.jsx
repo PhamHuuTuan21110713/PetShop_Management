@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { Modal, Box, Typography, Button, Chip, Divider, RadioGroup, FormControlLabel, Radio } from '@mui/material';
 import { OrderFetch, ProductFetch } from '~/REST_API_Client';  // Import API để lấy order (nếu cần)
-
+import { ToastContainer, toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 const DetailOrderModal = ({ open, onClose, order }) => {
     const [isUpdate, setIsUpdate] = useState(false);
     const [orderDetails, setOrderDetails] = useState(order);
@@ -100,12 +101,12 @@ const DetailOrderModal = ({ open, onClose, order }) => {
                 //onChange(newOrder);
                 // Gọi API cập nhật trạng thái đơn hàng (nếu cần)
                 // const data = await OrderFetch.updateOrder(orderDetails._id, updatedData);
-                window.alert("Cập nhật thông tin đơn hàng thành công");
+                toast.success("Cập nhật thông tin đơn hàng thành công");
                 onClose(); // Đóng modal sau khi xử lý
             })
             .catch(err => {
                 console.log("Lỗi khi cập nhật đơn hàng:", err);
-                window.alert(`Lỗi cập nhật thông tin đơn hàng: ${err.message || err}`);
+                toast.error(`Lỗi cập nhật thông tin đơn hàng: ${err.message || err}`);
             })
     };
 
@@ -229,6 +230,7 @@ const DetailOrderModal = ({ open, onClose, order }) => {
                         </Box>)
                 }
             </Box>
+            <ToastContainer />
         </Modal>
     );
 };

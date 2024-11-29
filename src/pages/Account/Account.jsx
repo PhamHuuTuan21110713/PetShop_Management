@@ -6,6 +6,8 @@ import BoughtOrders from "./BoughtOrders/BoughtOrders";
 import ResgisteredServices from "./RegisterdService/ResgisteredServices";
 import { useEffect, useState } from "react";
 import { UserFetch } from "~/REST_API_Client";
+import { ToastContainer, toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 const Account = () => {
     const navigate = useNavigate();
     const { id } = useParams();
@@ -20,7 +22,7 @@ const Account = () => {
                 setIsloading(false);
             })
             .catch(err => {
-                window.alert(`Lỗi lấy thông tin người dùng: \n${err}`);
+                toast.error(`Lỗi lấy thông tin người dùng: \n${err}`);
             })
     }
     useEffect(() => {
@@ -191,6 +193,7 @@ const Account = () => {
             <Box sx={{ marginTop: "20px" }}>
                 <ResgisteredServices userId= {id}/>
             </Box>
+            <ToastContainer />
         </Box>
     )
 }

@@ -12,5 +12,9 @@ export default defineConfig({
     alias: [
       { find: '~', replacement: '/src' }
     ]
+  },
+  server: {
+    port: 3000, // Đặt port mà bạn muốn, ví dụ: 3000
+    strictPort: true // Tùy chọn này đảm bảo Vite không chuyển sang port khác nếu port đã bị chiếm
   }
 })

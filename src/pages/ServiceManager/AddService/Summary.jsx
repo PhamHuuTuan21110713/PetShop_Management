@@ -1,6 +1,8 @@
 import { Box, Typography, Button } from "@mui/material";
 import { useState } from "react";
 import { ServiceFetch } from "~/REST_API_Client";
+import { ToastContainer, toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 const Summary = ({ value,onChange, data }) => {
     const [isLoading, setIsLoading] = useState(false);
     const handlePrev = () => {
@@ -11,7 +13,7 @@ const Summary = ({ value,onChange, data }) => {
         console.log("Data create: ", data)
         ServiceFetch.create(data)
             .then(data => {
-                window.alert("Tạo dịch vụ thành công");
+                toast.success("Tạo dịch vụ thành công");
                 setIsLoading(false);
                 onChange(1, {
                     name: "",
@@ -23,7 +25,7 @@ const Summary = ({ value,onChange, data }) => {
             })
             .catch(err => {
                 console.log("Loi dich vu: ",err)
-                window.alert(`Lỗi tạo dịch vụ: \n${err}`);
+                toast.error(`Lỗi tạo dịch vụ: \n${err}`);
                 setIsLoading(false);
             })
     }
@@ -122,6 +124,7 @@ const Summary = ({ value,onChange, data }) => {
                 <Button onClick={handlePrev} variant="contained">Quay về</Button>
                 <Button disabled={isLoading} onClick={handleCreate} variant="contained">Tạo</Button>
             </Box>
+            <ToastContainer />
         </Box>
     )
 }

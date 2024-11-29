@@ -5,6 +5,8 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import FormControl from '@mui/material/FormControl';
 import NativeSelect from '@mui/material/NativeSelect';
 import { BookingFetch } from "~/REST_API_Client";
+import { ToastContainer, toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 const Booking = () => {
     const navigate = useNavigate();
     const { id } = useParams();
@@ -24,7 +26,7 @@ const Booking = () => {
                 setIsLoading(false);
             })
             .catch(err => {
-                window.alert(`Lỗi lấy thông tin:\n${err}`)
+                toast.error(`Lỗi lấy thông tin:\n${err}`)
                 setIsLoading(false);
             })
     }
@@ -43,7 +45,7 @@ const Booking = () => {
                 fetchData()
             })
             .catch(err => {
-                window.alert(`Lỗi cập nhật\n${err}`)
+                toast.error(`Lỗi cập nhật\n${err}`)
             })
     }
     if (isLoading) {
@@ -143,6 +145,7 @@ const Booking = () => {
 
                 }
             </Box>
+            <ToastContainer />
         </Box>
     )
 }

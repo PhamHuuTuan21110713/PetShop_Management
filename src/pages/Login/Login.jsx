@@ -4,6 +4,8 @@ import { Link , useNavigate} from 'react-router-dom';
 import { loginSchema } from '~/utils/authenValidation';
 import { AuthenFetch } from '~/REST_API_Client';
 import { useAuth } from '../../components/Authentication/authentication';
+import { ToastContainer, toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 const Login = () => {
   console.log("render-dangnhap")
   const auth = useAuth();
@@ -36,7 +38,7 @@ const Login = () => {
       try {
         const data = await AuthenFetch.login(inputValue);
         if(data.data.user.role !== "admin") {
-          window.alert("Bạn không có quyền truy cập");
+          toast.error("Bạn không có quyền truy cập");
           return;
         }
         // console.log(data.data.access_token)
@@ -133,6 +135,7 @@ const Login = () => {
             : <Alert severity='error'>{errorMessage}</Alert>
         }
       </Dialog>
+      <ToastContainer />
     </Box>
   );
 };

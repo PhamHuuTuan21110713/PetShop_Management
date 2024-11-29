@@ -2,6 +2,8 @@ import { Box, Button, Typography } from "@mui/material";
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useRef, useState, useEffect } from 'react';
 import { ServiceFetch } from "~/REST_API_Client";
+import { ToastContainer, toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 const UpdatePrice = () => {
     const navigate = useNavigate();
     const location = useLocation();
@@ -21,11 +23,11 @@ const UpdatePrice = () => {
                 price: prices
             })
                 .then(data => {
-                    window.alert("Cập nhật thông tin thành công");
+                    toast.success("Cập nhật thông tin thành công");
                     navigate(-1)
                 })
                 .catch(err => {
-                    window.alert(`Lỗi cập nhật thông tin dịch vụ: \n${err}`);
+                    toast.error(`Lỗi cập nhật thông tin dịch vụ: \n${err}`);
                 }
                 )
         }
@@ -152,6 +154,7 @@ const UpdatePrice = () => {
                 <Button color="success" variant="contained" onClick={handleSubmit}>Cập nhật</Button>
 
             </Box>
+            <ToastContainer />
         </Box>
     )
 }

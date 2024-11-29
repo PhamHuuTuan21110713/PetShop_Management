@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { ShopFetch } from "~/REST_API_Client";
+import { ToastContainer, toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 const AddNamePage = ({ onChange, value, data }) => {
     const [name, SetName] = useState(data.name);
     const [addresses, setAddresses] = useState([]);
@@ -38,7 +40,7 @@ const AddNamePage = ({ onChange, value, data }) => {
             })
             .catch(err => {
                 console.log("err: ", err);
-                window.alert(`Lỗi lấy thông tin cửa hàng: \n${err}`)
+                toast.error(`Lỗi lấy thông tin cửa hàng: \n${err}`)
             })
     }
     return (
@@ -78,6 +80,7 @@ const AddNamePage = ({ onChange, value, data }) => {
             <Box sx={{ display: "flex", justifyContent: "flex-end", marginTop: "10px" }}>
                 <Button variant="contained" onClick={handleNext}>Tiếp</Button>
             </Box>
+            <ToastContainer />
         </Box>
     )
 }

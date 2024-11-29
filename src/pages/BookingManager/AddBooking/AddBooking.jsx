@@ -10,6 +10,8 @@ import { BookingFetch, ServiceFetch } from "~/REST_API_Client";
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import Alert from '@mui/material/Alert';
+import { ToastContainer, toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 const getCurrentTime = () => {
     const now = new Date();
     const hours = String(now.getHours()).padStart(2, '0');
@@ -61,9 +63,9 @@ const AddBooking = () => {
         }
         BookingFetch.createNew(sendData)
             .then(data => 
-                window.alert("Đặt lịch thành công")
+                toast.success("Đặt lịch thành công")
             ).catch(err => {
-                window.alert(`Lỗi đặt lịch:\n${err}`)
+                toast.error(`Lỗi đặt lịch:\n${err}`)
             })
         setWeightPet(2);
         setDetailPet("");
@@ -98,7 +100,7 @@ const AddBooking = () => {
                 setIsLoading(false);
             })
             .catch(err => {
-                window.alert(`Lỗi \n${err}`)
+                toast.error(`Lỗi \n${err}`)
                 setIsLoading(false);
             })
     }, []);
@@ -300,6 +302,7 @@ const AddBooking = () => {
 
                 </Dialog>
             </Box>
+            <ToastContainer />
         </Box>
     )
 }

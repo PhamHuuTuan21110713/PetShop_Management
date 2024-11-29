@@ -7,6 +7,8 @@ import LockOpenIcon from '@mui/icons-material/LockOpen';
 import DetailsIcon from '@mui/icons-material/Details';
 import DetailAccountModal from "../../../components/Modal/Account/DetailAccountModal";
 import { UserFetch } from "~/REST_API_Client";
+import { ToastContainer, toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 const AllAccount = () => {
     const [openModal, setOpenModal] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
@@ -39,7 +41,7 @@ const AllAccount = () => {
             })
             .catch(err => {
                 // console.log("ërr: ", err);
-                window.alert(`Lỗi lấy dữ liệu người dùng: \n ${err}`)
+                toast.error(`Lỗi lấy dữ liệu người dùng: \n ${err}`)
             })
     }
     useEffect(() => {
@@ -79,7 +81,7 @@ const AllAccount = () => {
                 setUsers(newUsers);
             })
             .catch(err => {
-                window.alert(`Lỗi cập nhật dữ liệu người dùng: \n ${err}`)
+                toast.error(`Lỗi cập nhật dữ liệu người dùng: \n ${err}`)
             })
     }
     const handleSort = (type) => {
@@ -163,66 +165,66 @@ const AllAccount = () => {
                         <tbody>
                             {
                                 isLoading ?
-                                (
-                                    <tr>
-                                        <td colSpan={6} style={{ textAlign: "center" }}>
-                                            <CircularProgress />
-                                        </td>
-                                    </tr>
-                                ) :
-                                users.data?.map((user, index) => {
-                                    return (
-                                        <tr key={index}>
-
-                                            <td>{user?._id}</td>
-                                            <td>{user?.name}</td>
-                                            <td>{user?.email}</td>
-                                            <td>{user?.phone}</td>
-                                            <td>
-                                                {
-                                                    user?.state === 1 ? <Chip label="hoạt động" color="success" /> :
-                                                        <Chip label="đã khóa" color="error" />
-                                                }
-
-                                            </td>
-                                            <td >
-                                                <Box sx={{ display: "flex", justifyContent: "center", gap: 2 }}>
-                                                    <Tooltip title="Chi tiết">
-                                                        <button
-                                                            onClick={() => {
-                                                                handleOpenModal(index)
-                                                            }}
-                                                            style={{ border: "none", cursor: "pointer", color: "#fff", background: "#346791", borderRadius: "4px" }}>
-                                                            <DetailsIcon />
-                                                        </button>
-                                                    </Tooltip>
-                                                    {
-                                                        user?.state === 1 ?
-                                                            (
-                                                                <Tooltip title="khóa tài khoản">
-                                                                    <button
-                                                                        onClick={() => updateStateUser(user, 0, index)}
-                                                                        style={{ border: "none", cursor: "pointer", color: "#fff", background: "#b55050", borderRadius: "4px" }}>
-                                                                        <LockIcon />
-                                                                    </button>
-                                                                </Tooltip>
-                                                            ) :
-                                                            (
-                                                                <Tooltip title="mở khóa tài khoản">
-                                                                    <button
-                                                                        onClick={() => updateStateUser(user, 1, index)}
-                                                                        style={{ border: "none", cursor: "pointer", color: "#fff", background: "#50c77f", borderRadius: "4px" }}>
-                                                                        <LockOpenIcon />
-                                                                    </button>
-                                                                </Tooltip>
-                                                            )
-                                                    }
-
-                                                </Box>
+                                    (
+                                        <tr>
+                                            <td colSpan={6} style={{ textAlign: "center" }}>
+                                                <CircularProgress />
                                             </td>
                                         </tr>
-                                    )
-                                })
+                                    ) :
+                                    users.data?.map((user, index) => {
+                                        return (
+                                            <tr key={index}>
+
+                                                <td>{user?._id}</td>
+                                                <td>{user?.name}</td>
+                                                <td>{user?.email}</td>
+                                                <td>{user?.phone}</td>
+                                                <td>
+                                                    {
+                                                        user?.state === 1 ? <Chip label="hoạt động" color="success" /> :
+                                                            <Chip label="đã khóa" color="error" />
+                                                    }
+
+                                                </td>
+                                                <td >
+                                                    <Box sx={{ display: "flex", justifyContent: "center", gap: 2 }}>
+                                                        <Tooltip title="Chi tiết">
+                                                            <button
+                                                                onClick={() => {
+                                                                    handleOpenModal(index)
+                                                                }}
+                                                                style={{ border: "none", cursor: "pointer", color: "#fff", background: "#346791", borderRadius: "4px" }}>
+                                                                <DetailsIcon />
+                                                            </button>
+                                                        </Tooltip>
+                                                        {
+                                                            user?.state === 1 ?
+                                                                (
+                                                                    <Tooltip title="khóa tài khoản">
+                                                                        <button
+                                                                            onClick={() => updateStateUser(user, 0, index)}
+                                                                            style={{ border: "none", cursor: "pointer", color: "#fff", background: "#b55050", borderRadius: "4px" }}>
+                                                                            <LockIcon />
+                                                                        </button>
+                                                                    </Tooltip>
+                                                                ) :
+                                                                (
+                                                                    <Tooltip title="mở khóa tài khoản">
+                                                                        <button
+                                                                            onClick={() => updateStateUser(user, 1, index)}
+                                                                            style={{ border: "none", cursor: "pointer", color: "#fff", background: "#50c77f", borderRadius: "4px" }}>
+                                                                            <LockOpenIcon />
+                                                                        </button>
+                                                                    </Tooltip>
+                                                                )
+                                                        }
+
+                                                    </Box>
+                                                </td>
+                                            </tr>
+                                        )
+                                    })
                             }
                         </tbody>
 
@@ -235,12 +237,12 @@ const AllAccount = () => {
                 isLoading ? null :
                     <>
                         <Box sx={{ marginTop: "10px", display: "flex", justifyContent: "flex-end" }}>
-                            <Pagination page={page} onChange={(e,value) => setPage(value) } count={users.totalPages} size="small" />
+                            <Pagination page={page} onChange={(e, value) => setPage(value)} count={users.totalPages} size="small" />
                         </Box>
                         <DetailAccountModal open={openModal} onClose={handleCloseModal} user={users.data[indexUser.current]} onChange={onChangeUsers} />
                     </>
             }
-
+            <ToastContainer />
         </Box>
     )
 }
