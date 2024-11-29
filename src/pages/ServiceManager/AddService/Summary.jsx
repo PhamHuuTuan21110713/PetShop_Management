@@ -14,14 +14,18 @@ const Summary = ({ value,onChange, data }) => {
         ServiceFetch.create(data)
             .then(data => {
                 toast.success("Tạo dịch vụ thành công");
-                setIsLoading(false);
-                onChange(1, {
-                    name: "",
-                    description: [],
-                    price: [],
-                    procedures: [],
-                    applicableBranches: [],
-                })
+                
+                setTimeout(() => {
+                    setIsLoading(false);
+                    onChange(1, {
+                        name: "",
+                        description: [],
+                        price: [],
+                        procedures: [],
+                        applicableBranches: [],
+                    })
+                },1500)
+               
             })
             .catch(err => {
                 console.log("Loi dich vu: ",err)

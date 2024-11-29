@@ -21,7 +21,7 @@ const AllAccount = () => {
     const indexUser = useRef(0);
     const fetchUser = (paged, sorted, filtered, finded) => {
         let sorting; let filtering; let finding;
-        let paging = paged; let limiting = 3;
+        let paging = paged; let limiting = 7;
         if (sorted === "default") {
             sorting = { createdAt: -1 }
         } else {
