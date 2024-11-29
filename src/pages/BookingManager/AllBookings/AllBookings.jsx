@@ -204,8 +204,8 @@ const AllBooking = () => {
                                     bookings &&
                                     bookings.map((booking, index) => {
                                         return (
-                                            <Box key={index} className={myStyle.colBooking}>
-                                                <Box sx={{ boxShadow: "rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;", padding: "20px", display: "flex", flexDirection: "column", gap: 1 }}>
+                                            <Box key={index} className={myStyle.colBooking} >
+                                                <Box sx={{ height:"100%",boxShadow: "rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;", padding: "20px", display: "flex", flexDirection: "column", gap: 1 }}>
                                                     <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
                                                         <Typography>Mã đơn: <Link to={`/lich-dat/${booking._id}`}><strong>{booking._id}</strong></Link></Typography>
                                                         <Divider orientation="vertical" flexItem />
