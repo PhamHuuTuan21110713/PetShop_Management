@@ -39,7 +39,7 @@ const BookingAPI = (axiosInstance) => {
             return res.data
         }catch(error) {
             if (error.response) {
-                throw new Error(error.response.data.message.message);
+                throw new Error(error.response.data.message);
             } else if (error.request) {
                 throw new Error("Server không phản hồi");
             } else {
@@ -47,10 +47,45 @@ const BookingAPI = (axiosInstance) => {
             }
         }
     }
-
+    const upDate = async (id,data) => {
+        try {
+            const access_token = localStorage.getItem("access_token");
+            const res = await axiosInstance.patch(`/bookings/${id}`,data, {
+                headers: {
+                    Authorization: `Bearer ${access_token}`,
+                }
+            });
+            return res.data
+        }catch(error) {
+            if (error.response) {
+                throw new Error(error.response.data.message);
+            } else if (error.request) {
+                throw new Error("Server không phản hồi");
+            } else {
+                throw new Error(error.message)
+            }
+        }
+    }
+    const getById = async (id) => {
+        try {
+           
+            const res = await axiosInstance.get(`/bookings/${id}`);
+            return res.data
+        }catch(error) {
+            if (error.response) {
+                throw new Error(error.response.data.message);
+            } else if (error.request) {
+                throw new Error("Server không phản hồi");
+            } else {
+                throw new Error(error.message)
+            }
+        }
+    }
     return {
         getAll,
-        createNew
+        createNew,
+        upDate,
+        getById
     }
 }
 

@@ -14,7 +14,7 @@ const AllBooking = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [totalPages, setTotalPages] = useState(1);
     const [currentPage, setCurrentPage] = useState(1);
-    const fetchData = (myFilter,myFind,myPage) => {
+    const fetchData = (myFilter, myFind, myPage) => {
         let condition;
         let sorting;
         if (yearList !== "") {
@@ -24,12 +24,12 @@ const AllBooking = () => {
             }
         }
 
-        if(sort === "down") {
-            sorting= {
+        if (sort === "down") {
+            sorting = {
                 bookingDate: -1
             }
         } else if (sort === "up") {
-            sorting= {
+            sorting = {
                 bookingDate: 1
             }
         }
@@ -50,7 +50,7 @@ const AllBooking = () => {
         const page = myPage;
         setCurrentPage(myPage);
         setIsLoading(true);
-        BookingFetch.getAll(undefined, condition,myFind, sorting,page,limit)
+        BookingFetch.getAll(undefined, condition, myFind, sorting, page, limit)
             .then(data => {
                 // console.log("bookings: ", data)
                 setBookings(data.data);
@@ -63,20 +63,58 @@ const AllBooking = () => {
             })
     }
     const handleSearch = () => {
-        fetchData(filter, find,1);
-        
+        fetchData(filter, find, 1);
+
     }
     const handleFindYearList = () => {
-        fetchData(filter, find,1);
-        
+        fetchData(filter, find, 1);
+
     }
     const handleChangePage = (event, value) => {
         setCurrentPage(value);
-        fetchData(filter,find,value)
+        fetchData(filter, find, value)
+    }
+    const handleUpdateBooking = (id, type, index) => {
+        if (type === "xac-nhan") {
+            BookingFetch.upDate(id, { status: "da-xac-nhan" })
+                .then(data => {
+                    console.log("thanh con: ", data)
+                    
+                    if (filter === "all") {
+                        fetchData(filter, find, currentPage)
+
+                    } else if (filter === "dang-xac-nhan") {
+                        let _bookings = [...bookings];
+                        _bookings.splice(index, 1)
+                        setBookings(_bookings);
+                    }
+                    
+                })
+                .catch(err => {
+                    window.alert(`Lỗi cập nhật: \n${err}`)
+                })
+        } else if (type === "huy") {
+            BookingFetch.upDate(id, { status: "da-huy" })
+                .then(data => {
+                   
+                    if (filter === "all") {
+                        fetchData(filter, find, currentPage)
+
+                    } else if (filter === "dang-xac-nhan") {
+                        let _bookings = [...bookings];
+                        _bookings.splice(index, 1)
+                        setBookings(_bookings);
+                    }
+                    
+                })
+                .catch(err => {
+                    window.alert(`Lỗi cập nhật: \n${err}`)
+                })
+        }
     }
     useEffect(() => {
-        fetchData(filter,find,1)
-    }, [filter,sort])
+        fetchData(filter, find, 1)
+    }, [filter, sort])
     return (
         <Box>
             <Box>
@@ -159,7 +197,7 @@ const AllBooking = () => {
                 {
                     isLoading ? (<Box sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}><CircularProgress /></Box>)
                         :
-                        (                 
+                        (
                             <Box sx={{ display: "flex", marginTop: "20px", flexWrap: "wrap" }}>
                                 {/* Lap ow day */}
                                 {
@@ -169,7 +207,7 @@ const AllBooking = () => {
                                             <Box key={index} className={myStyle.colBooking}>
                                                 <Box sx={{ boxShadow: "rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;", padding: "20px", display: "flex", flexDirection: "column", gap: 1 }}>
                                                     <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
-                                                        <Typography>Mã đơn: <Link><strong>{booking._id}</strong></Link></Typography>
+                                                        <Typography>Mã đơn: <Link to={`/lich-dat/${booking._id}`}><strong>{booking._id}</strong></Link></Typography>
                                                         <Divider orientation="vertical" flexItem />
                                                         {
                                                             booking.status === "dang-xac-nhan" ? <Typography sx={{ fontWeight: "bold", color: "#de5945" }}>Cần xác nhận</Typography> :
@@ -187,7 +225,7 @@ const AllBooking = () => {
                                                     </Box>
                                                     <Box sx={{ display: "flex", alignItems: "center", justifyContent: "flex-start", gap: 2 }}>
                                                         <Typography sx={{ fontWeight: "bold" }}>Khách đặt: </Typography>
-                                                        <Link>{booking.userId}</Link>
+                                                        <Link to={`/tai-khoan/${booking.userId}`}>{booking.userId}</Link>
                                                     </Box>
                                                     <Box sx={{ display: "flex", alignItems: "center", justifyContent: "flex-start", gap: 2 }}>
                                                         <Typography sx={{ fontWeight: "bold" }}>Chi nhánh: </Typography>
@@ -217,10 +255,13 @@ const AllBooking = () => {
                                                         <Typography sx={{ fontWeight: "bold" }}>Ghi chú: </Typography>
                                                         <Typography>{booking.note}</Typography>
                                                     </Box>
-                                                    <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 3 }}>
-                                                        <Button color="secondary" variant="contained" sx={{ textTransform: "none" }}>Hủy đơn</Button>
-                                                        <Button color="success" variant="contained" sx={{ textTransform: "none" }}>Xác nhận</Button>
-                                                    </Box>
+                                                    {
+                                                        booking.status === "dang-xac-nhan" ? (<Box sx={{ display: "flex", justifyContent: "flex-end", gap: 3 }}>
+                                                            <Button onClick={() => handleUpdateBooking(booking._id, "huy", index)} color="secondary" variant="contained" sx={{ textTransform: "none" }}>Hủy đơn</Button>
+                                                            <Button onClick={() => handleUpdateBooking(booking._id, "xac-nhan", index)} color="success" variant="contained" sx={{ textTransform: "none" }}>Xác nhận</Button>
+                                                        </Box>) : null
+                                                    }
+
                                                 </Box>
                                             </Box>
                                         )
