@@ -33,7 +33,7 @@ const AddNamePage = ({ onChange, value, data }) => {
     const fetchAddress = () => {
         ShopFetch.getInfo()
             .then(data => {
-                console.log("shop: ", data);
+                // console.log("shop: ", data);
                 setAddresses(data.data.branches);
             })
             .catch(err => {

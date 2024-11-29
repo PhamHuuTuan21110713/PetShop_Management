@@ -10,6 +10,7 @@ const UpdateProcedure = () => {
         summary: "",
         detail: ""
     })
+    console.log("re-rendering update procedure services")
     const handleBack = () => {
         navigate(-1);
     }
