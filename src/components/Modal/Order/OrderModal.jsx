@@ -229,8 +229,9 @@ const DetailOrderModal = ({ open, onClose, order }) => {
                             </Button>
                         </Box>)
                 }
+                 <ToastContainer />
             </Box>
-            <ToastContainer />
+           
         </Modal>
     );
 };

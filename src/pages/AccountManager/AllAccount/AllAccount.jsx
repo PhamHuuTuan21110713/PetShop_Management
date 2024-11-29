@@ -17,6 +17,7 @@ const AllAccount = () => {
     const [sort, setSort] = useState("default");
     const [find, setFind] = useState("");
     const [page, setPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(0);
     const indexUser = useRef(0);
     const fetchUser = (paged, sorted, filtered, finded) => {
         let sorting; let filtering; let finding;
@@ -36,7 +37,8 @@ const AllAccount = () => {
         UserFetch.get({ paging, limiting }, sorting, finding, filtering)
             .then(data => {
                 // console.log("data: ", data);
-                setUsers(data);
+                setUsers(data.data);
+                setTotalPages(data.totalPages)
                 setIsLoading(false)
             })
             .catch(err => {
@@ -76,6 +78,7 @@ const AllAccount = () => {
                 // setgender(newUser?.gender); setName(newUser?.name); setEmail(newUser?.email);
                 // setPhone(newUser?.phone); setAddress(newUser?.address); setState(newUser?.state);
                 // defaultInfor.current = { ...newUser };
+                console.log("users: ",)
                 const newUsers = [...users];
                 newUsers[index] = userData;
                 setUsers(newUsers);
@@ -172,7 +175,7 @@ const AllAccount = () => {
                                             </td>
                                         </tr>
                                     ) :
-                                    users.data?.map((user, index) => {
+                                    users?.map((user, index) => {
                                         return (
                                             <tr key={index}>
 
@@ -201,6 +204,7 @@ const AllAccount = () => {
                                                         {
                                                             user?.state === 1 ?
                                                                 (
+                                                                    user?.role === "admin" ? null :
                                                                     <Tooltip title="khóa tài khoản">
                                                                         <button
                                                                             onClick={() => updateStateUser(user, 0, index)}
@@ -237,9 +241,9 @@ const AllAccount = () => {
                 isLoading ? null :
                     <>
                         <Box sx={{ marginTop: "10px", display: "flex", justifyContent: "flex-end" }}>
-                            <Pagination page={page} onChange={(e, value) => setPage(value)} count={users.totalPages} size="small" />
+                            <Pagination page={page} onChange={(e, value) => setPage(value)} count={totalPages} size="small" />
                         </Box>
-                        <DetailAccountModal open={openModal} onClose={handleCloseModal} user={users.data[indexUser.current]} onChange={onChangeUsers} />
+                        <DetailAccountModal open={openModal} onClose={handleCloseModal} user={users[indexUser.current]} onChange={onChangeUsers} />
                     </>
             }
             <ToastContainer />

@@ -279,8 +279,9 @@ const DetailAccountModal = ({ open, onClose, product, onChange }) => {
             </Box>
           )
         }
+        <ToastContainer />
       </Box>
-      <ToastContainer />
+      
     </Modal>
   );
 };

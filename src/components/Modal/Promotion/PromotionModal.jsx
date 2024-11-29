@@ -42,7 +42,7 @@ const PromotionModal = ({ open, onClose, promotion }) => {
         const formData = {
             state: newState
         };
-    
+
         // Gọi API để cập nhật
         PromotionFetch.updatePromotion(promotionDetails?._id, formData)
             .then(data => {
@@ -71,57 +71,57 @@ const PromotionModal = ({ open, onClose, promotion }) => {
 
                 <Box sx={{ marginTop: "10px" }}>
                     <Typography><strong>Mã Chương trinh:</strong> {promotionDetails?._id}</Typography>
-                            <Typography><strong>Tên chương trình:</strong> {promotionDetails?.name}</Typography>
-                            <Typography><strong>Mô tả:</strong> {promotionDetails?.description}</Typography>
-                            <Typography><strong>Kiểu khuyến mãi:</strong> {promotionDetails?.type}</Typography>
-                            <Typography><strong>Trị giá:</strong> {promotionDetails?.value}</Typography>
-                            <Typography><strong>Ngày bắt đầu:</strong> {new Date(promotionDetails?.startDate).toLocaleDateString()}</Typography>
-                            <Typography><strong>Ngày kết thúc:</strong> {new Date(promotionDetails?.endDate).toLocaleDateString()}</Typography>
+                    <Typography><strong>Tên chương trình:</strong> {promotionDetails?.name}</Typography>
+                    <Typography><strong>Mô tả:</strong> {promotionDetails?.description}</Typography>
+                    <Typography><strong>Kiểu khuyến mãi:</strong> {promotionDetails?.type}</Typography>
+                    <Typography><strong>Trị giá:</strong> {promotionDetails?.value}</Typography>
+                    <Typography><strong>Ngày bắt đầu:</strong> {new Date(promotionDetails?.startDate).toLocaleDateString()}</Typography>
+                    <Typography><strong>Ngày kết thúc:</strong> {new Date(promotionDetails?.endDate).toLocaleDateString()}</Typography>
 
-                            <Divider sx={{ margin: "10px 0" }} />
+                    <Divider sx={{ margin: "10px 0" }} />
 
-                            <Typography><strong>Trạng thái:</strong></Typography>
-                            <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
-                                {promotionDetails?.state === true ? (
-                                    <Chip label="Đang hoạt động" color="success" />
-                                ) : (
-                                    <Chip label="Đã kết thúc" color="error" />
-                                )}
-                                {
-                                    promotionDetails?.state === true ? (
-                                        <button
-                                            onClick={() => updateStatePromotion(promotionDetails, false)}
-                                            style={{
-                                                border: "none",
-                                                cursor: "pointer",
-                                                padding: '8px 4px',
-                                                color: "#fff",
-                                                background: "#b55050",
-                                                borderRadius: "4px"
-                                            }}
-                                        >
-                                            Dừng chương trình
-                                        </button>
-                                    ) : (
-                                        <button
-                                            onClick={() => updateStatePromotion(promotionDetails, true)}
-                                            style={{
-                                                border: "none",
-                                                padding: '8px 4px',
-                                                cursor: "pointer",
-                                                color: "#fff",
-                                                background: "#50c77f",
-                                                borderRadius: "4px"
-                                            }}
-                                        >
+                    <Typography><strong>Trạng thái:</strong></Typography>
+                    <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
+                        {promotionDetails?.state === true ? (
+                            <Chip label="Đang hoạt động" color="success" />
+                        ) : (
+                            <Chip label="Đã kết thúc" color="error" />
+                        )}
+                        {
+                            promotionDetails?.state === true ? (
+                                <button
+                                    onClick={() => updateStatePromotion(promotionDetails, false)}
+                                    style={{
+                                        border: "none",
+                                        cursor: "pointer",
+                                        padding: '8px 4px',
+                                        color: "#fff",
+                                        background: "#b55050",
+                                        borderRadius: "4px"
+                                    }}
+                                >
+                                    Dừng chương trình
+                                </button>
+                            ) : (
+                                <button
+                                    onClick={() => updateStatePromotion(promotionDetails, true)}
+                                    style={{
+                                        border: "none",
+                                        padding: '8px 4px',
+                                        cursor: "pointer",
+                                        color: "#fff",
+                                        background: "#50c77f",
+                                        borderRadius: "4px"
+                                    }}
+                                >
 
-                                            Khởi động
-                                        </button>
-                                    )
-                                }
-                            
-                            </Box>
-                       
+                                    Khởi động
+                                </button>
+                            )
+                        }
+
+                    </Box>
+
                 </Box>
 
                 {/* {!isUpdate ? (
@@ -136,8 +136,9 @@ const PromotionModal = ({ open, onClose, promotion }) => {
                         </Button>
                     </Box>
                 )} */}
+                <ToastContainer />
             </Box>
-            <ToastContainer />
+
         </Modal>
     );
 };

@@ -76,123 +76,131 @@ const DetailAccountModal = ({ open, onClose, user, onChange }) => {
       aria-labelledby="user-details-title"
       aria-describedby="user-details-description"
     >
-      <Box sx={modalStyle}>
-        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <Typography variant="h6" sx={{ fontWeight: "bold" }} id="user-details-title">Thông tin cơ bản</Typography>
-          <Link to={`/tai-khoan/${user?._id}`}>Xem chi tiết ➡️</Link>
-        </Box>
-        {/* Detail */}
-        <Box sx={{ display: "flex", marginTop: "10px", width: "100%" }}>
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 2, width: "100%" }}>
-            <Typography id="user-details-description"><strong>Mã tài khoản: </strong>{user?._id}</Typography>
-            {
-              !isUpdate ? <>
-                <Typography><strong>Tên:</strong> {name}</Typography>
-                <Typography><strong>Giới tính:</strong> {gender === "male" ? "Nam" : gender === "female" ? "Nữ" : "Khác"}</Typography>
-                <Typography><strong>Email:</strong>{email}</Typography>
-                <Typography><strong>Số điện thoại:</strong>{phone}</Typography>
-                <Typography><strong>Địa chỉ:</strong>{address}</Typography>
-                <Typography><strong>Ngày tạo:</strong>{new Date(user?.createdAt).toLocaleDateString()}</Typography>
-                <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-                  <Typography><strong>Trạng thái tài khoản:</strong></Typography>
-                  {
-                    state === 1 ? <Chip label="Đang hoạt động" color="success" /> : <Chip label="Đã khóa" color="error" />
-                  }
-
-                </Box>
-              </> :
-                <>
-                  {/* Name */}
-                  <Box style={inputContainer}>
-                    <strong>Tên:</strong>
-                    <input style={textFieldStyle} value={name} onChange={handleChangeName} />
-                  </Box>
-                  {/* Gender */}
-                  <Box style={inputContainer}>
-                    <strong>Giới tính:</strong>
-                    <Box>
-                      <Radio
-                        checked={gender === 'male'}
-                        onChange={handleChangeGender}
-                        value="male"
-                        name="radio-buttons"
-                        inputProps={{ 'aria-label': 'A' }}
-                      /> Nam
-                      <Radio
-                        checked={gender === 'female'}
-                        onChange={handleChangeGender}
-                        value="female"
-                        name="radio-buttons"
-                        inputProps={{ 'aria-label': 'B' }}
-                      /> Nữ
-                      <Radio
-                        checked={gender === 'other'}
-                        onChange={handleChangeGender}
-                        value="other"
-                        name="radio-buttons"
-                        inputProps={{ 'aria-label': 'B' }}
-                      /> Khác
-                    </Box>
-                  </Box>
-                  {/* Email */}
-                  <Box style={inputContainer}>
-                    <strong>Email:</strong>
-                    <input style={textFieldStyle} value={email} onChange={handleChangeEmail} />
-                  </Box>
-                  {/* Phone */}
-                  <Box style={inputContainer}>
-                    <strong>Số điện thoại:</strong>
-                    <input style={textFieldStyle} value={phone} onChange={hanleChangePhone} />
-                  </Box>
-                  {/* Address */}
-                  <Box style={inputContainer}>
-                    <strong>Địa chỉ: </strong>
-                    <input style={textFieldStyle} value={address} onChange={handleChangeAddress} />
-                  </Box>
-                  {/* Create date */}
-                  <Typography sx={{ display: "flex", justifyContent: "space-between" }}><strong>Ngày tạo:</strong> 22/11/2023</Typography>
-                  {/* State */}
+      <div>
+        <Box sx={modalStyle}>
+          <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <Typography variant="h6" sx={{ fontWeight: "bold" }} id="user-details-title">Thông tin cơ bản</Typography>
+            <Link to={`/tai-khoan/${user?._id}`}>Xem chi tiết ➡️</Link>
+          </Box>
+          {/* Detail */}
+          <Box sx={{ display: "flex", marginTop: "10px", width: "100%" }}>
+            <Box sx={{ display: "flex", flexDirection: "column", gap: 2, width: "100%" }}>
+              <Typography id="user-details-description"><strong>Mã tài khoản: </strong>{user?._id}</Typography>
+              {
+                !isUpdate ? <>
+                  <Typography><strong>Tên:</strong> {name}</Typography>
+                  <Typography><strong>Giới tính:</strong> {gender === "male" ? "Nam" : gender === "female" ? "Nữ" : "Khác"}</Typography>
+                  <Typography><strong>Email:</strong>{email}</Typography>
+                  <Typography><strong>Số điện thoại:</strong>{phone}</Typography>
+                  <Typography><strong>Địa chỉ:</strong>{address}</Typography>
+                  <Typography><strong>Ngày tạo:</strong>{new Date(user?.createdAt).toLocaleDateString()}</Typography>
                   <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
                     <Typography><strong>Trạng thái tài khoản:</strong></Typography>
-
                     {
-                      state === 1 ?
-                        <>
-                          <Chip label="Đang hoạt động" color="success" />
-                          <Button onClick={() => {
-                            setState(0);
-                          }}
-                            variant='contained' color='error' sx={{ textTransform: "none" }}>Ngưng kích hoạt</Button>
-                        </>
-                        :
-                        <>
-                          <Chip label="Đã khóa" color="error" />
-                          <Button onClick={() => {
-                            setState(1);
-                          }}
-                            variant='contained' color='success' sx={{ textTransform: "none" }}>Tái kích hoạt</Button>
-                        </>
+                      state === 1 ? <Chip label="Đang hoạt động" color="success" /> : <Chip label="Đã khóa" color="error" />
                     }
+
                   </Box>
+                </> :
+                  <>
+                    {/* Name */}
+                    <Box style={inputContainer}>
+                      <strong>Tên:</strong>
+                      <input style={textFieldStyle} value={name} onChange={handleChangeName} />
+                    </Box>
+                    {/* Gender */}
+                    <Box style={inputContainer}>
+                      <strong>Giới tính:</strong>
+                      <Box>
+                        <Radio
+                          checked={gender === 'male'}
+                          onChange={handleChangeGender}
+                          value="male"
+                          name="radio-buttons"
+                          inputProps={{ 'aria-label': 'A' }}
+                        /> Nam
+                        <Radio
+                          checked={gender === 'female'}
+                          onChange={handleChangeGender}
+                          value="female"
+                          name="radio-buttons"
+                          inputProps={{ 'aria-label': 'B' }}
+                        /> Nữ
+                        <Radio
+                          checked={gender === 'other'}
+                          onChange={handleChangeGender}
+                          value="other"
+                          name="radio-buttons"
+                          inputProps={{ 'aria-label': 'B' }}
+                        /> Khác
+                      </Box>
+                    </Box>
+                    {/* Email */}
+                    <Box style={inputContainer}>
+                      <strong>Email:</strong>
+                      <input style={textFieldStyle} value={email} onChange={handleChangeEmail} />
+                    </Box>
+                    {/* Phone */}
+                    <Box style={inputContainer}>
+                      <strong>Số điện thoại:</strong>
+                      <input style={textFieldStyle} value={phone} onChange={hanleChangePhone} />
+                    </Box>
+                    {/* Address */}
+                    <Box style={inputContainer}>
+                      <strong>Địa chỉ: </strong>
+                      <input style={textFieldStyle} value={address} onChange={handleChangeAddress} />
+                    </Box>
+                    {/* Create date */}
+                    <Typography sx={{ display: "flex", justifyContent: "space-between" }}><strong>Ngày tạo:</strong> 22/11/2023</Typography>
+                    {/* State */}
+                    <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                      <Typography><strong>Trạng thái tài khoản:</strong></Typography>
 
-                </>
-            }
-          </Box>
-        </Box>
+                      {
+                        state === 1 ?
+                          <>
+                            {
+                              defaultInfor.current.role === "admin" ? null :
+                                <>
+                                  <Chip label="Đang hoạt động" color="success" />
+                                  <Button onClick={() => {
+                                    setState(0);
+                                  }}
+                                    variant='contained' color='error' sx={{ textTransform: "none" }}>Ngưng kích hoạt</Button>
+                                </>
+                            }
 
-        {!isUpdate ?
-          (<Box sx={{ marginTop: "20px", float: "right" }}>
-            <Button variant='contained' onClick={changeToUpdate}>Cập nhật</Button>
-          </Box>) :
-          (
-            <Box sx={{ display: "flex", alignItems: "center", gap: 2, marginTop: "20px", float: "right" }}>
-              <Button onClick={changeToUnUpdate} color='warning' variant='contained'>Hủy</Button>
-              <Button color="success" variant='contained' onClick={handleConfirm} >Xác nhận</Button>
+                          </>
+                          :
+                          <>
+                            <Chip label="Đã khóa" color="error" />
+                            <Button onClick={() => {
+                              setState(1);
+                            }}
+                              variant='contained' color='success' sx={{ textTransform: "none" }}>Tái kích hoạt</Button>
+                          </>
+                      }
+                    </Box>
+
+                  </>
+              }
             </Box>
-          )
-        }
-      </Box>
-      <ToastContainer />
+          </Box>
+
+          {!isUpdate ?
+            (<Box sx={{ marginTop: "20px", float: "right" }}>
+              <Button variant='contained' onClick={changeToUpdate}>Cập nhật</Button>
+            </Box>) :
+            (
+              <Box sx={{ display: "flex", alignItems: "center", gap: 2, marginTop: "20px", float: "right" }}>
+                <Button onClick={changeToUnUpdate} color='warning' variant='contained'>Hủy</Button>
+                <Button color="success" variant='contained' onClick={handleConfirm} >Xác nhận</Button>
+              </Box>
+            )
+          }
+        </Box>
+        <ToastContainer />
+      </div>
     </Modal>
   );
 };
