@@ -18,9 +18,8 @@ const getCurrentTime = () => {
     const minutes = String(now.getMinutes()).padStart(2, '0');
     return `${hours}:${minutes}`;
 };
-const guestID = "67485da6d708604722bd3f8a";
+const guestID = "6749e6c187bcce470fc79877";
 const AddBooking = () => {
-    const [idCustomer, setIdCustomer] = useState("");
     const [services, setServices] = useState();
     const [applicableBraches, setApplicableBranches] = useState();
     const [selectedBranch, setSelectedBranch] = useState();
