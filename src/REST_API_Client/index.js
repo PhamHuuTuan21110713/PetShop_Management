@@ -12,6 +12,8 @@ import PromotionAPI from './promotion';
 import BookingAPI from './booking';
 import ServiceAPI from './service';
 import ShopAPI from './shop';
+import ChatAPI from './chat';
+import MessageAPI from './message';
 // Tạo một instance của axios
 
 const axiosInstance = axios.create({
@@ -33,4 +35,6 @@ export const PromotionFetch = PromotionAPI(axiosInstance);
 export const BookingFetch = BookingAPI(axiosInstance);
 export const ServiceFetch = ServiceAPI(axiosInstance);
 export const ShopFetch = ShopAPI(axiosInstance);
+export const ChatFetch = ChatAPI(axiosInstance);
+export const MessageFetch = MessageAPI(axiosInstance);
 

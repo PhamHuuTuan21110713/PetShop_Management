@@ -11,13 +11,14 @@ import { Avatar, Typography } from "@mui/material";
 import Box from "@mui/material/Box"
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import ChatIcon from '@mui/icons-material/Chat';
-import { NavLink } from "react-router-dom/dist";
+import { Link, NavLink } from "react-router-dom/dist";
 import ModeSelect from "../ModeSelect/ModeSelect";
 import { useAuth } from "../Authentication/authentication";
 const classNameNav = ({ isActive }) => {
     return (isActive ? "active-link" : "inactive-link")
 }
 const Appbar = () => {
+
     console.log("re-render appbar")
     const [open, setOpen] = useState(false);
     const anchorRef = useRef(null);
@@ -46,8 +47,8 @@ const Appbar = () => {
             sx={{
                 height: (theme) => theme.customSize.headerHeight,
                 width: (theme) => `calc( 100% - ${theme.customSize.sidebarWidth})`,
-                padding:"10px"
-            }} 
+                padding: "10px"
+            }}
             className={myStyle.appbarContainer}
         >
             {/* left part */}
@@ -57,14 +58,17 @@ const Appbar = () => {
             {/* right part */}
             <Box sx={{ display: "flex", alignItems: "center", gap: 3 }}>
                 {/* Chat */}
-                <Box
-                    sx={{
-                        display: "flex", justifyContent: "center", alignItems: "center", cursor: "pointer",
-                        backgroundColor: "#c0bcc0", borderRadius: "50%", height: "40px", width: "40px"
-                    }}
-                >
-                    <ChatIcon sx={{ color: "#fff" }} />
-                </Box>
+                <Link to="/chat">
+                    <Box
+                        sx={{
+                            display: "flex", justifyContent: "center", alignItems: "center", cursor: "pointer",
+                            backgroundColor: "#c0bcc0", borderRadius: "50%", height: "40px", width: "40px"
+                        }}
+                    >
+                        <ChatIcon sx={{ color: "#fff" }} />
+                    </Box>
+                </Link>
+
 
                 {/* Avatar */}
                 <Box >
@@ -126,7 +130,7 @@ const Appbar = () => {
                         )}
                     </Popper>
                 </Box>
-                <ModeSelect/>
+                <ModeSelect />
             </Box>
         </Box>
     )

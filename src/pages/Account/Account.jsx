@@ -4,14 +4,17 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { useNavigate, useParams } from "react-router-dom";
 import BoughtOrders from "./BoughtOrders/BoughtOrders";
 import ResgisteredServices from "./RegisterdService/ResgisteredServices";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { UserFetch } from "~/REST_API_Client";
 import { ToastContainer, toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
+import { ChatContext } from "../ChatProvider/ChatProvider";
 const Account = () => {
     const navigate = useNavigate();
     const { id } = useParams();
     const [isLoading, setIsloading] = useState(false);
+    const { createChat } = useContext(ChatContext);
+    console.log("create chat: ", createChat);
     const [user, setUser] = useState();
     const fetchData = () => {
         setIsloading(true);
@@ -130,7 +133,7 @@ const Account = () => {
 
                                             </Box>
                                         </Box>
-                                        <Divider sx={{marginY:"10px"}}/>
+                                        <Divider sx={{ marginY: "10px" }} />
                                         {/* dia chi giao hang */}
                                         <Box>
                                             <Box sx={{ display: "flex", alignItems: "center", justifyContent: "flex-start", gap: 2 }}>
@@ -186,12 +189,12 @@ const Account = () => {
 
             {/*Đơn hàng đã mua  */}
             <Box sx={{ marginTop: "20px" }}>
-                <BoughtOrders userId= {id}/>
+                <BoughtOrders userId={id} />
             </Box>
 
             {/*Dịch vụ đã đăng ký  */}
             <Box sx={{ marginTop: "20px" }}>
-                <ResgisteredServices userId= {id}/>
+                <ResgisteredServices userId={id} />
             </Box>
             <ToastContainer />
         </Box>
