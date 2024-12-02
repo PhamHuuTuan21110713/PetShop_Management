@@ -1,13 +1,13 @@
 import { Avatar, Box, Skeleton, Typography } from "@mui/material"
 import { fetchRecipientUser } from "./fetchRecipient";
 
-const UserChat = ({ chat, user }) => {
-    console.log("chat: ", chat);
-    console.log("user: ", user);
+const UserChat = ({onClick, chat, user }) => {
+    // console.log("chat: ", chat);
+    // console.log("user: ", user);
     const { recipientUser } = fetchRecipientUser(chat, user);
-    console.log("recipeient: ", recipientUser)
+    // console.log("recipeient: ", recipientUser)
     return (
-        <Box sx={{ cursor: "pointer" }}>
+        <Box onClick={onClick} sx={{ cursor: "pointer", boxShadow:"rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;", padding:"10px",borderRadius:"4px" }} >
             {
                 recipientUser ?
                     (

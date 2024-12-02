@@ -1,14 +1,8 @@
 const MessageAPI = (axiosInstance) => {
 
     async function createMessage(senderId, chatId, text) {
-        const access_token = localStorage.getItem("access_token");
-        
         try {
-          const res = await axiosInstance.post('/messages/', {senderId, chatId, text}, {
-            headers: {
-              Authorization: `Bearer ${access_token}`,
-            },
-          });
+          const res = await axiosInstance.post('/messages/', {senderId, chatId, text});
           return res.data;
         } catch (error) {
             if (error.response) {
@@ -23,12 +17,8 @@ const MessageAPI = (axiosInstance) => {
       }
    
     const getMessageByChatId = async (chatId) => {
-
-        const accessToken = localStorage.getItem("access_token");
-
-
         try {
-            const filtersString = encodeURIComponent(JSON.stringify(filters));
+           
             const res = await axiosInstance.get(`/messages/${chatId}`);
             return res.data; // Trả về dữ liệu từ API
         } catch (error) {

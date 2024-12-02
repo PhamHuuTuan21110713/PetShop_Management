@@ -3,14 +3,18 @@ import { useContext } from "react";
 import { ChatContext } from "../ChatProvider/ChatProvider";
 import UserChat from "~/components/UserChat/UserChat";
 import { useAuth } from "~/components/Authentication/authentication";
+import ChatBox from "~/components/UserChat/ChatBox";
 const Chat = () => {
     const {
         userChats,
         isUserChatsLoading,
-        userChatsError
+        updateCurrentChat
     } = useContext(ChatContext);
     const auth = useAuth();
     console.log("userchat: ", userChats);
+    const handleUpdateCurrentChat = (chat) => {
+        updateCurrentChat(chat)
+    }
     return ( 
         <Box sx={{
             minWidth:"900px",
@@ -32,14 +36,14 @@ const Chat = () => {
                     {
                         userChats && userChats.map((chat, index) => {
                             return(
-                                <UserChat key={index} chat={chat} user={auth.user}/>
+                                <UserChat onClick={() =>handleUpdateCurrentChat(chat)} key={index} chat={chat} user={auth.user}/>
                             )
                         })
                     }
                 </Box>
             </Box>
             <Box sx={{flex:1}}>
-
+                <ChatBox />
             </Box>
         </Box>
      );

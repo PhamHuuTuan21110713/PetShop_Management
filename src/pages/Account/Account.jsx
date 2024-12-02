@@ -5,28 +5,43 @@ import { useNavigate, useParams } from "react-router-dom";
 import BoughtOrders from "./BoughtOrders/BoughtOrders";
 import ResgisteredServices from "./RegisterdService/ResgisteredServices";
 import { useContext, useEffect, useState } from "react";
-import { UserFetch } from "~/REST_API_Client";
+import { ChatFetch, UserFetch } from "~/REST_API_Client";
 import { ToastContainer, toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 import { ChatContext } from "../ChatProvider/ChatProvider";
+import { useAuth } from "~/components/Authentication/authentication";
 const Account = () => {
     const navigate = useNavigate();
     const { id } = useParams();
+    const auth = useAuth();
     const [isLoading, setIsloading] = useState(false);
-    const { createChat } = useContext(ChatContext);
-    console.log("create chat: ", createChat);
+    const { createChat,updateCurrentChat } = useContext(ChatContext);
+    // console.log("create chat: ", createChat);
     const [user, setUser] = useState();
     const fetchData = () => {
         setIsloading(true);
         UserFetch.getById(id)
             .then(data => {
                 setUser(data.data);
-                console.log("users: ", data.data);
+                // console.log("users: ", data.data);
                 setIsloading(false);
             })
             .catch(err => {
                 toast.error(`Lỗi lấy thông tin người dùng: \n${err}`);
             })
+    }
+    const handleChat = async () => {
+        try {
+            await createChat(auth?.user._id, id);
+            const getChat = await ChatFetch.findChat(auth?.user._id, id);
+            console.log("get new current chat: ", getChat.data);
+            updateCurrentChat(getChat.data[0]);
+            navigate('/chat')
+        } catch(err) {
+            toast.error("Lỗi lấy dữ liệu chat")
+            console.log(err);
+        }
+        
     }
     useEffect(() => {
         fetchData();
@@ -53,6 +68,12 @@ const Account = () => {
                                     <Typography sx={{ fontSize: "1.0rem", fontWeight: "bold", color: "#000" }}>{user?.role === "admin" ? "Quản trị" : "Người dùng"}</Typography>
 
                                 </Box>
+                                {
+                                    id === auth.user._id ? null : <Box sx={{ transform: "translateY(50%)", marginTop: "10px" }}>
+                                        <Button onClick={handleChat} sx={{ textTransform: "none" }} variant="contained" color="warning">Nhắn tin</Button>
+                                    </Box>
+                                }
+
 
                             </Box>
                             <Box sx={{ padding: "5px", display: "flex", gap: 3 }}>
@@ -68,6 +89,7 @@ const Account = () => {
 
                                 </Box>
                             </Box>
+
                         </Box>
 
                         <Divider sx={{ marginTop: "60px", marginBottom: "20px" }} />

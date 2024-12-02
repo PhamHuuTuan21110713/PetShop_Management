@@ -39,12 +39,8 @@ const ChatAPI = (axiosInstance) => {
     }
 
     const findChat = async (firstId, secondId) => {
-        const access_token = localStorage.getItem("access_token");
-        console.log("data update", data);
-
-
         try {
-            const res = await axiosInstance.patch(`/chats/find/${firstId}/${secondId}`)
+            const res = await axiosInstance.get(`/chats/find/${firstId}/${secondId}`)
             return res.data
         }
         catch (error) {
