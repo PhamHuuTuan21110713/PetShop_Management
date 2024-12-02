@@ -6,26 +6,26 @@ import "react-toastify/dist/ReactToastify.css";
 const PromotionModal = ({ open, onClose, promotion }) => {
     const [isUpdate, setIsUpdate] = useState(false);
     const [promotionDetails, setPromotionDetails] = useState(promotion);
-    const [name, setName] = useState('');
-    const [description, setDescription] = useState('');
-    const [type, setType] = useState('');
-    const [value, setValue] = useState('');
-    const [startDate, setStartDate] = useState('');
-    const [endDate, setEndDate] = useState('');
-    const [state, setState] = useState(true); // Default active state
-    const [statusChange, setStatusChange] = useState('');
+    // const [name, setName] = useState('');
+    // const [description, setDescription] = useState('');
+    // const [type, setType] = useState('');
+    // const [value, setValue] = useState('');
+    // const [startDate, setStartDate] = useState('');
+    // const [endDate, setEndDate] = useState('');
+    // const [state, setState] = useState(true); // Default active state
+    // const [statusChange, setStatusChange] = useState('');
 
     useEffect(() => {
         if (open) {
             setPromotionDetails(promotion);
             setIsUpdate(false);
-            setState(promotion?.state);
-            setName(promotion?.name || '');
-            setDescription(promotion?.description || '');
-            setType(promotion?.type || '');
-            setValue(promotion?.value || '');
-            setStartDate(promotion?.startDate || '');
-            setEndDate(promotion?.endDate || '');
+            // setState(promotion?.state);
+            // setName(promotion?.name || '');
+            // setDescription(promotion?.description || '');
+            // setType(promotion?.type || '');
+            // setValue(promotion?.value || '');
+            // setStartDate(promotion?.startDate || '');
+            // setEndDate(promotion?.endDate || '');
         }
     }, [open, promotion]);
 

@@ -10,6 +10,7 @@ const DetailOrderModal = ({ open, onClose, order }) => {
     const [productsDetails, setProductsDetails] = useState([]);
     const [status, setStatus] = useState()
     const [statusChange, setStatusChange] = useState()
+    const [paymentStatus, setPaymentStatus] = useState('')
 
     useEffect(() => {
         if (open === true) {
@@ -89,8 +90,12 @@ const DetailOrderModal = ({ open, onClose, order }) => {
     };
 
     const handleConfirm = async () => {
+        if(statusChange === 'tc'){
+            setPaymentStatus('success')
+        }
         const dataUpdate = {
-            status: statusChange
+            status: statusChange,
+            paymentStatus: paymentStatus
         }
 
 
@@ -199,18 +204,6 @@ const DetailOrderModal = ({ open, onClose, order }) => {
                                         <FormControlLabel value="hbs" control={<Radio />} label="Hủy bởi shop" />
                                         <FormControlLabel value="hbb" control={<Radio />} label="Người dùng hủy" />
                                     </RadioGroup>
-
-                                    // orderDetails.status === "dxl" ? (
-                                    //     <Chip label="Đang xử lý" color="primary" />
-                                    // ) : orderDetails.status === "dg" ? (
-                                    //     <Chip label="Đang giao" color="info" />
-                                    // ) : orderDetails.status === "tc" ? (
-                                    //     <Chip label="Thành công" color="success" />
-                                    // ) : orderDetails.status === "hbs" ? (
-                                    //     <Chip label="Hủy bởi shop" color="error" />
-                                    // ) : orderDetails.status === "hbb" ? (
-                                    //     <Chip label="Người dùng hủy" color="warning" />
-                                    // ) : null
                                 }
                             </Box>
                         </>
