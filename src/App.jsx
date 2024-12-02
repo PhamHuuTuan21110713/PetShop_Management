@@ -31,11 +31,16 @@ import AddBooking from './pages/BookingManager/AddBooking/AddBooking';
 import StatisticalBooking from './pages/BookingManager/StatisticalBooking/StatisticalBooking';
 import ProtectedRoutes from './components/Authentication/protectedRoute';
 import Booking from './pages/Booking/Booking';
+
 import CategoryManager from './pages/CategoryManager/CategoryManager';
 import AddCategory from './pages/CategoryManager/AddCategory/AddCategory';
 import AllCategory from './pages/CategoryManager/AllCategory/AllCategory';
 import { ChatProvider } from './pages/ChatProvider/ChatProvider';
 import Chat from './pages/Chat/Chat';
+
+import RevenueReport from './pages/RevenueReport/RevenueReport';
+import ProductReport from './pages/RevenueReport/ProductReport';
+
 function App() {
 
   return (
@@ -93,7 +98,6 @@ function App() {
                 <Route path='danh-sach-khuyen-mai' element={<AllPromotion />} />
                 <Route path='them-khuyen-mai' element={<AddPromotion />} />
               </Route>
-
               {/* Quản lý đơn hàng */}
               <Route path='quan-ly-don-hang' element={<OrdersManager />} />
 
@@ -103,9 +107,12 @@ function App() {
                 <Route path='them-moi' element={<AddCategory />} />
               </Route>
             </Route>
+
+            {/* Quản lý đơn hàng */}
+            <Route path='quan-ly-don-hang' element={<OrdersManager/>}/>
+            <Route path='thong-ke-doanh-thu' element={<RevenueReport/>}/>
+            <Route path='thong-ke-san-pham' element={<ProductReport/>}/>
           </Route>
-
-
         </Routes>
       </ChatProvider>
     </AuthProvider>

@@ -81,12 +81,34 @@ const AddPromotion = () => {
     };
 
     const handleConfirm = async () => {
-        // Kiểm tra nếu có trường nào chưa được điền
-        if (name.trim() === "" || desc.trim() === "" || value.trim() === "" || startDate.trim() === "" || !endDate.trim()) {
-            window.alert("Bạn cần điền đầy đủ thông tin sản phẩm!");
+        // Kiểm tra nếu có trường nào chưa được điền hoặc không hợp lệ
+        if (name.trim() === "" || desc.trim() === "" || value.trim() === "" || startDate.trim() === "" || endDate.trim() === "" || applicableProducts.length === 0) {
+           
+            toast.error("Các trường không được để trống!")
             return;
         }
-
+    
+        // Kiểm tra giá trị của "value" phải > 0
+        if (parseFloat(value) <= 0) {
+            toast.error("Giá trị giảm phải lớn hơn 0!")
+            return;
+        }
+    
+        // Kiểm tra ngày hết hạn phải lớn hơn ngày hiện tại và ngày bắt đầu
+        const currentDate = new Date();
+        const start = new Date(startDate);
+        const end = new Date(endDate);
+    
+        if (end <= currentDate) {
+            toast.error("Ngày kết thúc phải lớn hơn thời điểm hiện tại!")
+            return;
+        }
+    
+        if (end <= start) {
+            toast.error("Ngày kết thúc phải lớn hơn ngày bắt đầu!")
+            return;
+        }
+    
         const dataForm = {
             name: name,
             desc: desc,
@@ -96,19 +118,19 @@ const AddPromotion = () => {
             endDate: endDate,
             applicableProducts: applicableProducts
         };
-
+    
         console.log("LLLLLLLLLLLLLLLLLL", dataForm);
-
+    
         // Bắt đầu gửi yêu cầu tạo sản phẩm
         setIsLoading(true);  // Kích hoạt trạng thái loading
-
+    
         try {
             // Gửi yêu cầu tạo sản phẩm qua PromotionFetch
             const result = await PromotionFetch.createPromotion(dataForm);
-
+    
             if (result.status === "OK") {
                 toast.success("Thêm khuyến mãi thành công!");
-
+    
                 // Reset form sau khi thêm sản phẩm thành công
                 setName("");
                 setDesc("");
@@ -126,6 +148,54 @@ const AddPromotion = () => {
             setIsLoading(false); // Tắt trạng thái loading sau khi hoàn tất
         }
     };
+    
+
+    // const handleConfirm = async () => {
+    //     // Kiểm tra nếu có trường nào chưa được điền
+    //     if (name.trim() === "" || desc.trim() === "" || value.trim() === "" || startDate.trim() === "" || !endDate.trim()) {
+    //         window.alert("Bạn cần điền đầy đủ thông tin sản phẩm!");
+    //         return;
+    //     }
+
+    //     const dataForm = {
+    //         name: name,
+    //         desc: desc,
+    //         type: type,
+    //         value: value,
+    //         startDate: startDate,
+    //         endDate: endDate,
+    //         applicableProducts: applicableProducts
+    //     };
+
+    //     console.log("LLLLLLLLLLLLLLLLLL", dataForm);
+
+    //     // Bắt đầu gửi yêu cầu tạo sản phẩm
+    //     setIsLoading(true);  // Kích hoạt trạng thái loading
+
+    //     try {
+    //         // Gửi yêu cầu tạo sản phẩm qua PromotionFetch
+    //         const result = await PromotionFetch.createPromotion(dataForm);
+
+    //         if (result.status === "OK") {
+    //             toast.success("Thêm khuyến mãi thành công!");
+
+    //             // Reset form sau khi thêm sản phẩm thành công
+    //             setName("");
+    //             setDesc("");
+    //             setType("");
+    //             setValue("");
+    //             setStartDate("");
+    //             setEndDate("");
+    //             setApplicableProducts([]);
+    //         } else {
+    //             toast.error("Lỗi từ API khi tạo sản phẩm: " + result.message); // Hiển thị lỗi nếu API trả về lỗi
+    //         }
+    //     } catch (error) {
+    //         toast.error("Đã có lỗi xảy ra: " + error.message);  // Hiển thị lỗi khi có sự cố trong quá trình gửi yêu cầu
+    //     } finally {
+    //         setIsLoading(false); // Tắt trạng thái loading sau khi hoàn tất
+    //     }
+    // };
 
 
     // Phương thức xử lý tải file Excel
