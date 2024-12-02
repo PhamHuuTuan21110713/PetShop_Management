@@ -9,8 +9,8 @@ import "react-toastify/dist/ReactToastify.css";
 const CommonNoitice = () => {
 
     const [countOrder, setCountOrder] = useState(0)
-    const [countProduct, setCountProduct] = useState(0)
     const [countBooking, setCountBooking] = useState(0);
+    const [countProduct, setCountProduct] = useState(0)
 
     const [sort, setSort] = useState()
     const [filters, setFilters] = useState({

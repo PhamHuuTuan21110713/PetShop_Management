@@ -66,9 +66,21 @@ const AllPromotion = () => {
     };
 
     const handleOutDatedChange = (outdated) => {
-        const updatedFilters = { ...filters, outdated };
-        setFilters(updatedFilters); // Cập nhật filters khi thay đổi trạng thái hết hạn
+        if (outdated === "none") {
+            // Nếu outdated là "none", reset tất cả các filters về giá trị mặc định
+            setFilters({
+                outdated: "none",
+                promotionId: "",
+                type: "none",
+                name: ""
+            });
+        } else {
+            // Nếu không phải "none", chỉ cập nhật trạng thái outdated
+            const updatedFilters = { ...filters, outdated };
+            setFilters(updatedFilters);
+        }
     };
+    
 
     const handleTypeChange = (type) => {
         const updatedFilters = { ...filters, type };
@@ -98,11 +110,12 @@ const AllPromotion = () => {
                     <Button
                         sx={{ textTransform: "none" }}
                         onClick={() => {
-                            handleOutDatedChange("none")
-                            handleTypeChange("")}}
+                            handleOutDatedChange("none");  // Chỉ thay đổi trạng thái 'outdated' về "none"
+                        }}
                         variant={filters.outdated === "none" ? "contained" : "outlined"}>
                         Tất cả
                     </Button>
+
                     <Button
                         sx={{ textTransform: "none" }}
                         onClick={() => handleOutDatedChange("true")}
