@@ -15,7 +15,7 @@ const Account = () => {
     const { id } = useParams();
     const auth = useAuth();
     const [isLoading, setIsloading] = useState(false);
-    const { createChat,updateCurrentChat } = useContext(ChatContext);
+    const { createChat, updateCurrentChat, userChats, updateUserChats } = useContext(ChatContext);
     // console.log("create chat: ", createChat);
     const [user, setUser] = useState();
     const fetchData = () => {
@@ -30,18 +30,25 @@ const Account = () => {
                 toast.error(`Lỗi lấy thông tin người dùng: \n${err}`);
             })
     }
-    const handleChat = async () => {
-        try {
-            await createChat(auth?.user._id, id);
-            const getChat = await ChatFetch.findChat(auth?.user._id, id);
-            console.log("get new current chat: ", getChat.data);
-            updateCurrentChat(getChat.data[0]);
-            navigate('/chat')
-        } catch(err) {
-            toast.error("Lỗi lấy dữ liệu chat")
-            console.log(err);
-        }
-        
+    const handleChat = () => {
+
+        ChatFetch.createChat(auth?.user._id, id)
+            .then(data => {
+                // console.log("create chat succesfull: ", data.message);
+                // console.log("chat data: ", data.data);
+                // console.log("data status: ", data.status);
+                const isExistChat = userChats?.some((usc) => usc._id === data.data._id);
+                console.log("isExít: ", isExistChat);
+                if (isExistChat === false) {
+                    updateUserChats([data.data, ...userChats])
+                }
+                updateCurrentChat(data.data);
+                navigate('/chat')
+            })
+            .catch(err => {
+                console.log("err create chat: ", err)
+            })
+
     }
     useEffect(() => {
         fetchData();
