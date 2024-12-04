@@ -1,7 +1,7 @@
 
 import { createContext, useCallback, useEffect, useState } from "react"
 import { useAuth } from "~/components/Authentication/authentication";
-import { ChatFetch, MessageFetch, UserFetch } from "~/REST_API_Client";
+import { ChatFetch, MessageFetch, UserFetch, NotifyFetch } from "~/REST_API_Client";
 import { SOCKET_URL } from "~/constants";
 import { io } from "socket.io-client";
 export const ChatContext = createContext();
@@ -16,6 +16,8 @@ export const ChatProvider = ({ children }) => {
     const [messagesError, setMessagesError] = useState(null);
     const [newMessage, setNewMessage] = useState(null);
     const [socket, setSocket] = useState(null);
+    // const [notifications, setNotifications] = useState([]);
+    const [unReadNotifications, setUnReadNotifications] = useState([]);
     const auth = useAuth();
     // useEffect(() => {
     //     const getUsers = () => {
@@ -48,7 +50,7 @@ export const ChatProvider = ({ children }) => {
         setSocket(newSocket);
         // console.log("socket url: ", SOCKET_URL);
         return () => {
-            if(socket !== null ) {
+            if (socket !== null) {
                 socket.disconnect();
             }
         }
@@ -68,20 +70,73 @@ export const ChatProvider = ({ children }) => {
 
     }, [newMessage]);
     // SOKET RECEIVE MESSAGE 
+    console.log("unread notify", unReadNotifications)
     useEffect(() => {
         if (socket === null) return;
-        if (currentChat) {
-            socket.on("getMessage", (res) => {
+
+        socket.on("getMessage", (res) => {
+            if (!userChats) return
+            const isExistChat = userChats?.some((usc) => usc._id === res.chatId)
+            console.log("isExxistedchat: ", isExistChat);
+            if (isExistChat) {
+                console.log("roivao1")
+                const newUserChats = [...userChats].filter((uc) => uc._id !== res.chatId);
+                const firstUserChat = [...userChats].find((uc) => uc._id === res.chatId);
+                setUserChats([firstUserChat, ...newUserChats]);
+                console.log("newUserChats: ", newUserChats)
+                console.log("first element: ", firstUserChat);
                 if (currentChat?._id !== res.chatId) return;
-                console.log("user get new message: ", res)
+                // console.log("user get new message: ", res)
                 setMessages((prev) => [...prev, res])
-            })
-        }
+            } else {
+                console.log("roivao2")
+                ChatFetch.createChat(res.recipientId, res.senderId)
+                    .then(data => {
+                        console.log("data get: ", data.data)
+                        console.log("status: ", data.status)
+                        if (data.status === "EXIST") {
+                            setUserChats((prev) => {
+                                return [data.data, ...prev]
+                            })
+                        } else {
+                            return
+                        }
+
+                    })
+                    .catch(err => {
+                        console.log("err create chat: ", err)
+                    })
+            }
+
+        })
+        socket.on("getNotification", (res) => {
+            const isChatOpen = currentChat?.members.some(id => id === res.senderId);
+            if (isChatOpen) {
+
+            } else {
+                NotifyFetch.createNotify({
+                    senderId: res.senderId,
+                    receiverId: auth.user._id,
+                    type: "message",
+                    targetId: "",
+                    text: `Tin nhắn chưa đọc từ ${res.senderId} tới ${auth.user._id}`
+                }).then(data => {
+                    console.log("Tạo thông báo thành công: ", data.data);
+                    setUnReadNotifications((prev) => [{ ...res, receiverId: auth.user._id }, ...prev])
+                }).catch(err => {
+                    console.log("Lỗi tạo thông báo: ", err);
+                })
+            }
+        })
         return () => {
-            socket.off("getMessage")
+            socket.off("getMessage");
+            socket.off("getNotification")
         }
 
-    }, [socket, currentChat]);
+    }, [socket, currentChat, userChats]);
+    const updateUnreadNotifications = (data) => {
+        setUnReadNotifications(data)
+    }
     const createChat = useCallback(async (firstId, secondId) => {
         return ChatFetch.createChat(firstId, secondId)
             .then(data => {
@@ -101,6 +156,7 @@ export const ChatProvider = ({ children }) => {
                 console.log("err create chat: ", err)
             })
     }, [])
+
     useEffect(() => {
         const getUserChats = () => {
             if (auth.user?._id) {
@@ -111,6 +167,7 @@ export const ChatProvider = ({ children }) => {
                         console.log("data chats: ", data);
                         setUserChats(data.data);
                         setIsUserChatsLoading(false);
+
                     })
                     .catch(err => {
                         console.log("error chats: ", err);
@@ -157,18 +214,26 @@ export const ChatProvider = ({ children }) => {
                 console.log("err send message: ", err);
             })
     }, []);
+    const updateUserChats = (data) => {
+        setUserChats(data);
+    }
     return (
         <ChatContext.Provider value={{
             userChats,
+            updateUserChats,
             isUserChatsLoading,
             userChatsError,
+            setIsUserChatsLoading,
+            setUserChatsError,
             createChat,
             updateCurrentChat,
             currentChat,
             messages,
             isMessagesLoading,
             messagesError,
-            sendTextMessage
+            sendTextMessage,
+            unReadNotifications,
+            updateUnreadNotifications
             // potentialChats
         }}>
             {children}

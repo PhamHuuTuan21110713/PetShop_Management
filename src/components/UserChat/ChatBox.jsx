@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useRef, useEffect } from "react";
 import { useAuth } from "../Authentication/authentication"
 import { ChatContext } from "~/pages/ChatProvider/ChatProvider";
 import { fetchRecipientUser } from "./fetchRecipient";
@@ -6,12 +6,23 @@ import { Typography, Box, Avatar, Divider, Tooltip } from "@mui/material";
 import dayjs from "dayjs";
 import InputEmoji from "react-input-emoji";
 import SendIcon from '@mui/icons-material/Send';
+
 const ChatBox = () => {
     const auth = useAuth();
     const { currentChat, messages, isMessagesLoading, sendTextMessage } = useContext(ChatContext);
-    
     const { recipientUser } = fetchRecipientUser(currentChat, auth.user);
     const [textMessage, setTexMessage] = useState("");
+    const scroll = useRef();
+//    console.log("chatbox message: ", messages);
+    useEffect(() => {
+        // console.log("scrollTo")
+            // console.log("scroll current: ", scroll.current);
+            scroll.current?.scrollIntoView(
+                // {behavior: "smooth"}
+            )
+      
+    }, [messages,recipientUser])
+    
     if (!recipientUser) {
         return (
             <Typography sx={{ textAlign: "center" }}>
@@ -38,6 +49,7 @@ const ChatBox = () => {
                     messages && messages.map((message, index) => {
                         return (
                             <Box
+                                ref={scroll}
                                 sx={{
                                     backgroundColor: message.senderId === auth.user._id ? "#397ede" : "#6f706f",
                                     maxWidth: "60%",
@@ -54,8 +66,8 @@ const ChatBox = () => {
                             </Box>
                         )
                     })
+                   
                 }
-
             </Box>
             <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                 <InputEmoji value={textMessage} onChange={setTexMessage} />

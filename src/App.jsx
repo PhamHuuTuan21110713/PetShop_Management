@@ -40,81 +40,85 @@ import Chat from './pages/Chat/Chat';
 
 import RevenueReport from './pages/RevenueReport/RevenueReport';
 import ProductReport from './pages/RevenueReport/ProductReport';
+import Notify from './pages/Notify/Notify';
+import Notfound from './pages/NotfoundPage/Notfound';
 
 function App() {
 
   return (
     <AuthProvider>
-      <ChatProvider>
-        <Routes>
-          {/* Đăng nhập */}
-          <Route path="/dang-nhap" element={<Login />} />
-          <Route path='/' element={<ProtectedRoutes />}>
-            <Route path="/" element={<Manager />}>
-              <Route index element={<Home />} />
-              {/* Chat */}
-              <Route path='chat' element={<Chat />}/>
-              {/* Quản lý tài khoản */}
-              <Route path='quan-ly-tai-khoan' element={<AccountManager />} >
-                <Route index element={<Navigate to="danh-sach" />} />
-                <Route path='danh-sach' element={<AllAccount />} />
-                <Route path='them-moi' element={<AddAccount />} />
-              </Route>
-              {/* Quản lý dịch vụ */}
-              <Route path='quan-ly-dich-vu' element={<ServiceManager />}>
-                <Route index element={<Navigate to="danh-sach" />} />
-                <Route path='danh-sach' element={<AllService />} />
-                <Route path='them-moi' element={<AddService />} />
-              </Route>
-              {/* Chi tiết tài khoản */}
-              <Route path='tai-khoan/:id' element={<Account />} />
-              {/* Quản lý sản phẩm */}
-              <Route path="quan-ly-san-pham" element={<Products />}>
-                <Route index element={<Navigate to="danh-sach-san-pham" />} />
-                <Route path='danh-sach-san-pham' element={<AllProduct />} />
-                <Route path='them-san-pham' element={<AddProduct />} />
-              </Route>
-              {/* Quản lý lịch đặt dịch vụ */}
-              <Route path='lich-dat' element={<BookingManager />}>
-                <Route index element={<Navigate to="danh-sach" />} />
-                <Route path='danh-sach' element={<AllBooking />} />
-                <Route path='them-moi' element={<AddBooking />} />
-                <Route path='thong-ke' element={<StatisticalBooking />} />
-              </Route>
-              {/* Chi tiết lịch đặt */}
-              <Route path='lich-dat/:id' element={<Booking />} />
-              {/* Chi tiết dịch vụ */}
-              <Route path='dich-vu/:id' element={<Service />}>
-                <Route path='co-ban' element={<UpdateBaseInfor />} />
-                <Route path='mo-ta' element={<UpdateDescriptions />} />
-                <Route path='bang-gia' element={<UpdatePrice />} />
-                <Route path='quy-trinh' element={<UpdateProcedure />} />
-                <Route path='giam-sat' element={<MonitoringService />} />
-              </Route>
-
-              {/* Quản lý khuyến mãi */}
-              <Route path="quan-ly-khuyen-mai" element={<Promotion />}>
-                <Route index element={<Navigate to="danh-sach-khuyen-mai" />} />
-                <Route path='danh-sach-khuyen-mai' element={<AllPromotion />} />
-                <Route path='them-khuyen-mai' element={<AddPromotion />} />
-              </Route>
-              {/* Quản lý đơn hàng */}
-              <Route path='quan-ly-don-hang' element={<OrdersManager />} />
-
-              {/* Quản lý danh mục */}
-              <Route path='quan-ly-danh-muc' element={<CategoryManager />}>
-                <Route path='danh-sach' element={<AllCategory />} />
-                <Route path='them-moi' element={<AddCategory />} />
-              </Route>
+      {/* <ChatProvider> */}
+      <Routes>
+        {/* Đăng nhập */}
+        <Route path='*' element={<Notfound />} />
+        <Route path='not-found' element={<Notfound />} />
+        <Route path="/dang-nhap" element={<Login />} />
+        <Route path='/' element={<ProtectedRoutes />}>
+          <Route path="/" element={<Manager />}>
+            <Route index element={<Home />} />
+            {/* Chat */}
+            <Route path='chat' element={<Chat />} />
+            {/* Thong bao */}
+            <Route path='thong-bao' element={<Notify />} />
+            {/* Quản lý tài khoản */}
+            <Route path='quan-ly-tai-khoan' element={<AccountManager />} >
+              <Route index element={<Navigate to="danh-sach" />} />
+              <Route path='danh-sach' element={<AllAccount />} />
+              <Route path='them-moi' element={<AddAccount />} />
+            </Route>
+            {/* Quản lý dịch vụ */}
+            <Route path='quan-ly-dich-vu' element={<ServiceManager />}>
+              <Route index element={<Navigate to="danh-sach" />} />
+              <Route path='danh-sach' element={<AllService />} />
+              <Route path='them-moi' element={<AddService />} />
+            </Route>
+            {/* Chi tiết tài khoản */}
+            <Route path='tai-khoan/:id' element={<Account />} />
+            {/* Quản lý sản phẩm */}
+            <Route path="quan-ly-san-pham" element={<Products />}>
+              <Route index element={<Navigate to="danh-sach-san-pham" />} />
+              <Route path='danh-sach-san-pham' element={<AllProduct />} />
+              <Route path='them-san-pham' element={<AddProduct />} />
+            </Route>
+            {/* Quản lý lịch đặt dịch vụ */}
+            <Route path='lich-dat' element={<BookingManager />}>
+              <Route index element={<Navigate to="danh-sach" />} />
+              <Route path='danh-sach' element={<AllBooking />} />
+              <Route path='them-moi' element={<AddBooking />} />
+              <Route path='thong-ke' element={<StatisticalBooking />} />
+            </Route>
+            {/* Chi tiết lịch đặt */}
+            <Route path='lich-dat/:id' element={<Booking />} />
+            {/* Chi tiết dịch vụ */}
+            <Route path='dich-vu/:id' element={<Service />}>
+              <Route path='co-ban' element={<UpdateBaseInfor />} />
+              <Route path='mo-ta' element={<UpdateDescriptions />} />
+              <Route path='bang-gia' element={<UpdatePrice />} />
+              <Route path='quy-trinh' element={<UpdateProcedure />} />
+              <Route path='giam-sat' element={<MonitoringService />} />
             </Route>
 
+            {/* Quản lý khuyến mãi */}
+            <Route path="quan-ly-khuyen-mai" element={<Promotion />}>
+              <Route index element={<Navigate to="danh-sach-khuyen-mai" />} />
+              <Route path='danh-sach-khuyen-mai' element={<AllPromotion />} />
+              <Route path='them-khuyen-mai' element={<AddPromotion />} />
+            </Route>
             {/* Quản lý đơn hàng */}
-            <Route path='quan-ly-don-hang' element={<OrdersManager/>}/>
-            <Route path='thong-ke-doanh-thu' element={<RevenueReport/>}/>
-            <Route path='thong-ke-san-pham' element={<ProductReport/>}/>
+            <Route path='quan-ly-don-hang' element={<OrdersManager />} />
+
+            {/* Quản lý danh mục */}
+            <Route path='quan-ly-danh-muc' element={<CategoryManager />}>
+              <Route path='danh-sach' element={<AllCategory />} />
+              <Route path='them-moi' element={<AddCategory />} />
+            </Route>
+            <Route path='thong-ke-doanh-thu' element={<RevenueReport />} />
+            <Route path='thong-ke-san-pham' element={<ProductReport />} />
           </Route>
-        </Routes>
-      </ChatProvider>
+
+        </Route>
+      </Routes>
+      {/* </ChatProvider> */}
     </AuthProvider>
 
   );
