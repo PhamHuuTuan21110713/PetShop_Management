@@ -16,6 +16,7 @@ import ModeSelect from "../ModeSelect/ModeSelect";
 import { useAuth } from "../Authentication/authentication";
 import { ChatContext } from "~/pages/ChatProvider/ChatProvider";
 import { NotifyFetch } from "~/REST_API_Client";
+import Notify from "./Notify";
 const classNameNav = ({ isActive }) => {
     return (isActive ? "active-link" : "inactive-link")
 }
@@ -29,7 +30,7 @@ const Appbar = () => {
     const [chatCount, setChatCount] = useState(0)
     useEffect(() => {
         const fetchUnreadMessage = () => {
-            if(!auth.user) return
+            if (!auth.user) return
             NotifyFetch.getNotify({ receiverId: auth.user._id, isReading: false, type: "message" })
                 .then(data => {
                     // console.log("unread message: ", data)
@@ -46,6 +47,7 @@ const Appbar = () => {
         fetchUnreadMessage();
     }, [])
 
+   
     useEffect(() => {
         const unreadNotifications = unReadNotifications.length;
         setChatCount(unreadNotifications);
@@ -84,6 +86,10 @@ const Appbar = () => {
             </Box>
             {/* right part */}
             <Box sx={{ display: "flex", alignItems: "center", gap: 3 }}>
+
+                <Link to={"/thong-bao"}>
+                    <Notify />
+                </Link>
                 {/* Chat */}
                 <Link to="/chat">
                     <Box
@@ -107,7 +113,6 @@ const Appbar = () => {
 
                     </Box>
                 </Link>
-
 
                 {/* Avatar */}
                 <Box >

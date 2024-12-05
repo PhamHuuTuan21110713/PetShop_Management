@@ -50,11 +50,11 @@ const Sidebar = () => {
                                         <CalendarMonthIcon />Lịch đặt
                                     </Typography>
                                 </NavLink>
-                                <NavLink to="thong-bao" className={classNameNav}>
+                                {/* <NavLink to="thong-bao" className={classNameNav}>
                                     <Typography sx={{ color: "#000", fontWeight: "bold", display: "flex", alignItems: "center", gap: 1 }}>
                                         <SmsIcon />Thông báo
                                     </Typography>
-                                </NavLink>
+                                </NavLink> */}
                             </Box>
                         </Box>
                         <Divider sx={{ marginY: '20px' }} />
@@ -89,11 +89,11 @@ const Sidebar = () => {
                                         <RoomServiceIcon />Dịch vụ
                                     </Typography>
                                 </NavLink>
-                                <NavLink to="quan-ly-danh-muc" className={classNameNav}>
+                                {/* <NavLink to="quan-ly-danh-muc" className={classNameNav}>
                                     <Typography sx={{ color: "#000", fontWeight: "bold", display: "flex", alignItems: "center", gap: 1 }}>
                                         <CategoryIcon />Danh mục
                                     </Typography>
-                                </NavLink>
+                                </NavLink> */}
                             </Box>
                         </Box>
                         <Divider sx={{ marginY: '20px' }} />
@@ -114,11 +114,11 @@ const Sidebar = () => {
                                         <InventoryIcon />Sản phẩm
                                     </Typography>
                                 </NavLink>
-                                <NavLink to="thong-ke-tai-khoan" className={classNameNav}>
+                                {/* <NavLink to="thong-ke-tai-khoan" className={classNameNav}>
                                     <Typography sx={{ color: "#000", fontWeight: "bold", display: "flex", alignItems: "center", gap: 1 }}>
                                         <PersonIcon />Tài khoản
                                     </Typography>
-                                </NavLink>
+                                </NavLink> */}
                             </Box>
                         </Box>
                     </Box>

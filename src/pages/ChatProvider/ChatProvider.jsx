@@ -18,6 +18,8 @@ export const ChatProvider = ({ children }) => {
     const [socket, setSocket] = useState(null);
     // const [notifications, setNotifications] = useState([]);
     const [unReadNotifications, setUnReadNotifications] = useState([]);
+    const [newBookingNoti, setNewBookingNoti] = useState(null);
+    const [unreadBookingNotifies, setUnreadBookingNotifyes] = useState([]);
     const auth = useAuth();
     // useEffect(() => {
     //     const getUsers = () => {
@@ -134,6 +136,43 @@ export const ChatProvider = ({ children }) => {
         }
 
     }, [socket, currentChat, userChats]);
+
+    // Socket receive Booking Notify
+    console.log("Unread booking notifys: ", unreadBookingNotifies)
+    useEffect(() => {
+        if (socket === null) return;
+        socket.on("getBookingNotify", (notify) => {
+            console.log("push from socket")
+            setUnreadBookingNotifyes((prev) => [notify,...prev])
+        })
+        return () => {
+            socket.off("getBookingNotify")
+        }
+    }, [socket])
+
+    // socket send Booking notify
+    // useEffect(() => {
+    //     if(socket === null) return;
+    //     if(newBookingNoti) {
+    //         socket.emit("sendBookingNotify", newBookingNoti)
+    //     }
+    // }, [newBookingNoti])
+
+    const sendBookingNotify = useCallback((notify) => {
+        NotifyFetch.createNotify(notify)
+            .then((data) => {
+                console.log("Them notify thanh cong: ", data.data)
+                // setNewBookingNoti(data.data)
+                if(socket) {
+                    console.log("sending booking notify")
+                    socket.emit("sendBookingNotify", data.data)
+                }
+            })
+            .catch(err => {
+                console.log("Loi them booking notify")
+            })
+    }, [socket])
+
     const updateUnreadNotifications = (data) => {
         setUnReadNotifications(data)
     }
@@ -233,7 +272,10 @@ export const ChatProvider = ({ children }) => {
             messagesError,
             sendTextMessage,
             unReadNotifications,
-            updateUnreadNotifications
+            updateUnreadNotifications,
+            sendBookingNotify,
+            unreadBookingNotifies,
+            setUnreadBookingNotifyes
             // potentialChats
         }}>
             {children}
