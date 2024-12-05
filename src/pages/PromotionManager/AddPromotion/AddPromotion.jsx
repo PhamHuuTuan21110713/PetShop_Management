@@ -1,25 +1,27 @@
 import myStyle from "../../AccountManager/AddAccount/AddAccount.module.scss";
 import { useState } from 'react';
-import { useOutletContext } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 import {
-    TextField,
     Box,
     Typography,
     Button,
     Divider,
-    CircularProgress
+    FormControl,
+    RadioGroup,
+    FormControlLabel,
+    Radio
 } from '@mui/material';
 import { PromotionFetch } from "~/REST_API_Client";
 import { excel } from "~/utils/xlsx";
+import { createPromotionValidation } from "~/utils/validation";
 
 const AddPromotion = () => {
 
     // State Variables
     const [name, setName] = useState("");
     const [desc, setDesc] = useState("");
-    const [type, setType] = useState("");
+    const [type, setType] = useState("percent");
     const [value, setValue] = useState("");
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
@@ -80,35 +82,76 @@ const AddPromotion = () => {
         setName(""); setDesc(""); setType(""); setValue(""); setStartDate(""); setEndDate(""); setApplicableProducts([]);
     };
 
+    const validateForm = async () => {
+        // Chuyển đổi price và quantity thành số nguyên
+        const priceValue = Number(value)
+
+        // Kiểm tra tính hợp lệ của các trường bằng Yup
+        try {
+            await createPromotionValidation.validate({
+                name: name,
+                desc: desc,
+                type: type,
+                value: priceValue,
+                startDate: startDate,
+                endDate: endDate,
+                applicableProducts: applicableProducts
+            }, { abortEarly: false });
+
+            return true;
+        } catch (error) {
+            if (error.inner) {
+                // Nhóm lỗi theo path (tên trường) và chỉ hiển thị lỗi đầu tiên
+                const uniqueErrors = {};
+                error.inner.forEach(err => {
+                    if (!uniqueErrors[err.path]) {
+                        uniqueErrors[err.path] = err.message;  // Lưu lỗi đầu tiên cho mỗi trường
+                    }
+                });
+    
+                // Hiển thị lỗi cho từng trường
+                Object.values(uniqueErrors).forEach(errorMessage => {
+                    toast.error(errorMessage);
+                });
+            } else {
+                toast.error("Lỗi: " + error.message);  // Hiển thị lỗi chung nếu có
+            }
+            return false;
+        }
+    };
+
     const handleConfirm = async () => {
         // Kiểm tra nếu có trường nào chưa được điền hoặc không hợp lệ
-        if (name.trim() === "" || desc.trim() === "" || value.trim() === "" || startDate.trim() === "" || endDate.trim() === "" || applicableProducts.length === 0) {
-           
-            toast.error("Các trường không được để trống!")
-            return;
-        }
-    
-        // Kiểm tra giá trị của "value" phải > 0
-        if (parseFloat(value) <= 0) {
-            toast.error("Giá trị giảm phải lớn hơn 0!")
-            return;
-        }
-    
-        // Kiểm tra ngày hết hạn phải lớn hơn ngày hiện tại và ngày bắt đầu
-        const currentDate = new Date();
-        const start = new Date(startDate);
-        const end = new Date(endDate);
-    
-        if (end <= currentDate) {
-            toast.error("Ngày kết thúc phải lớn hơn thời điểm hiện tại!")
-            return;
-        }
-    
-        if (end <= start) {
-            toast.error("Ngày kết thúc phải lớn hơn ngày bắt đầu!")
-            return;
-        }
-    
+        // if (name.trim() === "" || desc.trim() === "" || value.trim() === "" || startDate.trim() === "" || endDate.trim() === "" || applicableProducts.length === 0) {
+
+        //     toast.error("Các trường không được để trống!")
+        //     return;
+        // }
+
+        // // Kiểm tra giá trị của "value" phải > 0
+        // if (parseFloat(value) <= 0) {
+        //     toast.error("Giá trị giảm phải lớn hơn 0!")
+        //     return;
+        // }
+
+        // // Kiểm tra ngày hết hạn phải lớn hơn ngày hiện tại và ngày bắt đầu
+        // const currentDate = new Date();
+        // const start = new Date(startDate);
+        // const end = new Date(endDate);
+
+        // if (end <= currentDate) {
+        //     toast.error("Ngày kết thúc phải lớn hơn thời điểm hiện tại!")
+        //     return;
+        // }
+
+        // if (end <= start) {
+        //     toast.error("Ngày kết thúc phải lớn hơn ngày bắt đầu!")
+        //     return;
+        // }
+
+        const isValid = await validateForm();
+        if (!isValid) return;
+
         const dataForm = {
             name: name,
             desc: desc,
@@ -118,19 +161,19 @@ const AddPromotion = () => {
             endDate: endDate,
             applicableProducts: applicableProducts
         };
-    
+
         console.log("LLLLLLLLLLLLLLLLLL", dataForm);
-    
+
         // Bắt đầu gửi yêu cầu tạo sản phẩm
         setIsLoading(true);  // Kích hoạt trạng thái loading
-    
+
         try {
             // Gửi yêu cầu tạo sản phẩm qua PromotionFetch
             const result = await PromotionFetch.createPromotion(dataForm);
-    
+
             if (result.status === "OK") {
                 toast.success("Thêm khuyến mãi thành công!");
-    
+
                 // Reset form sau khi thêm sản phẩm thành công
                 setName("");
                 setDesc("");
@@ -148,55 +191,6 @@ const AddPromotion = () => {
             setIsLoading(false); // Tắt trạng thái loading sau khi hoàn tất
         }
     };
-    
-
-    // const handleConfirm = async () => {
-    //     // Kiểm tra nếu có trường nào chưa được điền
-    //     if (name.trim() === "" || desc.trim() === "" || value.trim() === "" || startDate.trim() === "" || !endDate.trim()) {
-    //         window.alert("Bạn cần điền đầy đủ thông tin sản phẩm!");
-    //         return;
-    //     }
-
-    //     const dataForm = {
-    //         name: name,
-    //         desc: desc,
-    //         type: type,
-    //         value: value,
-    //         startDate: startDate,
-    //         endDate: endDate,
-    //         applicableProducts: applicableProducts
-    //     };
-
-    //     console.log("LLLLLLLLLLLLLLLLLL", dataForm);
-
-    //     // Bắt đầu gửi yêu cầu tạo sản phẩm
-    //     setIsLoading(true);  // Kích hoạt trạng thái loading
-
-    //     try {
-    //         // Gửi yêu cầu tạo sản phẩm qua PromotionFetch
-    //         const result = await PromotionFetch.createPromotion(dataForm);
-
-    //         if (result.status === "OK") {
-    //             toast.success("Thêm khuyến mãi thành công!");
-
-    //             // Reset form sau khi thêm sản phẩm thành công
-    //             setName("");
-    //             setDesc("");
-    //             setType("");
-    //             setValue("");
-    //             setStartDate("");
-    //             setEndDate("");
-    //             setApplicableProducts([]);
-    //         } else {
-    //             toast.error("Lỗi từ API khi tạo sản phẩm: " + result.message); // Hiển thị lỗi nếu API trả về lỗi
-    //         }
-    //     } catch (error) {
-    //         toast.error("Đã có lỗi xảy ra: " + error.message);  // Hiển thị lỗi khi có sự cố trong quá trình gửi yêu cầu
-    //     } finally {
-    //         setIsLoading(false); // Tắt trạng thái loading sau khi hoàn tất
-    //     }
-    // };
-
 
     // Phương thức xử lý tải file Excel
     const handleFileUpload = async (e) => {
@@ -233,9 +227,15 @@ const AddPromotion = () => {
                         <Typography className={myStyle.inputLabel}>Mô tả: </Typography>
                         <input type="text" value={desc} onChange={handleDescChange} className={myStyle.textFeild} />
                     </Box>
-                    <Box className={myStyle.inputContainer}>
-                        <Typography className={myStyle.inputLabel}>Kiểu: </Typography>
-                        <input type="text" value={type} onChange={handleTypeChange} className={myStyle.textFeild} />
+                     {/* Thay thế input Kiểu khuyến mãi bằng RadioButton */}
+                     <Box className={myStyle.inputContainer}>
+                        <Typography className={myStyle.inputLabel}>Kiểu khuyến mãi: </Typography>
+                        <FormControl component="fieldset">
+                            <RadioGroup row value={type} onChange={handleTypeChange}>
+                                <FormControlLabel value="percent" control={<Radio />} label="Phần trăm" />
+                                <FormControlLabel value="price" control={<Radio />} label="Giá cố định" />
+                            </RadioGroup>
+                        </FormControl>
                     </Box>
                     <Box className={myStyle.inputContainer}>
                         <Typography className={myStyle.inputLabel}>Giá: </Typography>

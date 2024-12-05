@@ -5,6 +5,7 @@ import { ProductFetch, UserFetch } from '~/REST_API_Client';
 import { Link } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
+import { updateProductValidation } from '~/utils/validation';
 const DetailAccountModal = ({ open, onClose, product, onChange }) => {
   // if (!product) return null; // Nếu không có product thì không render modal;
   const defaultInfor = useRef({ ...product });
@@ -53,7 +54,37 @@ const DetailAccountModal = ({ open, onClose, product, onChange }) => {
     }
 }
 
+const validateForm = async () => {
+  // Chuyển đổi price và quantity thành số nguyên
+  const priceValue = Number(price)
+        const quantityValue = Number(quantity)
+
+  // Kiểm tra tính hợp lệ của các trường bằng Yup
+  try {
+      await updateProductValidation.validate({
+          name: name,
+          desc: desc,
+          type: type,
+          price: priceValue,
+          quantity: quantityValue,  
+      }, { abortEarly: false });
+
+      return true;
+  } catch (error) {
+      if (error.inner) {
+          error.inner.forEach(err => {
+              toast.error(err.message);  
+          });
+      } else {
+          toast.error("Lỗi: " + error.message);  // Hiển thị lỗi chung nếu có
+      }
+      return false;
+  }
+};
+
   const handleConfirm = async () => {
+    const isValid = await validateForm();
+        if (!isValid) return;
     const formData = new FormData();
     formData.append("name", name);
     formData.append("desc", desc);
