@@ -38,7 +38,7 @@ const NotifyAPI = (axiosInstance) => {
             if(condition.receiverId) {
                 params.append("receiverId", condition.receiverId)
             }
-            if(condition.isReading) {
+            if(condition.isReading !== null && condition.isReading !== undefined ) {
                 params.append("isReading",JSON.stringify(condition.isReading))
             }
             if(condition.type) {

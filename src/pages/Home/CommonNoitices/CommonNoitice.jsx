@@ -22,7 +22,7 @@ const CommonNoitice = () => {
         orderId: "",
     });
     const fetchNotification = () => {
-        NotifyFetch.getNotify({receiverId: auth.user._id, isReading: false})
+        NotifyFetch.getNotify({receiverId: auth.user._id, isReading: false, type: "booking"})
             .then(data => {
                 console.log("notify data: ", data.data);
                 if(data.data.length > 0) {
