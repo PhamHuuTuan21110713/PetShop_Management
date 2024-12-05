@@ -4,26 +4,51 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { useNavigate, useParams } from "react-router-dom";
 import BoughtOrders from "./BoughtOrders/BoughtOrders";
 import ResgisteredServices from "./RegisterdService/ResgisteredServices";
-import { useEffect, useState } from "react";
-import { UserFetch } from "~/REST_API_Client";
+import { useContext, useEffect, useState } from "react";
+import { ChatFetch, UserFetch } from "~/REST_API_Client";
 import { ToastContainer, toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
+import { ChatContext } from "../ChatProvider/ChatProvider";
+import { useAuth } from "~/components/Authentication/authentication";
 const Account = () => {
     const navigate = useNavigate();
     const { id } = useParams();
+    const auth = useAuth();
     const [isLoading, setIsloading] = useState(false);
+    const { createChat, updateCurrentChat, userChats, updateUserChats } = useContext(ChatContext);
+    // console.log("create chat: ", createChat);
     const [user, setUser] = useState();
     const fetchData = () => {
         setIsloading(true);
         UserFetch.getById(id)
             .then(data => {
                 setUser(data.data);
-                console.log("users: ", data.data);
+                // console.log("users: ", data.data);
                 setIsloading(false);
             })
             .catch(err => {
                 toast.error(`Lỗi lấy thông tin người dùng: \n${err}`);
             })
+    }
+    const handleChat = () => {
+
+        ChatFetch.createChat(auth?.user._id, id)
+            .then(data => {
+                // console.log("create chat succesfull: ", data.message);
+                // console.log("chat data: ", data.data);
+                // console.log("data status: ", data.status);
+                const isExistChat = userChats?.some((usc) => usc._id === data.data._id);
+                console.log("isExít: ", isExistChat);
+                if (isExistChat === false) {
+                    updateUserChats([data.data, ...userChats])
+                }
+                updateCurrentChat(data.data);
+                navigate('/chat')
+            })
+            .catch(err => {
+                console.log("err create chat: ", err)
+            })
+
     }
     useEffect(() => {
         fetchData();
@@ -50,6 +75,12 @@ const Account = () => {
                                     <Typography sx={{ fontSize: "1.0rem", fontWeight: "bold", color: "#000" }}>{user?.role === "admin" ? "Quản trị" : "Người dùng"}</Typography>
 
                                 </Box>
+                                {
+                                    id === auth.user._id ? null : <Box sx={{ transform: "translateY(50%)", marginTop: "10px" }}>
+                                        <Button onClick={handleChat} sx={{ textTransform: "none" }} variant="contained" color="warning">Nhắn tin</Button>
+                                    </Box>
+                                }
+
 
                             </Box>
                             <Box sx={{ padding: "5px", display: "flex", gap: 3 }}>
@@ -65,6 +96,7 @@ const Account = () => {
 
                                 </Box>
                             </Box>
+
                         </Box>
 
                         <Divider sx={{ marginTop: "60px", marginBottom: "20px" }} />
@@ -130,7 +162,7 @@ const Account = () => {
 
                                             </Box>
                                         </Box>
-                                        <Divider sx={{marginY:"10px"}}/>
+                                        <Divider sx={{ marginY: "10px" }} />
                                         {/* dia chi giao hang */}
                                         <Box>
                                             <Box sx={{ display: "flex", alignItems: "center", justifyContent: "flex-start", gap: 2 }}>
@@ -186,12 +218,12 @@ const Account = () => {
 
             {/*Đơn hàng đã mua  */}
             <Box sx={{ marginTop: "20px" }}>
-                <BoughtOrders userId= {id}/>
+                <BoughtOrders userId={id} />
             </Box>
 
             {/*Dịch vụ đã đăng ký  */}
             <Box sx={{ marginTop: "20px" }}>
-                <ResgisteredServices userId= {id}/>
+                <ResgisteredServices userId={id} />
             </Box>
             <ToastContainer />
         </Box>

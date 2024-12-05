@@ -6,12 +6,14 @@ import { OrderFetch, ProductFetch } from "~/REST_API_Client";
 import { BookingFetch } from "~/REST_API_Client";
 import { ToastContainer, toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
+import { NotifyFetch } from "~/REST_API_Client";
+import { useAuth } from "~/components/Authentication/authentication";
 const CommonNoitice = () => {
-
+    const auth = useAuth();
     const [countOrder, setCountOrder] = useState(0)
     const [countBooking, setCountBooking] = useState(0);
     const [countProduct, setCountProduct] = useState(0)
-
+    const [countNotify, setCountNotify] = useState(0);
     const [sort, setSort] = useState()
     const [filters, setFilters] = useState({
         status: null,
@@ -19,6 +21,19 @@ const CommonNoitice = () => {
         year: 0,
         orderId: "",
     });
+    const fetchNotification = () => {
+        NotifyFetch.getNotify({receiverId: auth.user._id, isReading: false, type: "booking"})
+            .then(data => {
+                console.log("notify data: ", data.data);
+                if(data.data.length > 0) {
+                    setCountNotify(data.data.length)
+                }
+            })
+            .catch(err => {
+                console.log("err notify: ", err);
+                toast.error("Lỗi lấy dữ liệu thông báo")
+            })
+    }
 
     const fetchProducts = async ( page, condition, sorting) => {
         //console.log("Fetching products with categoryId:", cateValue);
@@ -67,7 +82,9 @@ const CommonNoitice = () => {
             window.alert("Lỗi khi lấy đơn hàng: " + error.message);
         }
     };
-
+    useEffect(() => {
+        fetchNotification();
+    }, [])
     useEffect(() => {
         fetchOrders(1, 1000,filters); // Lấy đơn hàng khi trang hoặc bộ lọc thay đổi
     }, [filters]);
@@ -79,7 +96,10 @@ const CommonNoitice = () => {
         BookingFetch.getAll(undefined,condition, undefined)
             .then(data => {
                 // console.log("list booking", data);
-                setCountBooking(data.data.length)
+                if(data.data.length > 0) {
+
+                    setCountBooking(data.data.length)
+                }
             })
             .catch(err => {
                 toast.error(`Lỗi lấy thông tin lịch dịch vụ \n${err}`);
@@ -101,9 +121,9 @@ const CommonNoitice = () => {
                     {/* Tin nhắn */}
                     <NavLink className={myStyle.noticeItemContainer}>
                         <Box >
-                            <Typography sx={{ fontSize: "1.1rem", fontWeight: "bold", textAlign: "center" }}>Tin nhắn mới</Typography>
+                            <Typography sx={{ fontSize: "1.1rem", fontWeight: "bold", textAlign: "center" }}>Thông báo mới</Typography>
                             <Divider sx={{ marginY: "4px" }} />
-                            <Typography><span style={{ color: "#de5945", fontWeight: "600" }}>15 </span>tin nhắn chờ phản hồi</Typography>
+                            <Typography><span style={{ color: "#de5945", fontWeight: "600" }}>{countNotify} </span>Thông báo chờ phản hồi</Typography>
                         </Box>
                     </NavLink>
                     {/* đơn hàng */}

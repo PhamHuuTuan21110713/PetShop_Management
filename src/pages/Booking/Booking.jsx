@@ -1,5 +1,5 @@
 import { Box, Button, CircularProgress, Divider, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import FormControl from '@mui/material/FormControl';
@@ -7,13 +7,17 @@ import NativeSelect from '@mui/material/NativeSelect';
 import { BookingFetch } from "~/REST_API_Client";
 import { ToastContainer, toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
+import { ChatContext } from "../ChatProvider/ChatProvider";
+import { useAuth } from "~/components/Authentication/authentication";
 const Booking = () => {
     const navigate = useNavigate();
+    const auth = useAuth();
     const { id } = useParams();
     const [isUpdate, setIsUpdate] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [status, setStatus] = useState()
     const [booking, setBooking] = useState();
+    const { sendBookingNotify } = useContext(ChatContext);
     const handleBackPrevPage = () => {
         navigate(-1);
     }
@@ -30,6 +34,7 @@ const Booking = () => {
                 setIsLoading(false);
             })
     }
+    
     useEffect(() => {
         fetchData()
     }, [])
@@ -43,9 +48,36 @@ const Booking = () => {
             .then(data => {
                 setIsUpdate(false)
                 fetchData()
+                if(status === "da-xac-nhan") {
+                    sendBookingNotify({
+                        senderId: auth.user._id,
+                        receiverId: booking.userId,
+                        targetId: id,
+                        type: "booking",
+                        text: "Đơn hàng của bạn đã được xác nhận"
+                    })
+                } else if(status === "da-huy") {
+                    sendBookingNotify({
+                        senderId: auth.user._id,
+                        receiverId: booking.userId,
+                        targetId: id,
+                        type: "booking",
+                        text: "Đơn hàng của bạn đã bị hủy"
+                    })
+                } else if(status === "hoan-thanh") {
+                    sendBookingNotify({
+                        senderId: auth.user._id,
+                        receiverId: booking.userId,
+                        targetId: id,
+                        type: "booking",
+                        text: "Đơn hàng đã hoàn thành. Cảm ơn quý khách🥰"
+                    })
+                }
+                
             })
             .catch(err => {
                 toast.error(`Lỗi cập nhật\n${err}`)
+                setIsUpdate(false)
             })
     }
     if (isLoading) {

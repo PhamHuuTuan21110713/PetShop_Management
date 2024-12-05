@@ -1,5 +1,5 @@
 import myStyle from "./Appbar.module.scss";
-import { useState, useRef } from "react";
+import { useState, useRef, useContext, useEffect } from "react";
 
 import Grow from '@mui/material/Grow';
 import Paper from '@mui/material/Paper';
@@ -11,17 +11,47 @@ import { Avatar, Typography } from "@mui/material";
 import Box from "@mui/material/Box"
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import ChatIcon from '@mui/icons-material/Chat';
-import { NavLink } from "react-router-dom/dist";
+import { Link, NavLink } from "react-router-dom/dist";
 import ModeSelect from "../ModeSelect/ModeSelect";
 import { useAuth } from "../Authentication/authentication";
+import { ChatContext } from "~/pages/ChatProvider/ChatProvider";
+import { NotifyFetch } from "~/REST_API_Client";
+import Notify from "./Notify";
 const classNameNav = ({ isActive }) => {
     return (isActive ? "active-link" : "inactive-link")
 }
 const Appbar = () => {
+
     console.log("re-render appbar")
     const [open, setOpen] = useState(false);
     const anchorRef = useRef(null);
     const auth = useAuth();
+    const { unReadNotifications, updateUnreadNotifications } = useContext(ChatContext);
+    const [chatCount, setChatCount] = useState(0)
+    useEffect(() => {
+        const fetchUnreadMessage = () => {
+            if (!auth.user) return
+            NotifyFetch.getNotify({ receiverId: auth.user._id, isReading: false, type: "message" })
+                .then(data => {
+                    // console.log("unread message: ", data)
+                    if (data.data.length > 0) {
+                        setChatCount(data.data.length);
+                        updateUnreadNotifications([...unReadNotifications, ...data.data])
+                    }
+
+                })
+                .catch(err => {
+                    console.log("err get unread message: ", err);
+                })
+        }
+        fetchUnreadMessage();
+    }, [])
+
+   
+    useEffect(() => {
+        const unreadNotifications = unReadNotifications.length;
+        setChatCount(unreadNotifications);
+    }, [unReadNotifications])
     const handleToggle = () => {
         setOpen((prevOpen) => !prevOpen);
     };
@@ -46,8 +76,8 @@ const Appbar = () => {
             sx={{
                 height: (theme) => theme.customSize.headerHeight,
                 width: (theme) => `calc( 100% - ${theme.customSize.sidebarWidth})`,
-                padding:"10px"
-            }} 
+                padding: "10px"
+            }}
             className={myStyle.appbarContainer}
         >
             {/* left part */}
@@ -56,15 +86,33 @@ const Appbar = () => {
             </Box>
             {/* right part */}
             <Box sx={{ display: "flex", alignItems: "center", gap: 3 }}>
+
+                <Link to={"/thong-bao"}>
+                    <Notify />
+                </Link>
                 {/* Chat */}
-                <Box
-                    sx={{
-                        display: "flex", justifyContent: "center", alignItems: "center", cursor: "pointer",
-                        backgroundColor: "#c0bcc0", borderRadius: "50%", height: "40px", width: "40px"
-                    }}
-                >
-                    <ChatIcon sx={{ color: "#fff" }} />
-                </Box>
+                <Link to="/chat">
+                    <Box
+                        sx={{
+                            display: "flex", justifyContent: "center", alignItems: "center", cursor: "pointer",
+                            backgroundColor: "#c0bcc0", borderRadius: "50%", height: "40px", width: "40px", position: "relative"
+                        }}
+                    >
+                        <ChatIcon sx={{ color: "#fff" }} />
+                        {
+                            chatCount !== 0 ?
+                                (
+                                    <Box sx={{
+                                        width: "20px", height: "20px", borderRadius: "50%", display: "flex", justifyContent: "center", alignItems: "center",
+                                        backgroundColor: "#de5945", position: "absolute", right: "-6px", top: "-6px"
+                                    }}>
+                                        <Typography sx={{ color: "#fff", fontSize: "0.6rem" }}>{chatCount}</Typography>
+                                    </Box>
+                                ) : null
+                        }
+
+                    </Box>
+                </Link>
 
                 {/* Avatar */}
                 <Box >
@@ -77,7 +125,7 @@ const Appbar = () => {
                         onClick={handleToggle}
                         sx={{ display: "flex", alignItems: "center", gap: 1, cursor: "pointer" }}
                     >
-                        <Avatar />
+                        <Avatar src={`${auth.user.avatar.preview}`} />
                         <Box>
                             <Typography sx={{ fontWeight: "bold", color: "#000" }}>
                                 {auth.user.name}
@@ -126,7 +174,7 @@ const Appbar = () => {
                         )}
                     </Popper>
                 </Box>
-                <ModeSelect/>
+                <ModeSelect />
             </Box>
         </Box>
     )

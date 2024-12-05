@@ -24,6 +24,7 @@ const TopProducts = () => {
         try {
             const response = await ProductFetch.fetchTopSaleProducts(type === "pre" ? 2 : 1, 10);  // Giả sử type "pre" cho tháng trước, "curr" cho tháng này
             setProducts(response.products);  // Lưu danh sách sản phẩm vào state
+            console.log("getProducts: ",response.products )
         } catch (err) {
             setError("Error fetching best selling products");  // Xử lý lỗi nếu có
         } finally {
@@ -95,8 +96,8 @@ const TopProducts = () => {
                         <Box key={product._id} sx={{ padding: "10px" }}>
                             <Box sx={{ display: "flex", alignItems: "center", gap: 1, justifyContent: "space-between" }}>
                                 <Box sx={{ display: 'flex', gap: 4 }}>
-                                    <Box sx={{ width: "50px", height: "50px", backgroundColor: "red" }}>
-                                        <img alt="ảnh" src={product.imageUrl} style={{ width: "100%", height: "100%" }} />
+                                    <Box sx={{ width: "50px", height: "50px" }}>
+                                        <img alt="ảnh" src={product.img} style={{ width: "100%", height: "100%" }} />
                                     </Box>
                                     <Box>
                                         <Typography>{product.name}</Typography>

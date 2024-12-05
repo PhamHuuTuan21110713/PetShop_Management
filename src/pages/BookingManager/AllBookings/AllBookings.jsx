@@ -1,14 +1,17 @@
 import { Box, Button, Pagination, Tooltip, Typography, CircularProgress, Chip, Divider } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
 import myStyle from './AllBookings.module.scss';
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import { BookingFetch } from "~/REST_API_Client";
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { ToastContainer, toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
+import { ChatContext } from "~/pages/ChatProvider/ChatProvider";
+import { useAuth } from "~/components/Authentication/authentication";
 const AllBooking = () => {
     const [sort, setSort] = useState("down");
+    const auth = useAuth();
     const [bookings, setBookings] = useState();
     const [filter, setFilter] = useState("dang-xac-nhan");
     const [yearList, setYearList] = useState("");
@@ -16,6 +19,7 @@ const AllBooking = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [totalPages, setTotalPages] = useState(1);
     const [currentPage, setCurrentPage] = useState(1);
+    const { sendBookingNotify } = useContext(ChatContext);
     const fetchData = (myFilter, myFind, myPage) => {
         let condition;
         let sorting;
@@ -76,12 +80,12 @@ const AllBooking = () => {
         setCurrentPage(value);
         fetchData(filter, find, value)
     }
-    const handleUpdateBooking = (id, type, index) => {
+    const handleUpdateBooking = (id, type, index, userId) => {
         if (type === "xac-nhan") {
             BookingFetch.upDate(id, { status: "da-xac-nhan" })
                 .then(data => {
                     console.log("thanh con: ", data)
-                    
+
                     if (filter === "all") {
                         fetchData(filter, find, currentPage)
 
@@ -90,7 +94,13 @@ const AllBooking = () => {
                         _bookings.splice(index, 1)
                         setBookings(_bookings);
                     }
-                    
+                    sendBookingNotify({
+                        senderId: auth.user?._id,
+                        receiverId: userId,
+                        targetId: id,
+                        type: "booking",
+                        text: "Đơn hàng dịch vụ của bạn đã được xác nhận"
+                    })
                 })
                 .catch(err => {
                     toast.error(`Lỗi cập nhật: \n${err}`)
@@ -98,7 +108,7 @@ const AllBooking = () => {
         } else if (type === "huy") {
             BookingFetch.upDate(id, { status: "da-huy" })
                 .then(data => {
-                   
+
                     if (filter === "all") {
                         fetchData(filter, find, currentPage)
 
@@ -107,7 +117,14 @@ const AllBooking = () => {
                         _bookings.splice(index, 1)
                         setBookings(_bookings);
                     }
-                    
+                    sendBookingNotify({
+                        senderId: auth.user?._id,
+                        receiverId: userId,
+                        targetId: id,
+                        type: "booking",
+                        text: "Đơn hàng dịch vụ của bạn đã bị hủy"
+                    })
+
                 })
                 .catch(err => {
                     toast.error(`Lỗi cập nhật: \n${err}`)
@@ -207,7 +224,7 @@ const AllBooking = () => {
                                     bookings.map((booking, index) => {
                                         return (
                                             <Box key={index} className={myStyle.colBooking} >
-                                                <Box sx={{ height:"100%",boxShadow: "rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;", padding: "20px", display: "flex", flexDirection: "column", gap: 1 }}>
+                                                <Box sx={{ height: "100%", boxShadow: "rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;", padding: "20px", display: "flex", flexDirection: "column", gap: 1 }}>
                                                     <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
                                                         <Typography>Mã đơn: <Link to={`/lich-dat/${booking._id}`}><strong>{booking._id}</strong></Link></Typography>
                                                         <Divider orientation="vertical" flexItem />
@@ -259,8 +276,8 @@ const AllBooking = () => {
                                                     </Box>
                                                     {
                                                         booking.status === "dang-xac-nhan" ? (<Box sx={{ display: "flex", justifyContent: "flex-end", gap: 3 }}>
-                                                            <Button onClick={() => handleUpdateBooking(booking._id, "huy", index)} color="secondary" variant="contained" sx={{ textTransform: "none" }}>Hủy đơn</Button>
-                                                            <Button onClick={() => handleUpdateBooking(booking._id, "xac-nhan", index)} color="success" variant="contained" sx={{ textTransform: "none" }}>Xác nhận</Button>
+                                                            <Button onClick={() => handleUpdateBooking(booking._id, "huy", index, booking.userId)} color="secondary" variant="contained" sx={{ textTransform: "none" }}>Hủy đơn</Button>
+                                                            <Button onClick={() => handleUpdateBooking(booking._id, "xac-nhan", index, booking.userId)} color="success" variant="contained" sx={{ textTransform: "none" }}>Xác nhận</Button>
                                                         </Box>) : null
                                                     }
 

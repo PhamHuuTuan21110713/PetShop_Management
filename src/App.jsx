@@ -31,18 +31,35 @@ import AddBooking from './pages/BookingManager/AddBooking/AddBooking';
 import StatisticalBooking from './pages/BookingManager/StatisticalBooking/StatisticalBooking';
 import ProtectedRoutes from './components/Authentication/protectedRoute';
 import Booking from './pages/Booking/Booking';
+
+import CategoryManager from './pages/CategoryManager/CategoryManager';
+import AddCategory from './pages/CategoryManager/AddCategory/AddCategory';
+import AllCategory from './pages/CategoryManager/AllCategory/AllCategory';
+import { ChatProvider } from './pages/ChatProvider/ChatProvider';
+import Chat from './pages/Chat/Chat';
+
 import RevenueReport from './pages/RevenueReport/RevenueReport';
 import ProductReport from './pages/RevenueReport/ProductReport';
+import Notify from './pages/Notify/Notify';
+import Notfound from './pages/NotfoundPage/Notfound';
+
 function App() {
 
   return (
     <AuthProvider>
+      {/* <ChatProvider> */}
       <Routes>
         {/* Đăng nhập */}
+        <Route path='*' element={<Notfound />} />
+        <Route path='not-found' element={<Notfound />} />
         <Route path="/dang-nhap" element={<Login />} />
         <Route path='/' element={<ProtectedRoutes />}>
           <Route path="/" element={<Manager />}>
             <Route index element={<Home />} />
+            {/* Chat */}
+            <Route path='chat' element={<Chat />} />
+            {/* Thong bao */}
+            <Route path='thong-bao' element={<Notify />} />
             {/* Quản lý tài khoản */}
             <Route path='quan-ly-tai-khoan' element={<AccountManager />} >
               <Route index element={<Navigate to="danh-sach" />} />
@@ -71,7 +88,7 @@ function App() {
               <Route path='thong-ke' element={<StatisticalBooking />} />
             </Route>
             {/* Chi tiết lịch đặt */}
-            <Route path='lich-dat/:id' element={<Booking />}/>
+            <Route path='lich-dat/:id' element={<Booking />} />
             {/* Chi tiết dịch vụ */}
             <Route path='dich-vu/:id' element={<Service />}>
               <Route path='co-ban' element={<UpdateBaseInfor />} />
@@ -87,16 +104,21 @@ function App() {
               <Route path='danh-sach-khuyen-mai' element={<AllPromotion />} />
               <Route path='them-khuyen-mai' element={<AddPromotion />} />
             </Route>
-
             {/* Quản lý đơn hàng */}
-            <Route path='quan-ly-don-hang' element={<OrdersManager/>}/>
-            <Route path='thong-ke-doanh-thu' element={<RevenueReport/>}/>
-            <Route path='thong-ke-san-pham' element={<ProductReport/>}/>
+            <Route path='quan-ly-don-hang' element={<OrdersManager />} />
+
+            {/* Quản lý danh mục */}
+            <Route path='quan-ly-danh-muc' element={<CategoryManager />}>
+              <Route path='danh-sach' element={<AllCategory />} />
+              <Route path='them-moi' element={<AddCategory />} />
+            </Route>
+            <Route path='thong-ke-doanh-thu' element={<RevenueReport />} />
+            <Route path='thong-ke-san-pham' element={<ProductReport />} />
           </Route>
+
         </Route>
-
-
       </Routes>
+      {/* </ChatProvider> */}
     </AuthProvider>
 
   );
