@@ -4,19 +4,20 @@ import { useOutletContext } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 import {
-    TextField,
+    //TextField,
     Box,
     Typography,
     Button,
     Divider,
-    CircularProgress
+    //CircularProgress
 } from '@mui/material';
-import { useAuth } from "~/components/Authentication/authentication";
+// import { useAuth } from "~/components/Authentication/authentication";
 import { ProductFetch } from "~/REST_API_Client";
 import { excel } from "~/utils/xlsx";
+import { createProductValidation } from "~/utils/validation";
 
 const AddProduct = () => {
-    const auth = useAuth();
+    // const auth = useAuth();
     const { categories } = useOutletContext();
 
     const [name, setName] = useState("");
@@ -67,38 +68,64 @@ const AddProduct = () => {
         }
     }
 
-    const handleConfirm = async () => {
-        // Kiểm tra nếu có trường nào chưa được điền
-        if (name.trim() === "" || desc.trim() === "" || price.trim() === "" || quantity.trim() === "" || !selectedSubCategory) {
-            window.alert("Bạn cần điền đầy đủ thông tin sản phẩm!");
-            return;
-        }
+    const validateForm = async () => {
+        // Chuyển đổi price và quantity thành số nguyên
+        // Chuyển đổi price và quantity thành số nguyên
+        const priceValue = Number(price)
+        const quantityValue = Number(quantity)
     
-        // Tạo formData để gửi dữ liệu
+        // Kiểm tra tính hợp lệ của các trường bằng Yup
+        try {
+            await createProductValidation.validate({
+                name: name,
+                desc: desc,
+                type: type,
+                price: priceValue,  // Sử dụng giá trị đã chuyển đổi thành số nguyên
+                quantity: quantityValue,  // Sử dụng giá trị đã chuyển đổi thành số nguyên
+                categoryId: selectedSubCategory
+            }, { abortEarly: false });
+    
+            return true;
+        } catch (error) {
+            if (error.inner) {
+                error.inner.forEach(err => {
+                    toast.error(err.message);  // Hiển thị tất cả các lỗi cho từng trường
+                });
+            } else {
+                toast.error("Lỗi: " + error.message);  // Hiển thị lỗi chung nếu có
+            }
+            return false;
+        }
+    };
+    
+    
+    const handleConfirm = async () => {
+      
+        // Kiểm tra tính hợp lệ của các trường
+        const isValid = await validateForm();
+        if (!isValid) return;  // Nếu validation thất bại thì không tiếp tục gửi dữ liệu
+    
+        // Tiến hành gửi dữ liệu API nếu validation thành công
         const formData = new FormData();
         formData.append("name", name);
         formData.append("desc", desc);
         formData.append("type", type);
-        formData.append("price", price);
-        formData.append("quantity", quantity);
+        formData.append("price", price);  // Sử dụng giá trị đã chuyển đổi
+        formData.append("quantity", quantity);  // Sử dụng giá trị đã chuyển đổi
         formData.append("categoryId", selectedSubCategory);
     
         if (image) {
-            formData.append("image", image); // Gửi ảnh sản phẩm nếu có
+            formData.append("image", image);
         }
     
-        // Bắt đầu gửi yêu cầu tạo sản phẩm
-        setIsLoading(true);  // Kích hoạt trạng thái loading
+        setIsLoading(true);  // Bắt đầu trạng thái loading
         try {
-            const result = await fetchData(formData); 
-            console.log("sau khi them san pham", result);
-             // Gọi API tạo sản phẩm
+            const result = await fetchData(formData);
     
-            // Kiểm tra kết quả trả về từ API
             if (result.status === "OK") {
                 toast.success("Thêm sản phẩm thành công!");
     
-                // Reset form sau khi thêm sản phẩm thành công
+                // Reset form sau khi tạo sản phẩm thành công
                 setName("");
                 setDesc("");
                 setType("");
@@ -106,42 +133,32 @@ const AddProduct = () => {
                 setQuantity("");
                 setSelectedSubCategory("");
                 setImage(null);
-
-                if (imageThumnail){
-                    const productId = result.data._id
-
+    
+                // Xử lý ảnh thumbnail nếu có
+                if (imageThumnail) {
+                    const productId = result.data._id;
                     const formThumbnail = new FormData();
-                    formThumbnail.append("image", imageThumnail)
-                    try{
-                        await ProductFetch.addThumbnail(productId, formThumbnail)
-                        console.log("Them san pham thanh cong");
-
-                        setImageThumbnail(null)
-                        
+                    formThumbnail.append("image", imageThumnail);
+    
+                    try {
+                        await ProductFetch.addThumbnail(productId, formThumbnail);
+                        console.log("Thêm ảnh thumbnail thành công");
+                        setImageThumbnail(null);
                     } catch (err) {
                         console.log("Lỗi khi cập nhật ảnh thumbnail:", err);
                         toast.error(`Lỗi khi cập nhật ảnh thumbnail: ${err.message || err}`);
-                      }
+                    }
                 }
             } else {
-                toast.error("Lỗi từ API khi tạo sản phẩm: " + result.message); // Hiển thị lỗi nếu API trả về lỗi
+                toast.error("Lỗi từ API khi tạo sản phẩm: " + result.message);
             }
-        } catch (error) {
-            toast.error("Đã có lỗi xảy ra: " + error.message);  // Hiển thị lỗi khi có sự cố trong quá trình gửi yêu cầu
+        } catch (err) {
+            toast.error("Lỗi khi gửi dữ liệu: " + err.message || err);
         } finally {
-            setIsLoading(false); // Tắt trạng thái loading sau khi hoàn tất
+            setIsLoading(false);  // Tắt trạng thái loading
         }
     };
     
-
-    
-
-    // const handleThumbnailUpload = (e) => {
-    //     const file = e.target.files[0];
-    //     if (file) {
-    //         setThumbnailImage(file); // Lưu ảnh thumbnail vào state
-    //     }
-    // };
 
     const handleFileUpload = async (e) => {
         const file = e.target.files[0];

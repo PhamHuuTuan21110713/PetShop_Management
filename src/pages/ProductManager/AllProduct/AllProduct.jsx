@@ -27,30 +27,13 @@ const AllProduct = () => {
     maxPrice: "",
     minStar: 0,
     maxStar: 5,
+    name: "",
     productId: "",
     onlyPromotion: false
   })
 
   const indexProduct = useRef(0);
-  // Create instance of CategoryAPI
-
-  // Fetch categories
-  // const fetchCategories = async () => {
-  //   try {
-  //     const data = await CategoryFetch.get();
-  //     //console.log("sadasf", data);
-
-  //     setCategories(data.data); // Store the fetched categories
-  //   } catch (error) {
-  //     window.alert(`Error fetching categories: \n${error.message}`);
-  //   }
-  // };
-
-  //console.log("day la cate ", categories);
-  // categories.map(cate => {
-  //   //console.log("quai dan", cate.subCategory);
-
-  // })
+  
 
   const fetchProducts = async (cateValue, page, condition, sorting) => {
     //console.log("Fetching products with categoryId:", cateValue);
@@ -81,7 +64,6 @@ const AllProduct = () => {
 
 
   useEffect(() => {
-    //fetchCategories(); // Fetch categories when the component mounts
 
     const condition = { page: 1, limit: 10 }
     fetchProducts(selectedCategory, 1, condition, sort);
@@ -155,29 +137,25 @@ const AllProduct = () => {
     fetchProducts(selectedCategory, 1,condition , type)
   };
 
-  const searchProducts = (products, searchTerm) => {
-    return products?.filter((product) => {
-      const lowercasedTerm = searchTerm.toLowerCase();
-      return (
-        product._id.toLowerCase().includes(lowercasedTerm) ||
-        product.name.toLowerCase().includes(lowercasedTerm)
-      );
-    });
-  };
-
-
   const handleChangeFind = (e) => {
-    setFind(e.target.value);  // Cập nhật từ khóa tìm kiếm
-    // const filteredProducts = searchProducts(products.products, e.target.value);  // Lọc sản phẩm
-    // setProducts({ products: filteredProducts, page: 1 });  // Cập nhật lại mảng sản phẩm đã lọc
+    setFind(e.target.value);  
+    
   };
 
 
   const handleSearch = () => {
-    // const filteredProducts = searchProducts(products.products, find);  // Tìm kiếm sản phẩm
-    // setProducts({ products: filteredProducts, page: 1 });  // Cập nhật lại danh sách sản phẩm
-    setFilters(prevFilters => ({ ...prevFilters, productId: find }));
+    const searchTerm = find.trim();  
+  
+      const isProductId = /^[a-fA-F0-9]{24}$/.test(searchTerm);
+  
+      setFilters(prevFilters => ({
+        ...prevFilters,
+        productId: isProductId ? searchTerm : "",  
+        name: isProductId ? "" : searchTerm  
+      }));
+  
   };
+  
 
   const handlePageChange = (e, newPage) => {
     console.log("newpage", newPage);

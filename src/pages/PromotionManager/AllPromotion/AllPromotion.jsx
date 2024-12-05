@@ -58,7 +58,8 @@ const AllPromotion = () => {
 
     const handleSearch = () => {
         // Cập nhật `filters.promotionId` với `searchTerm` và gọi API
-        setFilters(prevFilters => ({ ...prevFilters, promotionId: searchTerm }));
+        const isPromotionId = /^[a-fA-F0-9]{24}$/.test(searchTerm);
+        setFilters(prevFilters => ({ ...prevFilters, promotionId: isPromotionId? searchTerm: "" }));
     };
 
     const handlePageChange = (e, newPage) => {
@@ -95,7 +96,7 @@ const AllPromotion = () => {
                     <Box sx={{ display: "flex", alignItems: "center", border: "solid 1px #000", width: "400px", gap: "2px", borderRadius: "20px", overflow: "hidden" }}>
                         <input
                             className={myStyle.searchInput}
-                            placeholder="Tìm kiếm"
+                            placeholder="Tìm kiếm theo mã khuyến mãi"
                             type="text"
                             value={searchTerm} // Hiển thị giá trị của `searchTerm`
                             onChange={handleChangeFind} // Cập nhật `searchTerm` khi người dùng nhập

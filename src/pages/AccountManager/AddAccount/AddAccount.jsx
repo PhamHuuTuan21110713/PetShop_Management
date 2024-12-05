@@ -15,6 +15,7 @@ import { UserFetch } from "~/REST_API_Client";
 import { excel } from "~/utils/xlsx";
 import { ToastContainer, toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
+import { registerSchema } from "~/utils/authenValidation";
 // import { Link, useNavigate } from 'react-router-dom';
 // import { registerSchema } from '../../utils/rules'; // Đường dẫn đến file validate
 // import { RegisterFetch } from '~/REST-API-client';
@@ -54,12 +55,47 @@ const AddAccount = () => {
         setName(""); setEmail(""); setPassword(""); setAddress(""); setPhone("");
         setSelectedGender("male"); setSelectedRole("user");
     };
-    const handleConfirm = () => {
-        const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (name.trim() === "" || !regexEmail.test(email) || password.trim() === "" || address.trim() === "" || phone.trim() === "") {
-            window.alert("Bạn cần điền đúng thông tin");
-            return
+
+    const validateForm = async () => {
+        try {
+            await registerSchema.validate(
+                {
+                    name: name,
+                    email: email,
+                    password: password,
+                    address: address,
+                    phone: phone,  
+                    gender: selectedGender,
+                    role: selectedRole,
+                },
+                { abortEarly: false }
+            );
+            return true;
+        } catch (error) {
+            if (error.inner) {
+                // Nhóm lỗi theo path (tên trường) và chỉ hiển thị lỗi đầu tiên
+                const uniqueErrors = {};
+                error.inner.forEach(err => {
+                    if (!uniqueErrors[err.path]) {
+                        uniqueErrors[err.path] = err.message;  // Lưu lỗi đầu tiên cho mỗi trường
+                    }
+                });
+    
+                // Hiển thị lỗi cho từng trường
+                Object.values(uniqueErrors).forEach(errorMessage => {
+                    toast.error(errorMessage);
+                });
+            } else {
+                toast.error("Lỗi: " + error.message);  // Hiển thị lỗi chung nếu có
+            }
+            return false;
         }
+    };
+    
+
+    const handleConfirm = async () => {
+        const isValid = await validateForm();
+        if (!isValid) return;
         const data = [{
             name,
             email,
@@ -105,7 +141,7 @@ const AddAccount = () => {
                     </Box>
                     <Box className={myStyle.inputContainer}>
                         <Typography className={myStyle.inputLabel}>Mật khẩu: </Typography>
-                        <input type="text" value={password} onChange={(e) => setPassword(e.target.value)} className={myStyle.textFeild} />
+                        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} className={myStyle.textFeild} />
                     </Box>
                     <Box className={myStyle.inputContainer}>
                         <Typography className={myStyle.inputLabel}>Giới tính: </Typography>

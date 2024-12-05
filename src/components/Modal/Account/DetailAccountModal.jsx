@@ -5,6 +5,7 @@ import { UserFetch } from '~/REST_API_Client';
 import { Link } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
+import { updateSchema } from '~/utils/authenValidation';
 const DetailAccountModal = ({ open, onClose, user, onChange }) => {
   // if (!user) return null; // Nếu không có user thì không render modal;
   const defaultInfor = useRef({ ...user });
@@ -45,7 +46,41 @@ const DetailAccountModal = ({ open, onClose, user, onChange }) => {
   const handleChangeEmail = (e) => {
     setEmail(e.target.value);
   }
-  const handleConfirm = () => {
+  const validateForm = async () => {
+    try {
+        await updateSchema.validate(
+            {
+                name: name,
+                email: email,
+                address: address,
+                phone: phone,
+            },
+            { abortEarly: false }
+        );
+        return true;
+    } catch (error) {
+        if (error.inner) {
+            // Nhóm lỗi theo path (tên trường) và chỉ hiển thị lỗi đầu tiên
+            const uniqueErrors = {};
+            error.inner.forEach(err => {
+                if (!uniqueErrors[err.path]) {
+                    uniqueErrors[err.path] = err.message;  // Lưu lỗi đầu tiên cho mỗi trường
+                }
+            });
+
+            // Hiển thị lỗi cho từng trường
+            Object.values(uniqueErrors).forEach(errorMessage => {
+                toast.error(errorMessage);
+            });
+        } else {
+            toast.error("Lỗi: " + error.message);  // Hiển thị lỗi chung nếu có
+        }
+        return false;
+    }
+};
+  const handleConfirm = async () => {
+    const isValid = await validateForm();
+    if (!isValid) return;
     const formData = new FormData();
     formData.append("name", name);
     formData.append("email", email);
