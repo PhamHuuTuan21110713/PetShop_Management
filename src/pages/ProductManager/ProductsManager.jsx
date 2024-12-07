@@ -39,7 +39,7 @@ const Products = () => {
                     <Typography>Thêm mới</Typography>
                 </NavLink>
             </Box>
-            <Box sx={{ border: "solid 1px #ebebeb", marginTop: "4px", padding: "20px", maxHeight: "557px", overflowY: "auto" }}>
+            <Box sx={{ border: "solid 1px #ebebeb", marginTop: "4px", padding: "20px", maxHeight: "610px", overflowY: "auto" }}>
                 <Outlet context={{ categories }} />
             </Box>
         </Box>

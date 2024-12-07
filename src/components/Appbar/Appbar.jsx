@@ -175,7 +175,7 @@ const Appbar = () => {
                         )}
                     </Popper>
                 </Box>
-                <ModeSelect />
+                {/* <ModeSelect /> */}
             </Box>
         </Box>
     )

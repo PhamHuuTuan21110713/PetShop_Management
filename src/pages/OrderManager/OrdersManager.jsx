@@ -64,7 +64,8 @@ const OrdersManager = () => {
     };
 
     const handleSearch = () => {
-        setFilters(prevFilters => ({ ...prevFilters, orderId: searchTerm })); // Tìm kiếm theo mã đơn hàng
+        const isOrderId = /^[a-fA-F0-9]{24}$/.test(searchTerm);
+        setFilters(prevFilters => ({ ...prevFilters, orderId: isOrderId ? searchTerm: "" })); // Tìm kiếm theo mã đơn hàng
     };
 
     const handleChangeFind = (e) => {
