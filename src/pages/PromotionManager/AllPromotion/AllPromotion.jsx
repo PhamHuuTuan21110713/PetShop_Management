@@ -59,7 +59,11 @@ const AllPromotion = () => {
     const handleSearch = () => {
         // Cập nhật `filters.promotionId` với `searchTerm` và gọi API
         const isPromotionId = /^[a-fA-F0-9]{24}$/.test(searchTerm);
-        setFilters(prevFilters => ({ ...prevFilters, promotionId: isPromotionId? searchTerm: "" }));
+        setFilters(prevFilters => ({
+            ...prevFilters,
+            promotionId: isPromotionId? searchTerm: "",
+            name: isPromotionId ? "" : searchTerm
+        }));
     };
 
     const handlePageChange = (e, newPage) => {
@@ -158,10 +162,10 @@ const AllPromotion = () => {
                     <table>
                         <thead>
                             <tr>
-                                <th style={{ width: "15%" }}>ID</th>
-                                <th style={{ width: "20%" }}>Tên chương trình</th>
-                                <th style={{ width: "8%" }}>Kiểu giảm</th>
-                                <th style={{ width: "8%" }}>Giá trị</th>
+                                <th style={{ width: "6%" }}>STT</th>
+                                <th style={{ width: "25%" }}>Tên chương trình</th>
+                                <th style={{ width: "10%" }}>Kiểu giảm</th>
+                                <th style={{ width: "10%" }}>Giá trị</th>
                                 <th style={{ width: "15%" }}>Ngày hết</th>
                                 <th style={{ width: "14%" }}>Trạng thái</th>
                                 <th style={{ width: "20%" }}>Hành động</th>
@@ -180,7 +184,7 @@ const AllPromotion = () => {
                                 {promotions?.length > 0 &&
                                     promotions.map((promotion, index) => (
                                         <tr key={promotion._id || index}>
-                                            <td>{promotion._id}</td>
+                                            <td>{index+1}</td>
                                             <td>{promotion.name}</td>
                                             <td>{promotion.type}</td>
                                             <td>{promotion.value}</td>

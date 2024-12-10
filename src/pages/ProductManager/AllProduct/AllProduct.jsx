@@ -261,13 +261,13 @@ const AllProduct = () => {
           <table>
             <thead>
               <tr>
-                <th style={{ width: "15%" }}>ID</th>
-                <th style={{ width: "20%" }}>Tên sản phẩm</th>
+                <th style={{ width: "10%" }}>STT</th>
+                <th style={{ width: "24%" }}>Tên sản phẩm</th>
                 <th style={{ width: "15%" }}>Danh mục</th>
-                <th style={{ width: "8%" }}>Số lượng</th>
-                <th style={{ width: "8%" }}>Đã bán</th>
-                <th style={{ width: "14%" }}>Trạng thái</th>
-                <th style={{ width: "20%" }}>Hành động</th>
+                <th style={{ width: "10%" }}>Số lượng</th>
+                <th style={{ width: "10%" }}>Đã bán</th>
+                <th style={{ width: "15%" }}>Trạng thái</th>
+                <th style={{ width: "16%" }}>Hành động</th>
               </tr>
             </thead>
             {isLoading ? (
@@ -285,7 +285,7 @@ const AllProduct = () => {
                     // Kiểm tra nếu sản phẩm không có tên hoặc không có trạng thái, không hiển thị dòng này
                     (product.name && product.state !== undefined) && (
                       <tr key={product._id || index}>
-                        <td>{product._id}</td>
+                        <td>{index+1}</td>
                         <td>{product.name}</td>
                         <td>{selectedCategoryName}</td>
                         <td>{product.quantity}</td>

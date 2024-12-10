@@ -22,6 +22,7 @@ const OrdersManager = () => {
         month: "",
         year: 0,
         orderId: "",
+        name: ""
     });
     
 
@@ -65,7 +66,10 @@ const OrdersManager = () => {
 
     const handleSearch = () => {
         const isOrderId = /^[a-fA-F0-9]{24}$/.test(searchTerm);
-        setFilters(prevFilters => ({ ...prevFilters, orderId: isOrderId ? searchTerm: "" })); // Tìm kiếm theo mã đơn hàng
+        setFilters(prevFilters => ({
+            ...prevFilters,
+            orderId: isOrderId ? searchTerm: "", // Tìm kiếm theo mã đơn hàng
+            name: isOrderId ? "" :  searchTerm })); // Tìm kiếm theo mã đơn hàng
     };
 
     const handleChangeFind = (e) => {
@@ -147,11 +151,11 @@ const OrdersManager = () => {
                     <table>
                         <thead>
                             <tr>
-                                <th style={{ width: "15%" }}>ID</th>
-                                <th style={{ width: "20%" }}>Tên khách hàng</th>
+                                <th style={{ width: "10%" }}>STT</th>
+                                <th style={{ width: "22%" }}>Tên khách hàng</th>
                                 <th style={{ width: "10%" }}>Số sản phẩm</th>
-                                <th style={{ width: "15%" }}>Tổng giá trị</th>
-                                <th style={{ width: "15%" }}>Ngày đặt hàng</th>
+                                <th style={{ width: "16%" }}>Tổng giá trị</th>
+                                <th style={{ width: "17%" }}>Ngày đặt hàng</th>
                                 <th style={{ width: "15%" }}>Trạng thái</th>
                                 <th style={{ width: "20%" }}>Hành động</th>
                             </tr>
@@ -169,7 +173,7 @@ const OrdersManager = () => {
                                 {orders?.length > 0 &&
                                     orders.map((order, index) => (
                                         <tr key={order._id}>
-                                            <td>{order._id}</td>
+                                            <td>{index+1}</td>
                                             <td>{order.name}</td>
                                             <td>{order.products.length}</td>
                                             <td>{order.totalPrice.toLocaleString('vi-VN')}đ</td>

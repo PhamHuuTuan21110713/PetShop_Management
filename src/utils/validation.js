@@ -51,7 +51,7 @@ const createPromotionValidation = Yup.object({
     endDate: Yup.string()
     .required('Vui lòng nhập ngày kết thúc!')
     .matches(/^(0[1-9]|1[0-2])\/(0[1-9]|[12][0-9]|3[01])\/\d{4}$/, 'Ngày kết thúc không đúng định dạng mm/dd/yyyy!')
-    .test('is-after-start-date', 'Ngày kết thúc phải lớn hơn hoặc bằng ngày bắt đầu!', function (value) {
+    .test('is-after-start-date', 'Ngày kết thúc phải lớn hơn ngày bắt đầu!', function (value) {
       const { startDate } = this.parent;  // Lấy giá trị startDate từ parent (schema cùng cấp)
   
       // Nếu không có ngày bắt đầu hoặc kết thúc thì không cần kiểm tra
@@ -63,8 +63,8 @@ const createPromotionValidation = Yup.object({
   
       // So sánh từng phần (năm, tháng, ngày)
       if (endYear < startYear) return false; // Nếu năm kết thúc nhỏ hơn năm bắt đầu
-      if (endYear === startYear && endMonth < startMonth) return false; // Nếu cùng năm nhưng tháng kết thúc nhỏ hơn tháng bắt đầu
-      if (endYear === startYear && endMonth === startMonth && endDay < startDay) return false; // Nếu cùng năm và tháng, nhưng ngày kết thúc nhỏ hơn ngày bắt đầu
+      if (endYear === startYear && endMonth <= startMonth) return false; // Nếu cùng năm nhưng tháng kết thúc nhỏ hơn tháng bắt đầu
+      if (endYear === startYear && endMonth === startMonth && endDay <= startDay) return false; // Nếu cùng năm và tháng, nhưng ngày kết thúc nhỏ hơn ngày bắt đầu
   
       // Nếu không rơi vào bất kỳ điều kiện trên, ngày kết thúc hợp lệ
       return true;
