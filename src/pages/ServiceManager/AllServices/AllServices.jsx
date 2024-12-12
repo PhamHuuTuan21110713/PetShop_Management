@@ -115,7 +115,7 @@ const AllServices = () => {
                         <thead>
                             <tr>
 
-                                <th style={{ width: "20%" }}>ID</th>
+                                <th style={{ width: "20%" }}>STT</th>
                                 <th style={{ width: "40%" }}>Tên</th>
                                 <th style={{ width: "20%" }}>Chi tiết</th>
                                 <th style={{ width: "20%" }}>Xóa</th>
@@ -136,7 +136,7 @@ const AllServices = () => {
                                         return (
                                             <tr key={index}>
 
-                                                <td>{item._id}</td>
+                                                <td>{index+1}</td>
                                                 <td>{item.name}</td>
                                                 <td>
                                                     <Box sx={{ display: "flex", justifyContent: "center", gap: 2 }}>
