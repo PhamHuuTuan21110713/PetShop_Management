@@ -62,11 +62,10 @@ const createPromotionValidation = Yup.object({
       const [endMonth, endDay, endYear] = value.split('/').map(Number);
   
       // So sánh từng phần (năm, tháng, ngày)
-      if (endYear < startYear) return false; // Nếu năm kết thúc nhỏ hơn năm bắt đầu
-      if (endYear === startYear && endMonth <= startMonth) return false; // Nếu cùng năm nhưng tháng kết thúc nhỏ hơn tháng bắt đầu
-      if (endYear === startYear && endMonth === startMonth && endDay <= startDay) return false; // Nếu cùng năm và tháng, nhưng ngày kết thúc nhỏ hơn ngày bắt đầu
+      if (endYear < startYear) return false; 
+      if (endYear === startYear && endMonth < startMonth) return false; 
+      if (endYear === startYear && endMonth === startMonth && endDay <= startDay) return false; 
   
-      // Nếu không rơi vào bất kỳ điều kiện trên, ngày kết thúc hợp lệ
       return true;
   }),
   applicableProducts: Yup.array()
