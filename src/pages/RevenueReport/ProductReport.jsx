@@ -34,6 +34,8 @@ const ProductReport = () => {
         const fetchProducts = async () => {
             try {
                 const data = await ProductFetch.getAllProduct(1, '', filters, 1000);
+                
+                
                 setProducts(data.data.products);
             } catch (error) {
                 console.error("Error fetching products:", error);
@@ -41,6 +43,7 @@ const ProductReport = () => {
         };
         fetchProducts();
     }, [filters]);
+    console.log("data", products);
 
     // Fetch orders
     useEffect(() => {

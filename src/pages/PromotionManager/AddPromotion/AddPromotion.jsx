@@ -1,5 +1,5 @@
 import myStyle from "../../AccountManager/AddAccount/AddAccount.module.scss";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 import {
@@ -10,11 +10,15 @@ import {
     FormControl,
     RadioGroup,
     FormControlLabel,
-    Radio
+    Radio,
+    Select,
+    MenuItem,
+    ListItemText
 } from '@mui/material';
-import { PromotionFetch } from "~/REST_API_Client";
+import { ProductFetch, PromotionFetch } from "~/REST_API_Client";
 import { excel } from "~/utils/xlsx";
 import { createPromotionValidation } from "~/utils/validation";
+import { CheckBox } from "@mui/icons-material";
 
 const AddPromotion = () => {
 
@@ -25,24 +29,26 @@ const AddPromotion = () => {
     const [value, setValue] = useState("");
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
+    const [products, setProducts] = useState([]);
     const [applicableProducts, setApplicableProducts] = useState([]);
 
     const [isLoading, setIsLoading] = useState(false);
     const [promotions, setPromotions] = useState();
+    const [filters, setFilters] = useState({
+        status: 'tc',
+        month: "",
+        year: 2024,
+        quarter: "",
+    });
 
-    // Phương thức xử lý tên chương trình
     const handleNameChange = (e) => setName(e.target.value);
 
-    // Phương thức xử lý mô tả
     const handleDescChange = (e) => setDesc(e.target.value);
 
-    // Phương thức xử lý kiểu khuyến mãi
     const handleTypeChange = (e) => setType(e.target.value);
 
-    // Phương thức xử lý giá trị khuyến mãi
     const handleValueChange = (e) => setValue(e.target.value);
 
-    // Phương thức xử lý ngày bắt đầu
     const handleStartDateChange = (e) => {
         setStartDate(e.target.value);
 
@@ -53,12 +59,12 @@ const AddPromotion = () => {
         setEndDate(e.target.value);
     };
 
-    // Phương thức xử lý các sản phẩm áp dụng
-    const handleApplicableProductsChange = (e) => {
-        const value = e.target.value;
-        const productIds = value.split(',').map(id => id.trim()); // Tách ID từ chuỗi
-        setApplicableProducts(productIds);
-    };
+    // // Phương thức xử lý các sản phẩm áp dụng
+    // const handleApplicableProductsChange = (e) => {
+    //     const value = e.target.value;
+    //     const productIds = value.split(',').map(id => id.trim()); // Tách ID từ chuỗi
+    //     setApplicableProducts(productIds);
+    // };
 
     // Phương thức kiểm tra và gửi dữ liệu
     const fetchData = (data) => {
@@ -76,6 +82,25 @@ const AddPromotion = () => {
                 setIsLoading(false);
             })
     };
+
+    // Fetch products
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                const data = await ProductFetch.getAllProduct(1, '', filters, 1000);
+                // Lọc các sản phẩm có `hasPromotion` == true
+                const filteredProducts = data.data.products.filter(product => product.hasPromotion === false);
+
+                // Cập nhật state với sản phẩm đã lọc
+                setProducts(filteredProducts);
+                console.log("products sau add", filteredProducts);
+
+            } catch (error) {
+                console.error("Error fetching products:", error);
+            }
+        };
+        fetchProducts();
+    }, [filters]);
 
     // Phương thức hủy nhập liệu
     const handleCancel = () => {
@@ -108,7 +133,7 @@ const AddPromotion = () => {
                         uniqueErrors[err.path] = err.message;  // Lưu lỗi đầu tiên cho mỗi trường
                     }
                 });
-    
+
                 // Hiển thị lỗi cho từng trường
                 Object.values(uniqueErrors).forEach(errorMessage => {
                     toast.error(errorMessage);
@@ -121,33 +146,7 @@ const AddPromotion = () => {
     };
 
     const handleConfirm = async () => {
-        // Kiểm tra nếu có trường nào chưa được điền hoặc không hợp lệ
-        // if (name.trim() === "" || desc.trim() === "" || value.trim() === "" || startDate.trim() === "" || endDate.trim() === "" || applicableProducts.length === 0) {
 
-        //     toast.error("Các trường không được để trống!")
-        //     return;
-        // }
-
-        // // Kiểm tra giá trị của "value" phải > 0
-        // if (parseFloat(value) <= 0) {
-        //     toast.error("Giá trị giảm phải lớn hơn 0!")
-        //     return;
-        // }
-
-        // // Kiểm tra ngày hết hạn phải lớn hơn ngày hiện tại và ngày bắt đầu
-        // const currentDate = new Date();
-        // const start = new Date(startDate);
-        // const end = new Date(endDate);
-
-        // if (end <= currentDate) {
-        //     toast.error("Ngày kết thúc phải lớn hơn thời điểm hiện tại!")
-        //     return;
-        // }
-
-        // if (end <= start) {
-        //     toast.error("Ngày kết thúc phải lớn hơn ngày bắt đầu!")
-        //     return;
-        // }
 
         const isValid = await validateForm();
         if (!isValid) return;
@@ -213,6 +212,13 @@ const AddPromotion = () => {
         fetchData(promotions);
     };
 
+    const handleApplicableProductsChange = (event) => {
+        const selectedProductIds = event.target.value;
+        console.log("Updated applicableProducts: ", selectedProductIds);  // Kiểm tra mảng ID đã chọn
+        setApplicableProducts(selectedProductIds);
+    };
+
+
     return (
         <>
             <Box sx={{ display: "flex", alignItems: "center", flexDirection: "column" }}>
@@ -227,8 +233,8 @@ const AddPromotion = () => {
                         <Typography className={myStyle.inputLabel}>Mô tả: </Typography>
                         <input type="text" value={desc} onChange={handleDescChange} className={myStyle.textFeild} />
                     </Box>
-                     {/* Thay thế input Kiểu khuyến mãi bằng RadioButton */}
-                     <Box className={myStyle.inputContainer}>
+                    {/* Thay thế input Kiểu khuyến mãi bằng RadioButton */}
+                    <Box className={myStyle.inputContainer}>
                         <Typography className={myStyle.inputLabel}>Kiểu khuyến mãi: </Typography>
                         <FormControl component="fieldset">
                             <RadioGroup row value={type} onChange={handleTypeChange}>
@@ -262,9 +268,37 @@ const AddPromotion = () => {
                         />
                     </Box>
 
+
                     <Box className={myStyle.inputContainer}>
                         <Typography className={myStyle.inputLabel}>Áp dụng với: </Typography>
-                        <input type="text" value={applicableProducts} onChange={handleApplicableProductsChange} className={myStyle.textFeild} />
+
+                        <Select
+                            className={myStyle.textFeild}
+                            multiple
+                            value={applicableProducts} // Truyền mảng các sản phẩm đã chọn vào value
+                            onChange={handleApplicableProductsChange} // Cập nhật giá trị khi chọn sản phẩm
+                            renderValue={(selected) => {
+                                // Nếu bạn muốn chỉ hiển thị số lượng sản phẩm đã chọn
+                                return `${selected.length} sản phẩm đã chọn`;
+                            }}
+                            MenuProps={{
+                                PaperProps: {
+                                    style: {
+                                        maxHeight: 200, // Giới hạn chiều cao của dropdown
+                                        overflowY: 'auto', // Bật cuộn nếu chiều cao vượt quá 200px
+                                        width: 250,
+                                    },
+                                },
+                            }}
+                        >
+                            {products.map((product) => (
+                                <MenuItem key={product._id} value={product._id}>
+                                    {console.log('Checking if product is selected:', applicableProducts.includes(product._id))}
+                                    {/* <CheckBox checked={applicableProducts.includes(product._id)} /> */}
+                                    <ListItemText primary={product.name} />
+                                </MenuItem>
+                            ))}
+                        </Select>
                     </Box>
 
                     <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2, marginTop: "20px" }}>
