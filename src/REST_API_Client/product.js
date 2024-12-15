@@ -60,7 +60,7 @@ const ProductAPI = (axiosInstance) => {
   // Lấy tất cả sản phẩm
   async function getAllProduct(page, sort, filters, limit) {
     console.log("filter", filters);
-    
+
     try {
       const filtersString = encodeURIComponent(JSON.stringify(filters));
       const res = await axiosInstance.get(`/product?page=${page}&limit=${limit}&sort_by=${sort}&filters=${filtersString}`);
@@ -123,6 +123,28 @@ const ProductAPI = (axiosInstance) => {
     }
   }
 
+  async function createProducts(data) {
+    const access_token = localStorage.getItem("access_token");
+    try {
+      const res = await axiosInstance.post("/product/create-many", data, {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+          "Content-Type": "application/json"
+        }
+      });
+      return res;
+    } catch (error) {
+      if (error.response) {
+        console.log("loi ne: ", error);
+        throw new Error(error.response.data.writeErrors[0].err.errmsg)
+      } else if (error.request) {
+        throw new Error("Server không phản hồi");
+      } else {
+        throw new Error(error.message);
+      }
+    }
+  }
+
   return {
     getAllProduct,
     getById,
@@ -130,6 +152,7 @@ const ProductAPI = (axiosInstance) => {
     fetchTopSaleProducts,
     createProduct,
     addThumbnail,
+    createProducts
   };
 };
 

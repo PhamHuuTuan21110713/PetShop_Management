@@ -1,15 +1,7 @@
-.tableContainer table {
-  width: 100%;
-  border-collapse: collapse;
-}
-.tableContainer th,
-.tableContainer td {
-  border: 1px solid #ccc;
-  padding: 10px;
-  text-align: left;
-}
-.tableContainer th {
-  background-color: #f4f4f4;
+.colBooking {
+  padding: 4px;
+  flex: 0 0 50%;
+  max-width: 50%;
 }
 
 .searchInput {
@@ -39,4 +31,11 @@
 
 .searchButton:hover {
   background-color: #eda59a;
+}
+
+@media (max-width: 1100px) {
+  .colBooking {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
 }/*# sourceMappingURL=AllBookings.module.css.map */
