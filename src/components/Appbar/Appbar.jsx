@@ -125,7 +125,8 @@ const Appbar = () => {
                         onClick={handleToggle}
                         sx={{ display: "flex", alignItems: "center", gap: 1, cursor: "pointer" }}
                     >
-                        <Avatar src={`${auth.user.avatar.preview}`} />
+                        {/* <Avatar src={`${auth.user.avatar.preview}`} /> */}
+                        <Avatar />
                         <Box>
                             <Typography sx={{ fontWeight: "bold", color: "#000" }}>
                                 {auth.user.name}

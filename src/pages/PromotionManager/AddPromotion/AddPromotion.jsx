@@ -307,9 +307,9 @@ const AddPromotion = () => {
                     </Box>
                 </Box>
             </Box>
-            <Divider sx={{ marginY: "20px" }} />
+            {/* <Divider sx={{ marginY: "20px" }} /> */}
 
-            <Box sx={{ display: "flex", alignItems: "center", flexDirection: "column" }}>
+            {/* <Box sx={{ display: "flex", alignItems: "center", flexDirection: "column" }}>
                 <Typography variant="h5" sx={{ fontWeight: "bold" }}>Thêm từ Excel</Typography>
                 <Box sx={{}}>
                     <Button variant="contained" color="warning" sx={{ textTransform: "none" }}>
@@ -360,7 +360,7 @@ const AddPromotion = () => {
                         </Box>
                     </>
                 )}
-            </Box>
+            </Box> */}
             <ToastContainer />
         </>
     );

@@ -165,7 +165,7 @@ const AddProduct = () => {
         if (file) {
             try {
                 const data = await excel.readExcelFile(file);
-                // console.log('Dữ liệu từ Excel:', data);
+                console.log('Dữ liệu từ Excel:', data);
                 setUsers(data);
             } catch (error) {
                 // console.error('Lỗi đọc file:', error);
@@ -178,7 +178,18 @@ const AddProduct = () => {
     }
 
     const hanleConfirmMany = () => {
-        fetchData(users);
+        setIsLoading(true);
+        ProductFetch.createProducts(users)
+            .then(data => {
+                console.log(data);
+                toast.success(`Thêm sản phẩm thành công\n ${data.data.message}`)
+                setIsLoading(false);
+            })
+            .catch(err => {
+                // console.log(err);
+                toast.error(`Tạo sản phẩm thất bại: \n ${err}`);
+                setIsLoading(false);
+            })
     }
 
     const handleSubCategoryChange = (e) => {
@@ -285,8 +296,7 @@ const AddProduct = () => {
                                             <th style={{ width: "16%" }}>kiểu sản phẩm</th>
                                             <th style={{ width: "16%" }}>Giá</th>
                                             <th style={{ width: "16%" }}>Số lượng</th>
-                                            <th style={{ width: "16%" }}>Loại sản phẩm</th>
-                                            <th style={{ width: "16%" }}>Vai trò</th>
+                                            <th style={{ width: "16%" }}>Mã danh mục</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -294,12 +304,12 @@ const AddProduct = () => {
                                             users?.map((user, index) => (
                                                 <tr key={index}>
                                                     <td>{user?.name}</td>
-                                                    <td>{user?.email}</td>
-                                                    <td>{user?.password}</td>
-                                                    <td>{user?.gender}</td>
-                                                    <td>{user?.address}</td>
-                                                    <td>{user?.phone}</td>
-                                                    <td>{user?.role}</td>
+                                                    <td>{user?.desc}</td>
+                                                    <td>{user?.type}</td>
+                                                    <td>{user?.price}</td>
+                                                    <td>{user?.quantity}</td>
+                                                    <td>{user?.categoryId}</td>
+                                                  
                                                 </tr>
                                             ))
                                         }
@@ -308,8 +318,8 @@ const AddProduct = () => {
                             </Box>
                         </Box>
                         <Box sx={{ marginTop: "20px", display: "flex", justifyContent: "flex-end", gap: 2 }}>
-                            <Button onClick={() => setUsers(null)} variant="contained" color="error" sx={{ textTransform: "none" }}>Hủy</Button>
-                            <Button onClick={hanleConfirmMany} variant="contained" color="success" sx={{ textTransform: "none" }}>Xác nhận</Button>
+                            <Button disabled={isLoading} onClick={() => setUsers(null)} variant="contained" color="error" sx={{ textTransform: "none" }}>Hủy</Button>
+                            <Button disabled={isLoading} onClick={hanleConfirmMany} variant="contained" color="success" sx={{ textTransform: "none" }}>Xác nhận</Button>
                         </Box>
                     </>
                 )}

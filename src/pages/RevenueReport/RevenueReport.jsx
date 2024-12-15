@@ -160,7 +160,7 @@ const RevenueReport = () => {
             </Box>
 
             {/* Controls */}
-            <Box display="flex" justifyContent="space-between" mb={4}>
+            <Box display="flex" justifyContent="space-between" mb={4} gap={1}>
                 <FormControl fullWidth>
                     <InputLabel>Chọn Mốc Thời Gian</InputLabel>
                     <Select
