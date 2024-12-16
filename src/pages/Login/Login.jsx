@@ -56,6 +56,7 @@ const Login = () => {
           navigate("/");
         }, 1500)
       } catch(err) {
+        // console.log("error login: ", err)
         setErrorMassage(err.toString());
         setIsSuccess(false)
         setOpenDialog(true);
@@ -65,6 +66,7 @@ const Login = () => {
       err.inner.forEach((error) => {
         validationErrors[error.path] = error.message;
       });
+      // console.log("error: ",validationErrors);
       setErrors(validationErrors);
     }
   };
