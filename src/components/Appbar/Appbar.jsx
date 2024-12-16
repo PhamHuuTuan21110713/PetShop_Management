@@ -1,30 +1,30 @@
 import myStyle from "./Appbar.module.scss";
-import { useState, useRef, useContext, useEffect } from "react";
+import { useState, useContext, useEffect } from "react";
 
-import Grow from '@mui/material/Grow';
-import Paper from '@mui/material/Paper';
-import Popper from '@mui/material/Popper';
-import MenuItem from '@mui/material/MenuItem';
-import MenuList from '@mui/material/MenuList';
-import ClickAwayListener from '@mui/material/ClickAwayListener';
-import { Avatar, Typography } from "@mui/material";
+// import Grow from '@mui/material/Grow';
+// import Paper from '@mui/material/Paper';
+// import Popper from '@mui/material/Popper';
+// import MenuItem from '@mui/material/MenuItem';
+// import MenuList from '@mui/material/MenuList';
+// import ClickAwayListener from '@mui/material/ClickAwayListener';
+import { Avatar, Button, Typography } from "@mui/material";
 import Box from "@mui/material/Box"
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+// import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import ChatIcon from '@mui/icons-material/Chat';
 import { Link, NavLink } from "react-router-dom/dist";
-import ModeSelect from "../ModeSelect/ModeSelect";
+// import ModeSelect from "../ModeSelect/ModeSelect";
 import { useAuth } from "../Authentication/authentication";
 import { ChatContext } from "~/pages/ChatProvider/ChatProvider";
-import { NotifyFetch } from "~/REST_API_Client";
+import { AuthenFetch, NotifyFetch } from "~/REST_API_Client";
 import Notify from "./Notify";
-const classNameNav = ({ isActive }) => {
-    return (isActive ? "active-link" : "inactive-link")
-}
+// const classNameNav = ({ isActive }) => {
+//     return (isActive ? "active-link" : "inactive-link")
+// }
 const Appbar = () => {
 
     console.log("re-render appbar")
-    const [open, setOpen] = useState(false);
-    const anchorRef = useRef(null);
+    // const [open, setOpen] = useState(false);
+    // const anchorRef = useRef(null);
     const auth = useAuth();
     const { unReadNotifications, updateUnreadNotifications } = useContext(ChatContext);
     const [chatCount, setChatCount] = useState(0)
@@ -55,22 +55,32 @@ const Appbar = () => {
     const handleToggle = () => {
         setOpen((prevOpen) => !prevOpen);
     };
-    function handleListKeyDown(event) {
-        if (event.key === 'Tab') {
-            event.preventDefault();
-            setOpen(false);
-        } else if (event.key === 'Escape') {
-            setOpen(false);
-        }
+    // function handleListKeyDown(event) {
+    //     if (event.key === 'Tab') {
+    //         event.preventDefault();
+    //         setOpen(false);
+    //     } else if (event.key === 'Escape') {
+    //         setOpen(false);
+    //     }
+    // }
+    // const handleClose = (event) => {
+    //     if (anchorRef.current && anchorRef.current.contains(event.target)) {
+    //         return;
+    //     }
+
+    //     setOpen(false);
+    // };
+    const handleCloseLogout = (event) => {
+        localStorage.removeItem("access_token");
+        AuthenFetch.logout()
+            .then(data => {
+                console.log(data)
+                auth.authenUser(null);
+            })
+            .catch(err => {
+                console.log("err: ", err);
+            })
     }
-    const handleClose = (event) => {
-        if (anchorRef.current && anchorRef.current.contains(event.target)) {
-            return;
-        }
-
-        setOpen(false);
-    };
-
     return (
         <Box
             sx={{
@@ -117,12 +127,12 @@ const Appbar = () => {
                 {/* Avatar */}
                 <Box >
                     <Box
-                        ref={anchorRef}
-                        id="composition-button"
-                        aria-controls={open ? 'composition-menu' : undefined}
-                        aria-expanded={open ? 'true' : undefined}
-                        aria-haspopup="true"
-                        onClick={handleToggle}
+                        // ref={anchorRef}
+                        // id="composition-button"
+                        // aria-controls={open ? 'composition-menu' : undefined}
+                        // aria-expanded={open ? 'true' : undefined}
+                        // aria-haspopup="true"
+                        // onClick={handleToggle}
                         sx={{ display: "flex", alignItems: "center", gap: 1, cursor: "pointer" }}
                     >
                         {/* <Avatar src={`${auth.user.avatar.preview}`} /> */}
@@ -132,9 +142,9 @@ const Appbar = () => {
                                 {auth.user.name}
                             </Typography>
                         </Box>
-                        <KeyboardArrowDownIcon />
+                        {/* <KeyboardArrowDownIcon /> */}
                     </Box>
-                    <Popper
+                    {/* <Popper
                         open={open}
                         anchorEl={anchorRef.current}
                         role={undefined}
@@ -173,8 +183,13 @@ const Appbar = () => {
                                 </Paper>
                             </Grow>
                         )}
-                    </Popper>
+                    </Popper> */}
                 </Box>
+
+                {/* Logout */}
+                <NavLink to={"/dang-nhap"}>
+                    <Button onClick={handleCloseLogout} variant="contained" sx={{textTransform:"none"}}>Đăng xuất</Button>
+                </NavLink>
                 {/* <ModeSelect /> */}
             </Box>
         </Box>
