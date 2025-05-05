@@ -15,6 +15,7 @@ import ShopAPI from './shop';
 import ChatAPI from './chat';
 import MessageAPI from './message';
 import NotifyAPI from './notify';
+import BlogAPI from './blog';
 // Tạo một instance của axios
 
 const axiosInstance = axios.create({
@@ -39,4 +40,5 @@ export const ShopFetch = ShopAPI(axiosInstance);
 export const ChatFetch = ChatAPI(axiosInstance);
 export const MessageFetch = MessageAPI(axiosInstance);
 export const NotifyFetch = NotifyAPI(axiosInstance);
+export const BlogFetch = BlogAPI(axiosInstance);
 

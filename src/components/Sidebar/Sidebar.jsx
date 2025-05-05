@@ -13,7 +13,7 @@ import ViewQuiltIcon from '@mui/icons-material/ViewQuilt';
 import RoomServiceIcon from '@mui/icons-material/RoomService';
 import MovingIcon from '@mui/icons-material/Moving';
 import LoyaltyIcon from '@mui/icons-material/Loyalty';
-import CategoryIcon from '@mui/icons-material/Category';
+import FeedIcon from '@mui/icons-material/Feed';
 const classNameNav = ({ isActive }) => {
     return (isActive ? `${myStyle.activeLink}` : `${myStyle.menuItem}`)
 }
@@ -87,6 +87,12 @@ const Sidebar = () => {
                                 <NavLink to="quan-ly-dich-vu" className={classNameNav}>
                                     <Typography sx={{ color: "#000", fontWeight: "bold", display: "flex", alignItems: "center", gap: 1 }}>
                                         <RoomServiceIcon />Dịch vụ
+                                    </Typography>
+                                </NavLink>
+
+                                <NavLink to="quan-ly-bai-viet" className={classNameNav}>
+                                    <Typography sx={{ color: "#000", fontWeight: "bold", display: "flex", alignItems: "center", gap: 1 }}>
+                                        <FeedIcon />Bài viết
                                     </Typography>
                                 </NavLink>
                                 {/* <NavLink to="quan-ly-danh-muc" className={classNameNav}>
