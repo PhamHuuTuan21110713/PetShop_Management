@@ -1,8 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Modal, Box, Typography, Button, Avatar, Chip, TextField, Divider } from '@mui/material';
 import Radio from '@mui/material/Radio';
-import { ProductFetch, UserFetch } from '~/REST_API_Client';
-import { Link } from 'react-router-dom';
+import { ProductFetch } from '~/REST_API_Client';
 import { ToastContainer, toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 import { updateProductValidation } from '~/utils/validation';
@@ -169,7 +168,7 @@ const validateForm = async () => {
                   {/* Desc */}
                   <Box style={inputContainer}>
                     <strong>Mô tả:</strong>
-                    <input style={textFieldStyle} value={type} onChange={handleChangeDesc} />
+                    <input style={textFieldStyle} value={desc} onChange={handleChangeDesc} />
 
                   </Box>
                   {/* Type */}

@@ -42,6 +42,9 @@ import RevenueReport from './pages/RevenueReport/RevenueReport';
 import ProductReport from './pages/RevenueReport/ProductReport';
 import Notify from './pages/Notify/Notify';
 import Notfound from './pages/NotfoundPage/Notfound';
+import BlogsManager from './pages/BlogManager/BlogsManager';
+import AllBlog from './pages/BlogManager/AllBlog/AllBlog';
+import AddBlog from './pages/BlogManager/AddBlog/AddBlog';
 
 function App() {
 
@@ -103,6 +106,13 @@ function App() {
               <Route index element={<Navigate to="danh-sach-khuyen-mai" />} />
               <Route path='danh-sach-khuyen-mai' element={<AllPromotion />} />
               <Route path='them-khuyen-mai' element={<AddPromotion />} />
+            </Route>
+
+            {/* Quản lý bải viết */}
+            <Route path="quan-ly-bai-viet" element={<BlogsManager/>}>
+              <Route index element={<Navigate to="danh-sach-bai-viet" />} />
+              <Route path='danh-sach-bai-viet' element={<AllBlog />} />
+              <Route path='them-bai-viet' element={<AddBlog />} />
             </Route>
             {/* Quản lý đơn hàng */}
             <Route path='quan-ly-don-hang' element={<OrdersManager />} />
