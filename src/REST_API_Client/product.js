@@ -36,27 +36,6 @@ const ProductAPI = (axiosInstance) => {
     }
   }
 
-  // Thêm ảnh thumbnail cho sản phẩm
-  // async function addThumbnail(productId, imageFile) {
-  //   const access_token = localStorage.getItem("access_token");
-  //   try {
-  //     const formData = new FormData();
-  //     formData.append("image", imageFile); // "image" là tên trường trong formData
-
-  //     // Gửi yêu cầu PATCH đến API
-  //     const res = await axiosInstance.patch(`/product/add-thumbnail/${productId}`, formData, {
-  //       headers: {
-  //         Authorization: `Bearer ${access_token}`,
-  //         'Content-Type': 'multipart/form-data', // Đảm bảo gửi multipart/form-data
-  //       },
-  //     });
-
-  //     return res.data;
-  //   } catch (error) {
-  //     handleApiError(error);
-  //   }
-  // }
-
   // Lấy tất cả sản phẩm
   async function getAllProduct(page, sort, filters, limit) {
     console.log("filter", filters);
@@ -65,6 +44,15 @@ const ProductAPI = (axiosInstance) => {
       const filtersString = encodeURIComponent(JSON.stringify(filters));
       const res = await axiosInstance.get(`/product?page=${page}&limit=${limit}&sort_by=${sort}&filters=${filtersString}`);
       return res.data;
+    } catch (error) {
+      handleApiError(error);
+    }
+  }
+
+  async function getTypeOfProduct() {
+    try {
+      const res = await axiosInstance.get(`/product/type`)
+      return res.data.data
     } catch (error) {
       handleApiError(error);
     }
@@ -148,6 +136,7 @@ const ProductAPI = (axiosInstance) => {
   return {
     getAllProduct,
     getById,
+    getTypeOfProduct,
     updateProduct,
     fetchTopSaleProducts,
     createProduct,

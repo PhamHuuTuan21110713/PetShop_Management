@@ -1,5 +1,5 @@
 import myStyle from "../../AccountManager/AddAccount/AddAccount.module.scss";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useOutletContext } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
@@ -9,6 +9,9 @@ import {
     Typography,
     Button,
     Divider,
+    FormControl,
+    Select,
+    MenuItem,
     //CircularProgress
 } from '@mui/material';
 // import { useAuth } from "~/components/Authentication/authentication";
@@ -22,7 +25,8 @@ const AddProduct = () => {
 
     const [name, setName] = useState("");
     const [desc, setDesc] = useState("");
-    const [type, setType] = useState("");
+    const [type, setType] = useState([]);
+    const [typeProduct, setTypeProduct] = useState([]);
     const [price, setPrice] = useState("");
     const [quantity, setQuantity] = useState("");
     const [image, setImage] = useState(null); // State để lưu ảnh
@@ -50,7 +54,7 @@ const AddProduct = () => {
 
 
     const handleCancel = () => {
-        setName(""); setDesc(""); setType(""); setPrice(""); setQuantity(""); setImage(null); // Reset ảnh
+        setName(""); setDesc(""); setType([]); setPrice(""); setQuantity(""); setImage(null); // Reset ảnh
         setSelectedSubCategory("");
     };
 
@@ -73,7 +77,7 @@ const AddProduct = () => {
         // Chuyển đổi price và quantity thành số nguyên
         const priceValue = Number(price)
         const quantityValue = Number(quantity)
-    
+
         // Kiểm tra tính hợp lệ của các trường bằng Yup
         try {
             await createProductValidation.validate({
@@ -84,7 +88,7 @@ const AddProduct = () => {
                 quantity: quantityValue,  // Sử dụng giá trị đã chuyển đổi thành số nguyên
                 categoryId: selectedSubCategory
             }, { abortEarly: false });
-    
+
             return true;
         } catch (error) {
             if (error.inner) {
@@ -97,14 +101,14 @@ const AddProduct = () => {
             return false;
         }
     };
-    
-    
+
+
     const handleConfirm = async () => {
-      
+
         // Kiểm tra tính hợp lệ của các trường
         const isValid = await validateForm();
         if (!isValid) return;  // Nếu validation thất bại thì không tiếp tục gửi dữ liệu
-    
+
         // Tiến hành gửi dữ liệu API nếu validation thành công
         const formData = new FormData();
         formData.append("name", name);
@@ -113,33 +117,33 @@ const AddProduct = () => {
         formData.append("price", price);  // Sử dụng giá trị đã chuyển đổi
         formData.append("quantity", quantity);  // Sử dụng giá trị đã chuyển đổi
         formData.append("categoryId", selectedSubCategory);
-    
+
         if (image) {
             formData.append("image", image);
         }
-    
+
         setIsLoading(true);  // Bắt đầu trạng thái loading
         try {
             const result = await fetchData(formData);
-    
+
             if (result.status === "OK") {
                 toast.success("Thêm sản phẩm thành công!");
-    
+
                 // Reset form sau khi tạo sản phẩm thành công
                 setName("");
                 setDesc("");
-                setType("");
+                setType([]);
                 setPrice("");
                 setQuantity("");
                 setSelectedSubCategory("");
                 setImage(null);
-    
+
                 // Xử lý ảnh thumbnail nếu có
                 if (imageThumnail) {
                     const productId = result.data._id;
                     const formThumbnail = new FormData();
                     formThumbnail.append("image", imageThumnail);
-    
+
                     try {
                         await ProductFetch.addThumbnail(productId, formThumbnail);
                         console.log("Thêm ảnh thumbnail thành công");
@@ -158,7 +162,7 @@ const AddProduct = () => {
             setIsLoading(false);  // Tắt trạng thái loading
         }
     };
-    
+
 
     const handleFileUpload = async (e) => {
         const file = e.target.files[0];
@@ -192,6 +196,32 @@ const AddProduct = () => {
             })
     }
 
+    const fetchTypeOfProduct = async () => {
+        try {
+            const dataType = await ProductFetch.getTypeOfProduct()
+            console.log("type of product: ", dataType.type);
+
+            setTypeProduct(dataType.type)
+        }
+        catch (error) {
+            toast.error(`Lỗi khi lấy loại sản phẩm: \n${error}`);
+        }
+    }
+
+    useEffect(() => {
+        fetchTypeOfProduct()
+    }, [])
+
+    const handleChangeType = (e) => {
+        const selectedValues = e.target.value;
+        const newType = [...selectedValues]; // Biến tạm lưu giá trị mới
+      
+        // Chỉ cập nhật state nếu giá trị mới khác giá trị cũ
+        if (JSON.stringify(newType) !== JSON.stringify(type)) {
+          setType(newType); 
+        }
+      };
+
     const handleSubCategoryChange = (e) => {
         setSelectedSubCategory(e.target.value);
     };
@@ -211,9 +241,25 @@ const AddProduct = () => {
                         <input type="text" value={desc} onChange={(e) => setDesc(e.target.value)} className={myStyle.textFeild} />
                     </Box>
                     <Box className={myStyle.inputContainer}>
-                        <Typography className={myStyle.inputLabel}>Kiểu: </Typography>
-                        <input type="text" value={type} onChange={(e) => setType(e.target.value)} className={myStyle.textFeild} />
-                    </Box>
+                    <Typography className={myStyle.inputLabel}>Loại sản phẩm </Typography>
+                    <FormControl style={{ minWidth: 200 }}>
+                      <Select
+                        multiple
+                        value={type}
+                        onChange={handleChangeType}
+                        displayEmpty
+                        renderValue={() => "Chọn loại sản phẩm"} // Luôn hiển thị câu này, không hiển thị danh sách chọn
+                        //style={{ width: "100%" }}
+                        className={myStyle.textFeild}
+                      >
+                        {typeProduct?.map((item) => (
+                          <MenuItem key={item._id} value={item._id}>
+                            {item.name}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </Box>
                     <Box className={myStyle.inputContainer}>
                         <Typography className={myStyle.inputLabel}>Giá: </Typography>
                         <input type="text" value={price} onChange={(e) => setPrice(e.target.value)} className={myStyle.textFeild} />
@@ -264,7 +310,7 @@ const AddProduct = () => {
                         />
                         {/* {image && <Typography>Ảnh đã chọn: {image.name}</Typography>} */}
                     </Box>
-                
+
                     <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2, marginTop: "20px" }}>
                         <Button disabled={isLoading} onClick={handleCancel} variant="contained" color="secondary">Hủy</Button>
                         <Button disabled={isLoading} onClick={handleConfirm} variant="contained" color="success">Xác nhận</Button>
@@ -309,7 +355,7 @@ const AddProduct = () => {
                                                     <td>{user?.price}</td>
                                                     <td>{user?.quantity}</td>
                                                     <td>{user?.categoryId}</td>
-                                                  
+
                                                 </tr>
                                             ))
                                         }

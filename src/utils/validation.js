@@ -4,7 +4,7 @@ import * as Yup from 'yup';
 const createProductValidation = Yup.object({
   name: Yup.string().required('Tên sản phẩm là bắt buộc'),
   desc: Yup.string().required('Mô tả sản phẩm là bắt buộc'),
-  type: Yup.string().required('Loại sản phẩm là bắt buộc'),
+  type: Yup.array().required('Loại sản phẩm là bắt buộc'),
   price: Yup.number()
     .required('Giá sản phẩm là bắt buộc') 
     .min(1, 'Giá phải lớn hơn 0')  
@@ -25,7 +25,7 @@ const createProductValidation = Yup.object({
 const updateProductValidation = Yup.object({
   name: Yup.string().required('Tên sản phẩm là bắt buộc'),
   desc: Yup.string().required('Mô tả sản phẩm là bắt buộc'),
-  type: Yup.string().required('Loại sản phẩm là bắt buộc'),
+  type: Yup.array().required('Loại sản phẩm là bắt buộc'),
   price: Yup.number()
     .required('Giá sản phẩm là bắt buộc')
     .min(1, 'Giá phải lớn hơn 0')
