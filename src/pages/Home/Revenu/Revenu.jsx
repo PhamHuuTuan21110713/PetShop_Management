@@ -17,7 +17,7 @@ const Revenu = () => {
       // Lọc chỉ lấy các đơn hàng có status là 'tc' và năm là 2024
       const filteredOrders = fetchedOrders.filter(order => {
         const orderYear = dayjs(order.orderDate).year();
-        return order.status === "tc" && orderYear === 2024;
+        return order.status === "tc" && orderYear === 2025;
       });
 
       setOrders(filteredOrders); // Cập nhật danh sách đơn hàng
@@ -47,7 +47,7 @@ const Revenu = () => {
     // Lấy đơn hàng cho năm 2024
     const filters = {
       status: "tc", 
-      year: 2024,    
+      year: 2025,    
     };
     fetchOrders(1, 1000, filters);
   }, []); 
@@ -64,7 +64,7 @@ const Revenu = () => {
     <Box sx={{ boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;", padding: "5px" }}>
       <Box sx={{ display: "flex", justifyContent: "space-between", position: "relative" }}>
         <Typography variant="h5" sx={{ fontWeight: "bold", textAlign: "center", paddingX: "10px" }}>
-          Doanh thu năm 2024
+          Doanh thu năm 2025
         </Typography>
       </Box>
 
