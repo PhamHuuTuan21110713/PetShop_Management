@@ -223,7 +223,7 @@ const RevenueReport = () => {
                         ]}
                         width={1000}
                         height={500}
-                        margin={{ left: 70, right: 20, top: 10, bottom: 40 }} // Tăng margin cho trục Y
+                        margin={{ left: 70, right: 20, top: 30, bottom: 40 }} // Tăng margin cho trục Y
                     />
 
                     {/* Hiển thị tổng doanh thu sản phẩm và dịch vụ */}

@@ -105,7 +105,7 @@ const Revenu = () => {
             ]}
             width={580}
             height={390}
-            margin={{ left: 70, right: 20, top: 10, bottom: 40 }}
+            margin={{ left: 70, right: 20, top: 30, bottom: 40 }}
           />
         </Box>
       </Box>
