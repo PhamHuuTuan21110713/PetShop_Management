@@ -79,34 +79,34 @@ const BlogModal = ({ open, onClose, blog }) => {
 
 
     //const handleUpdateBlog = async (blogDetails, newState) => {
-        const handleUpdateBlog = async () => {
-            try {
-                const parsedData = parseTextToJSON(content);
-                const formData = {
-                    title: title,
-                    contents: parsedData.contents,
-                    state: state
-                };
-        
-                console.log("Thông tin update: ", formData);
-        
-                // Gọi API để cập nhật
-                const data = await BlogFetch.updateBlog(blogDetails?._id, formData);
-        
-                // Cập nhật thông tin blog mới
-                setBlogDetails(data.data);
-        
-                // Đóng modal nếu có (onClose là hàm bạn gọi để đóng modal)
-                //onChange(data?.data)
-                onClose();
-        
-                // Điều hướng về trang allBlogs sau khi cập nhật
-                //navigate("/quan-ly-bai-viet/danh-sach-bai-viet");
-            } catch (err) {
-                console.error("Lỗi khi cập nhật bài viết:", err);
-                toast.error(`Lỗi cập nhật bài viết: ${err.message}`);
-            }
-        };
+    const handleUpdateBlog = async () => {
+        try {
+            const parsedData = parseTextToJSON(content);
+            const formData = {
+                title: title,
+                contents: parsedData.contents,
+                state: state
+            };
+
+            console.log("Thông tin update: ", formData);
+
+            // Gọi API để cập nhật
+            const data = await BlogFetch.updateBlog(blogDetails?._id, formData);
+
+            // Cập nhật thông tin blog mới
+            setBlogDetails(data.data);
+
+            // Đóng modal nếu có (onClose là hàm bạn gọi để đóng modal)
+            //onChange(data?.data)
+            onClose();
+
+            // Điều hướng về trang allBlogs sau khi cập nhật
+            //navigate("/quan-ly-bai-viet/danh-sach-bai-viet");
+        } catch (err) {
+            console.error("Lỗi khi cập nhật bài viết:", err);
+            toast.error(`Lỗi cập nhật bài viết: ${err.message}`);
+        }
+    };
 
     const handleTabKey = (e) => {
         if (e.key === "Tab") {
@@ -144,7 +144,7 @@ const BlogModal = ({ open, onClose, blog }) => {
                     {
                         !isUpdate ? <>
                             <Typography><strong>Tiêu đề bài viết: </strong> {blogDetails?.title}</Typography>
-                            <Typography><strong>Nội dung:</strong></Typography>
+                            {/* <Typography><strong>Nội dung:</strong></Typography>
                             {blogDetails?.contents.map((content, index) => (
                                 <Box key={index}>
                                     <Typography key={index}><strong>*</strong> {content?.titleContent}</Typography>
@@ -156,7 +156,19 @@ const BlogModal = ({ open, onClose, blog }) => {
                                 </Box>
 
 
-                            ))}
+                            ))} */}
+                            <Typography><strong>Nội dung:</strong></Typography>
+                            <Box sx={{ maxHeight: 500, overflowY: "auto", paddingRight: 1 }}>
+                                {blogDetails?.contents.map((content, index) => (
+                                    <Box key={index} sx={{ marginBottom: 2 }}>
+                                        <Typography><strong>*</strong> {content?.titleContent}</Typography>
+                                        {content?.contentItem.map((item, idx) => (
+                                            <Typography key={idx} sx={{ pl: 2 }}>- {item}</Typography>
+                                        ))}
+                                    </Box>
+                                ))}
+                            </Box>
+
                         </>
                             :
                             <>
