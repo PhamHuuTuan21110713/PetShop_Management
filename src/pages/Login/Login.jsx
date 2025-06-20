@@ -119,7 +119,7 @@ const Login = () => {
             Đăng Nhập
           </Button>
         </form>
-        <Typography variant="body2" align="center" sx={{ marginTop: 2 }} color={(theme) => (theme.palette.mode === 'dark' ? '#ffffff' : '#666666')}>
+        {/* <Typography variant="body2" align="center" sx={{ marginTop: 2 }} color={(theme) => (theme.palette.mode === 'dark' ? '#ffffff' : '#666666')}>
           <Link to="#" variant="body2" style={{ color: "#2d98da" }}>
             Quên mật khẩu?
           </Link>
@@ -129,7 +129,7 @@ const Login = () => {
           <Link to="/dang-ky" variant="body2" style={{ color: "#2d98da" }}>
             Đăng ký
           </Link>
-        </Typography>
+        </Typography> */}
       </Paper>
       <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
         {

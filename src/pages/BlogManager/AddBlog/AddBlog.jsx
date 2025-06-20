@@ -123,7 +123,7 @@ const AddBlog = () => {
 
       {/* Chọn ảnh sản phẩm */}
       <Box className={myStyle.inputContainer}>
-        <Typography className={myStyle.inputLabel}>Chọn ảnh sản phẩm: </Typography>
+        <Typography className={myStyle.inputLabel}>Chọn ảnh bài viết: </Typography>
         <input
           type="file"
           accept="image/*"

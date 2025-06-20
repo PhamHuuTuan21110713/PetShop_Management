@@ -174,7 +174,7 @@ const DetailAccountModal = ({ open, onClose, product, onChange }) => {
                 <Typography><strong>Số lượng:</strong>{quantity}</Typography>
                 <Typography><strong>Ngày tạo:</strong>{new Date(product?.createdAt).toLocaleDateString()}</Typography>
                 <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-                  <Typography><strong>Trạng thái tài khoản:</strong></Typography>
+                  <Typography><strong>Trạng thái:</strong></Typography>
                   {state === true ? (
                     quantity > 0 ? (
                       <Chip label="Kinh doanh" color="success" />
@@ -239,7 +239,7 @@ const DetailAccountModal = ({ open, onClose, product, onChange }) => {
                   <Typography sx={{ display: "flex", justifyContent: "space-between" }}><strong>Ngày tạo:</strong> 22/11/2023</Typography>
                   {/* State */}
                   <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-                    <Typography><strong>Trạng thái tài khoản:</strong></Typography>
+                    <Typography><strong>Trạng thái:</strong></Typography>
 
                     {
                       state === true ?
